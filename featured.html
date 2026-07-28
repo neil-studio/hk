@@ -16,8 +16,32 @@
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <!-- 引入 Chart.js 用于悬浮趋势弹窗 -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- 🔒 专属访问密码保护门 (lm8888) - 零延迟优先锁定 -->
+  <script>
+    (function() {
+      var k = 'hk_site_auth_token';
+      var isUnlocked = sessionStorage.getItem(k) === 'unlocked_lm8888' || localStorage.getItem(k) === 'unlocked_lm8888';
+      if (!isUnlocked) {
+        document.documentElement.classList.add('site-locked');
+      }
+    })();
+  </script>
 </head>
 <body>
+
+  <!-- 🔒 专属访问密码保护门 (Password Gate: lm8888) -->
+  <div id="siteAuthOverlay" class="site-auth-overlay">
+    <div class="site-auth-card">
+      <div class="auth-icon">🔒</div>
+      <h2>香港一手新盘一站通</h2>
+      <p class="auth-subtitle">访问受限，请输入专属授权密码开启体验</p>
+      <div class="auth-input-group">
+        <input type="password" id="siteAuthPassword" placeholder="请输入访问密码" autocomplete="current-password" autofocus />
+        <button id="siteAuthBtn">解锁进入 →</button>
+      </div>
+      <div id="siteAuthError" class="auth-error-msg"></div>
+    </div>
+  </div>
 
 
   <!-- 背景环境光效果 -->
