@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>历史成交分析专页 - 香港一手新盘一站通</title>
+  <!-- 引入 Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+  <!-- 引入自定义样式 -->
+  <link rel="stylesheet" href="style.css?v=20260724_fresh">
+  <!-- 引入全量预编译静态数据 (零延迟离线载入) -->
+  <script src="data.js?v=20260724_direct"></script>
+  <!-- 引入 Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+
+  <!-- 背景环境光效果 -->
+  <div class="glow-bg">
+    <div class="glow-circle circle-1"></div>
+    <div class="glow-circle circle-2"></div>
+  </div>
+
+  <div class="container">
+    <!-- 统一页头与全局导航栏 -->
+    <header class="app-header">
+      <div class="logo-area">
+        <a href="index.html" class="logo-link">
+          <h1>香港一手新盘一站通</h1>
+        </a>
+        <p class="subtitle">历史成交走势分析 • 区域竞品对比 • 户型去化透视</p>
+      </div>
+      
+      <nav class="main-nav">
+        <a href="index.html" class="nav-item">🏠 首页门户</a>
+        <a href="sales.html" class="nav-item">🏢 销控查询</a>
+        <a href="analytics.html" class="nav-item active">📈 历史成交分析</a>
+        <a href="featured.html" class="nav-item">💎 聚焦精选盘</a>
+      </nav>
+
+      <div class="header-actions">
+        <div class="update-badge" id="lastUpdatedBadge">数据载入中...</div>
+      </div>
+    </header>
+
+    <!-- 分析控制台分析工具栏 -->
+    <section class="analytics-console">
+      <div class="console-header">
+        <div class="console-title">
+          <h2>成交历史多维度分析控制台</h2>
+          <p>可按年、月、周粒度对比分析全港楼盘的成交量与实用呎价变化曲线</p>
+        </div>
+        
+        <!-- 时间粒度切换 Segment Control -->
+        <div class="granularity-control">
+          <button class="granularity-btn" data-granularity="yearly">年度分析</button>
+          <button class="granularity-btn active" data-granularity="monthly">月度分析</button>
+          <button class="granularity-btn" data-granularity="weekly">周度分析</button>
+        </div>
+      </div>
+
+      <!-- 对比分析模式选择 -->
+      <div class="analysis-mode-bar">
+        <div class="mode-selectors">
+          <label class="mode-label">对比分析模式：</label>
+          <button class="mode-btn active" data-mode="single">模式 A: 单项目历史走势</button>
+          <button class="mode-btn" data-mode="district">模式 B: 同区域竞品对比</button>
+          <button class="mode-btn" data-mode="custom">模式 C: 自选多盘对比</button>
+        </div>
+
+        <!-- 关联下拉控制器与两步筛选器 -->
+        <div class="analytics-filters">
+          <!-- 模式 A 两步筛选法: 商圈 + 搜索框 + 项目 -->
+          <div class="step-filter-bar" id="singleProjectWrapper" style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;">
+            <div class="select-wrapper" style="min-width: 140px;">
+              <select id="singleDistrictFilter" style="font-size:0.85rem; padding:0.4rem 0.6rem;">
+                <option value="">所有商圈 (全港)</option>
+              </select>
+            </div>
+            <div class="search-input-wrapper" style="position: relative; min-width: 160px; max-width: 220px;">
+              <input type="text" id="singleProjectSearchInput" placeholder="🔍 搜索项目名称..." style="width: 100%; padding: 0.4rem 0.7rem; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.85rem; background: #ffffff; color: var(--text-main); outline: none;">
+            </div>
+            <div class="select-wrapper" style="min-width: 200px; flex: 1;">
+              <select id="analyticsProjectSelect" style="font-size:0.85rem; padding:0.4rem 0.6rem;">
+                <option value="">正在载入项目列表...</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- 模式 B 商圈对比控制框 -->
+          <div class="select-wrapper" id="districtSelectWrapper" style="display: none; min-width: 180px;">
+            <select id="analyticsDistrictSelect" style="font-size:0.85rem; padding:0.4rem 0.6rem;">
+              <option value="">载入商圈列表...</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- 模式 C: 自选多盘对比专用控制面板 (支持两步筛选 + 关键词搜索) -->
+      <div class="custom-compare-bar" id="customCompareBar" style="display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border-color);">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+          <div style="display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; flex: 1;">
+            <span style="font-size: 0.88rem; font-weight: 700; color: var(--accent-color);">已选对比项目:</span>
+            <div class="selected-tags-pool" id="selectedProjectTags">
+              <!-- 动态添加项目标签，如 [海盈山第4B期 ✖] -->
+            </div>
+          </div>
+          
+          <!-- 两步筛选 + 搜索框 添加项目到对比池 -->
+          <div style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;">
+            <div class="select-wrapper" style="min-width: 130px;">
+              <select id="compareDistrictFilter" style="font-size:0.82rem; padding:0.35rem 0.6rem;">
+                <option value="">所有商圈</option>
+              </select>
+            </div>
+            <div class="search-input-wrapper" style="min-width: 120px; width: 140px;">
+              <input type="text" id="compareProjectSearchInput" placeholder="🔍 搜索项目..." style="width:100%; padding: 0.35rem 0.6rem; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.82rem; background:#fff; color:var(--text-main); outline:none;">
+            </div>
+            <div class="select-wrapper" style="min-width: 200px;">
+              <select id="addCompareProjectSelect" style="font-size:0.82rem; padding:0.35rem 0.6rem;">
+                <option value="">+ 选择并添加对比项目...</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 图表渲染区域 -->
+    <section class="analytics-charts-grid">
+      <!-- 图表 1：双轴柱状折线图（成交套数 + 实用呎价） -->
+      <div class="chart-card chart-card-wide">
+        <div class="chart-header">
+          <div class="chart-title">
+            <h3 id="mainChartTitle">成交量与实用呎价趋势走势</h3>
+            <span class="chart-sub">双轴分析：柱状表示成交套数(套)，折线表示实用呎价(HK$/呎)</span>
+          </div>
+        </div>
+        <div id="trendChartCustomLegend" style="margin-bottom: 0.8rem;"></div>
+        <div class="chart-wrapper">
+          <canvas id="trendChart"></canvas>
+        </div>
+      </div>
+
+      <!-- 模式 A 单盘专属子图表 (全宽网格容器) -->
+      <div id="singleProjectSubCharts" class="chart-card-wide" style="display: flex; gap: 1.5rem; width: 100%; flex-wrap: wrap; background: transparent; border: none; padding: 0; box-shadow: none;">
+        <!-- 图表 2：成交户型结构占比 (Doughnut Chart) -->
+        <div class="chart-card" style="flex: 1; min-width: 320px;">
+          <div class="chart-header">
+            <div class="chart-title">
+              <h3>成交户型去化占比结构</h3>
+              <span class="chart-sub">开放式/1房/2房/3房/4房去化分布</span>
+            </div>
+          </div>
+          <div class="chart-wrapper" style="height: 320px;">
+            <canvas id="layoutPieChart"></canvas>
+          </div>
+        </div>
+
+        <!-- 图表 3：成交总价区间分布 (Bar Chart) -->
+        <div class="chart-card" style="flex: 1; min-width: 320px;">
+          <div class="chart-header">
+            <div class="chart-title">
+              <h3>成交总价分布区间</h3>
+              <span class="chart-sub">刚需与豪宅单位去化结构</span>
+            </div>
+          </div>
+          <div class="chart-wrapper" style="height: 320px;">
+            <canvas id="priceDistChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- 模式 B / 模式 C 竞品对比专属方案一模块 (全宽网格容器) -->
+      <div id="compareSubCharts" class="chart-card-wide" style="display: none; gap: 1.5rem; width: 100%; flex-wrap: wrap; background: transparent; border: none; padding: 0; box-shadow: none;">
+        <!-- 模块 1：竞品多维综合竞争力雷达图 -->
+        <div class="chart-card" style="flex: 1; min-width: 340px;">
+          <div class="chart-header">
+            <div class="chart-title">
+              <h3>🎯 竞品多维综合竞争力雷达比对</h3>
+              <span class="chart-sub">维度：成交热度、呎价吸引力、预估ROI、门槛亲民度、去化占比</span>
+            </div>
+          </div>
+          <div class="chart-wrapper" style="height: 320px;">
+            <canvas id="compareRadarChart"></canvas>
+          </div>
+        </div>
+
+        <!-- 模块 2：竞品总价门槛与均价区间对比图 -->
+        <div class="chart-card" style="flex: 1; min-width: 340px;">
+          <div class="chart-header">
+            <div class="chart-title">
+              <h3>💰 竞品成交总价门槛与价格区间对比</h3>
+              <span class="chart-sub">最低入手门槛 vs 平均成交总价 vs 最高成交价 (万元)</span>
+            </div>
+          </div>
+          <div class="chart-wrapper" style="height: 320px;">
+            <canvas id="comparePriceBarChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 模式 A 单盘成交明细数据透视表 -->
+    <section class="analytics-table-section" id="singleProjectTableSection" style="margin-top: 2rem;">
+      <div class="section-header-row">
+        <h3>成交明细数据透视表</h3>
+      </div>
+      <div class="table-container">
+        <table class="analytics-table" id="analyticsTable">
+          <thead>
+            <tr>
+              <th>时间周期</th>
+              <th>项目名称</th>
+              <th>区域/商圈</th>
+              <th>成交套数</th>
+              <th>平均成交总价</th>
+              <th>平均实用呎价</th>
+              <th>最高/最低呎价</th>
+              <th>主力成交户型</th>
+            </tr>
+          </thead>
+          <tbody id="analyticsTableBody">
+            <!-- 动态生成 -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 模式 B / 模式 C 竞品核心指标全景对照透视表 -->
+    <section class="analytics-table-section" id="compareTableSection" style="display: none; margin-top: 2rem;">
+      <div class="section-header-row">
+        <h3>🏆 竞品核心指标全景对照透视表</h3>
+      </div>
+      <div class="table-container">
+        <table class="analytics-table" id="compareMatrixTable">
+          <thead>
+            <tr>
+              <th>参评项目名称</th>
+              <th>区域 / 商圈</th>
+              <th>历史总成交套数</th>
+              <th>平均实用呎价 (HK$)</th>
+              <th>预估实用呎租 (HK$)</th>
+              <th>预估月租范围</th>
+              <th>预估租金回报率 (ROI)</th>
+              <th>快捷操作</th>
+            </tr>
+          </thead>
+          <tbody id="compareMatrixTableBody">
+            <!-- 动态生成 -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="app-footer" style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border-color); text-align: center; color: var(--text-secondary); font-size: 0.85rem;">
+      <p>© 2026 香港一手新盘一站通 版权所有</p>
+    </footer>
+  </div>
+
+  <!-- 引入主程序逻辑 -->
+  <script src="app.js?v=20260724_FIXED_FINAL"></script>
+</body>
+</html>
