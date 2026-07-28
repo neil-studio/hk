@@ -1,0 +1,23 @@
+{
+  "1_18_A": {
+    "original_price": 17428000,
+    "discount_price": 15859400,
+    "discount_percent_str": "9.00%",
+    "payment_method": "現金付款計劃 (減9.0%)",
+    "price_list": "2"
+  },
+  "1_17_H": {
+    "original_price": 8199000,
+    "discount_price": 7461000,
+    "discount_percent_str": "9.00%",
+    "payment_method": "現金付款計劃 (減9.0%)",
+    "price_list": "2"
+  },
+  "1_22_M": {
+    "original_price": 15535000,
+    "discount_price": 14136800,
+    "discount_percent_str": "9.00%",
+    "payment_method": "現金付款計劃 (減9.0%)",
+    "price_list": "2"
+  }
+}

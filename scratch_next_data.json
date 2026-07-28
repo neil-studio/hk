@@ -1,0 +1,1682 @@
+{
+  "props": {
+    "pageProps": {
+      "apiTranslation": {
+        "listingFilter.bedroom": {
+          "zh-hk": "間隔"
+        },
+        "listingFilter.bedroom.0": {
+          "zh-hk": "開放式"
+        },
+        "listingFilter.bedroom.1": {
+          "zh-hk": "1房"
+        },
+        "listingFilter.bedroom.2": {
+          "zh-hk": "2房"
+        },
+        "listingFilter.bedroom.3": {
+          "zh-hk": "3房"
+        },
+        "listingFilter.bedroom.4+": {
+          "zh-hk": "4房或以上"
+        },
+        "listingFilter.bedroom.HOUSE": {
+          "zh-hk": "獨立屋"
+        },
+        "listingFilter.bedroom.null": {
+          "zh-hk": "未有間隔資料"
+        },
+        "mReferral.mortgage.disclaimer": {
+          "zh-hk": "經絡按揭轉介為美聯及長和組成之聯營公司，按此前往使用其服務"
+        },
+        "new-property.28hse.remark_app": {
+          "zh-hk": "以上的物業資料只供參考，一切以發展商最新公布為準。\n部份優惠/計劃只適用於特定單位\n＊單位以一約多伙形式售出"
+        },
+        "new-property.detail.28hse.remark": {},
+        "new-property.detail.28hse.remark.inner": {},
+        "new-property.detail.28hse.remark_app": {
+          "zh-hk": "以上的物業資料只供參考，一切以發展商最新公布為準。\n部份優惠/計劃只適用於特定單位\n＊單位以一約多伙形式售出\n"
+        },
+        "new-property.detail.multiple.tx": {
+          "zh-hk": "多伙合共售價*"
+        },
+        "new-property.detail.multiple.tx.area": {
+          "zh-hk": "多伙合共面積"
+        },
+        "new-property.detail.remark": {
+          "zh-hk": "以上的物業資料只供參考，一切以發展商最新公布為準。 \n部份優惠/計劃只適用於特定單位。 \n*單位以一約多伙型式售出。 \n"
+        },
+        "new-property.detail.remark.maxdiscount": {
+          "zh-hk": "^以最高折扣價顯示"
+        },
+        "new-property.detail.remark.withcarpark": {
+          "zh-hk": "= 包括車位"
+        },
+        "new-property.detail.withcarpark": {
+          "zh-hk": "連車位"
+        },
+        "new-property.discount_na.remark": {
+          "zh-hk": "已選取折扣不適用此單位"
+        },
+        "new-property.discount_title": {
+          "zh-hk": "支付條件及獲得折扣基礎"
+        },
+        "new-property.discount_zero.remark": {
+          "zh-hk": "照售價"
+        },
+        "new-property.layout.remark": {
+          "zh-hk": "^以最高折扣價顯示"
+        },
+        "new-property.limited_time_offer.title": {
+          "zh-hk": "獨家優惠"
+        },
+        "new-property.max.discount.description": {
+          "zh-hk": "不包括額外折扣"
+        },
+        "new-property.min_price.remark": {
+          "zh-hk": "*根據發展項目的所有價單，列出該項目的單位物業最低售價或計算折扣價後的最低售價。\n^伙數、出售中、已售伙數及折實價等資料只供參考，一切以發展商最新公佈為準。"
+        },
+        "new-property.min_price.remark_history": {
+          "zh-hk": "*根據發展項目的所有價單，列出該項目的單位物業最低售價或計算折扣價後的最低售價。\n^伙數、出售中、已售伙數及折實價等資料只供參考，一切以發展商最新公佈為準。"
+        },
+        "new-property.min_price.remark_homepage": {
+          "zh-hk": "*根據發展項目的所有價單，列出該項目的單位物業最低售價或計算折扣價後的最低售價。\n^伙數、出售中、已售伙數及折實價等資料只供參考，一切以發展商最新公佈為準。\n\n "
+        },
+        "new-property.min_price.remark_listing_promo": {
+          "zh-hk": "*根據發展項目的所有價單，列出該項目的單位物業最低售價或計算折扣價後的最低售價。\n^伙數、出售中、已售伙數及折實價等資料只供參考，一切以發展商最新公佈為準。"
+        },
+        "new-property.min_price.remark_listing_promo_app": {
+          "zh-hk": "*根據發展項目的所有價單，列出該項目的單位物業最低售價或計算折扣價後的最低售價。\n^伙數、出售中、已售伙數及折實價等資料只供參考，一切以發展商最新公佈為準。"
+        },
+        "new-property.min_price.remark_listing_promo_preview": {
+          "zh-hk": "免責聲明及註解*"
+        },
+        "new-property.min_price.remark_promo": {},
+        "new-property.timeline.id.first_op_date": {
+          "zh-hk": "落成日期"
+        },
+        "new-property.timeline.id.first_price_list_date": {
+          "zh-hk": "首份價單日期"
+        },
+        "new-property.timeline.id.first_sale_date": {
+          "zh-hk": "首次出售日期"
+        },
+        "new-property.timeline.id.key_date": {
+          "zh-hk": "預計關鍵日期"
+        },
+        "new-property.tx_table.midland": {
+          "zh-hk": "銷售情況"
+        }
+      },
+      "newPropertyDetail": {
+        "id": "E000015461",
+        "geo_branch": [
+          {
+            "alt_name": "東半山跑馬地豪宅 - 成和道分行",
+            "phone_no": "25730768"
+          },
+          {
+            "alt_name": "東半山跑馬地豪宅 - 跑馬地分行",
+            "phone_no": "29235633"
+          },
+          {
+            "alt_name": "東半山跑馬地豪宅 - 禮頓山分行",
+            "phone_no": "29238000"
+          }
+        ],
+        "geo_transaction": {
+          "firsthand_sell": []
+        },
+        "phase": false,
+        "latitude": 22.268708999999998,
+        "longitude": 114.187429,
+        "min_net_area": 4571,
+        "max_net_area": 4599,
+        "sold_units": 15,
+        "amenities": [],
+        "mtr_line": [],
+        "mtr": [],
+        "name": {
+          "chi": "藍塘道23-39號",
+          "en": "23-39 Blue Pool Road"
+        },
+        "news_name": "藍塘道23-39號",
+        "project_name": "藍塘道23-39號",
+        "region": {
+          "id": "10",
+          "name": "港島"
+        },
+        "subregion": {
+          "id": "1002",
+          "name": "灣仔"
+        },
+        "district": "黃泥涌",
+        "description": {
+          "desc": "藍塘道23-39號(23-39 Blue Pool Road) 位於黃泥涌 藍塘道39號，於2014年9月落成，由恒隆集團發展。項目設有18座洋房，共提供18個單位，實用面積由4,571至4,599平方呎，戶型涵蓋1房至5房。物業屬於小學校網12，並劃入灣仔中學校區。"
+        },
+        "sm_district": {
+          "id": "10020004",
+          "name": "跑馬地 / 東半山",
+          "url_desc": "https://www.hkp.com.hk/zh-hk/district/%E6%B8%AF%E5%B3%B6-%E8%B7%91%E9%A6%AC%E5%9C%B0-%E6%9D%B1%E5%8D%8A%E5%B1%B1-10020004",
+          "sell_count": 158,
+          "rent_count": 68,
+          "open_date_stats_chart": {
+            "total_unit_count": 17151
+          }
+        },
+        "address": "藍塘道39號",
+        "hotline": [
+          "25730768",
+          " 29238000",
+          " 29216789",
+          " 29235633"
+        ],
+        "hotline_agent_licence_no": [],
+        "hot": true,
+        "total_flats": "18",
+        "no_of_blocks": "18座",
+        "project_url": "http://www.23-39bluepoolroad.com/",
+        "sole": false,
+        "logo": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&src=https%3A%2F%2Fres-fh.midland.com.hk%2Fprod%2Fnew-property%2Ffiles%2F259548%2F369858_505dc9fa0feaa7c9a9994c2a85be148f.png",
+        "show_news_video": true,
+        "score": 9999714,
+        "first_sale_date": "2015-09-17T16:00:00.000Z",
+        "property_status": [
+          "tail",
+          "completed"
+        ],
+        "sell_status": "on_sale",
+        "sell_status_detail": {
+          "id": "on_sale",
+          "name": "出售中",
+          "min_price_desc": "招標項目"
+        },
+        "first_op_date": "2014-09-11T16:00:00.000Z",
+        "print_date": "2015-02-05T16:00:00.000Z",
+        "photo360": [],
+        "attachment": [
+          {
+            "name": "檢視記錄",
+            "type": "vr",
+            "file_size": 290253,
+            "path": "https://res-fh.hkp.com.hk/prod/new-property/files/259548/416808_bdbc4d207e3ef5d32388fe1edc8a5173.pdf",
+            "seq": 400
+          },
+          {
+            "name": "一手住宅物業買家須知",
+            "type": "mp",
+            "file_size": 933153,
+            "path": "https://res-fh.hkp.com.hk/prod/new-property/files/259548/347085_b2f215641779dac23d9230fa49564479.pdf",
+            "update_date": "2023-06-12T16:00:00.000Z",
+            "seq": 101
+          },
+          {
+            "name": "發展項目的資料",
+            "type": "mp",
+            "file_size": 1427493,
+            "path": "https://res-fh.hkp.com.hk/prod/new-property/files/259548/379854_5ff88d8fb4e04023acbaaf54466747f6.pdf",
+            "update_date": "2025-02-26T16:00:00.000Z",
+            "seq": 102
+          },
+          {
+            "name": "發展項目的所在位置圖",
+            "type": "mp",
+            "file_size": 1076282,
+            "path": "https://res-fh.hkp.com.hk/prod/new-property/files/259548/416807_2ca5e92ea6b57da84d89af4a40c5831e.pdf",
+            "update_date": "2026-05-17T16:00:00.000Z",
+            "seq": 103
+          },
+          {
+            "name": "發展項目的鳥瞰照片",
+            "type": "mp",
+            "file_size": 1312542,
+            "path": "https://res-fh.hkp.com.hk/prod/new-property/files/259548/374156_0430f7a24c026f68c33b4ea1fdf19a6c.pdf",
+            "update_date": "2024-11-28T16:00:00.000Z",
+            "seq": 104
+          },
+          {
+            "name": "關乎發展項目的分區計劃大綱圖",
+            "type": "mp",
+            "file_size": 8354372,
+            "path": "https://res-fh.hkp.com.hk/prod/new-property/files/259548/374155_855fd811c704a02116badb9233d0b5c5.pdf",
+            "update_date": "2024-11-28T16:00:00.000Z",
+            "seq": 105
+          },
+          {
+            "name": "發展項目的布局圖",
+            "type": "mp",
+            "file_size": 586176,
+            "path": "https://res-fh.hkp.com.hk/prod/new-property/files/160408/41005_24c2bab2c9f336cf70f272aef260893b.pdf",
+            "update_date": "2016-04-07T16:00:00.000Z",
+            "seq": 106
+          },
+          {
+            "name": "住宅物業的面積",
+            "type": "mp",
+            "file_size": 1020766,
+            "path": "https://res-fh.hkp.com.hk/prod/new-property/files/259548/310576_fa452ca7e645b33a1603344cd68cb59a.pdf",
+            "update_date": "2021-03-18T16:00:00.000Z",
+            "seq": 107
+          },
+          {
+            "name": "住宅物業的樓面平面圖",
+            "type": "mp",
+            "file_size": 10292630,
+            "path": "https://res-fh.hkp.com.hk/prod/new-property/files/259548/367985_fd103e77a64889ae087cf412c9e5ad2e.pdf",
+            "update_date": "2024-08-28T16:00:00.000Z",
+            "seq": 108
+          },
+          {
+            "name": "售樓說明書",
+            "type": "mf",
+            "file_size": 16170359,
+            "path": "https://res-fh.hkp.com.hk/prod/new-property/files/259548/416806_a42527b5473bb3c74539e51248044059.pdf",
+            "update_date": "2026-05-17T16:00:00.000Z",
+            "seq": 500
+          },
+          {
+            "name": "成交紀錄冊",
+            "type": "cr",
+            "file_size": 423119,
+            "path": "https://res-fh.hkp.com.hk/prod/new-property/files/259548/406134_2eed3e4c252ce2d2b6f75e1d64afc589.pdf"
+          },
+          {
+            "name": "27-06-2026 銷售安排資料",
+            "type": "sa",
+            "file_size": 681903,
+            "path": "https://res-fh.hkp.com.hk/prod/new-property/files/259548/419976_e4e86d8d867ba1fc9fd2c70a1ebe7773.pdf",
+            "update_date": "2026-06-26T16:00:00.000Z",
+            "tender": {
+              "unit_count": 1,
+              "date_min": "2026-06-30T16:00:00.000Z",
+              "date_max": "2026-12-30T16:00:00.000Z",
+              "net_area_min": 4571,
+              "net_area_max": 4571,
+              "room_min": 1,
+              "room_max": 1
+            }
+          },
+          {
+            "name": "28-12-2025 銷售安排資料",
+            "type": "sa",
+            "file_size": 682521,
+            "path": "https://res-fh.hkp.com.hk/prod/new-property/files/259548/404507_c49bd1ce9aa7bd73eb8d5bb85794efb7.pdf",
+            "update_date": "2025-12-27T16:00:00.000Z",
+            "tender": {
+              "unit_count": 1,
+              "date_min": "2025-12-31T16:00:00.000Z",
+              "date_max": "2026-06-29T16:00:00.000Z",
+              "net_area_min": 4571,
+              "net_area_max": 4571,
+              "room_min": 1,
+              "room_max": 1
+            }
+          },
+          {
+            "name": "03-12-2025 銷售安排資料",
+            "type": "sa",
+            "file_size": 684573,
+            "path": "https://res-fh.hkp.com.hk/prod/new-property/files/259548/402677_3b2642c08d17acb47d0eb14e6e0eb3c0.pdf",
+            "update_date": "2025-12-02T16:00:00.000Z",
+            "tender": {
+              "unit_count": 1,
+              "date_min": "2025-12-06T16:00:00.000Z",
+              "date_max": "2025-12-30T16:00:00.000Z",
+              "net_area_min": 4571,
+              "net_area_max": 4571,
+              "room_min": 1,
+              "room_max": 1
+            }
+          },
+          {
+            "name": "25-11-2025 銷售安排資料",
+            "type": "sa",
+            "file_size": 426647,
+            "path": "https://res-fh.hkp.com.hk/prod/new-property/files/259548/402033_aa69067cec259bb81360eb318b714ff5.pdf",
+            "update_date": "2025-11-24T16:00:00.000Z",
+            "tender": {
+              "unit_count": 2,
+              "date_min": "2025-11-28T16:00:00.000Z",
+              "date_max": "2025-12-30T16:00:00.000Z",
+              "net_area_min": 4575,
+              "net_area_max": 4602,
+              "room_min": 1,
+              "room_max": 1
+            }
+          },
+          {
+            "name": "14-07-2025 銷售安排資料",
+            "type": "sa",
+            "file_size": 685894,
+            "path": "https://res-fh.hkp.com.hk/prod/new-property/files/259548/390270_b00ce430e661d4baaff1714e9649001e.pdf",
+            "update_date": "2025-07-13T16:00:00.000Z",
+            "tender": {
+              "unit_count": 1,
+              "date_min": "2025-07-17T16:00:00.000Z",
+              "date_max": "2025-12-30T16:00:00.000Z",
+              "net_area_min": 4575,
+              "net_area_max": 4575,
+              "room_min": 4,
+              "room_max": 4
+            }
+          },
+          {
+            "name": "03-05-2024 銷售安排資料",
+            "type": "sa",
+            "file_size": 310130,
+            "path": "https://res-fh.hkp.com.hk/prod/new-property/files/259548/362026_1f81c960509c2f9dffb8990311a875f7.pdf",
+            "update_date": "2024-05-02T16:00:00.000Z",
+            "tender": {
+              "unit_count": 1,
+              "date_max": "2024-05-06T16:00:00.000Z",
+              "net_area_min": 4602,
+              "net_area_max": 4602,
+              "room_min": 4,
+              "room_max": 4
+            }
+          },
+          {
+            "name": "04-01-2024 銷售安排資料",
+            "type": "sa",
+            "file_size": 300929,
+            "path": "https://res-fh.hkp.com.hk/prod/new-property/files/259548/355028_708d5fa4a89edbfec2524f41fed7e549.pdf",
+            "update_date": "2024-01-03T16:00:00.000Z",
+            "tender": {
+              "unit_count": 1,
+              "date_max": "2024-01-27T16:00:00.000Z",
+              "net_area_min": 4602,
+              "net_area_max": 4602,
+              "room_min": 5,
+              "room_max": 5
+            }
+          },
+          {
+            "name": "17-06-2021 銷售安排資料",
+            "type": "sa",
+            "file_size": 279715,
+            "path": "https://res-fh.hkp.com.hk/prod/new-property/files/259548/315620_d24fb25d4720d4ead2606be70c5430ef.PDF",
+            "update_date": "2021-06-16T16:00:00.000Z",
+            "tender": {
+              "unit_count": 1,
+              "date_max": "2021-06-20T16:00:00.000Z",
+              "net_area_min": 4602,
+              "net_area_max": 4602,
+              "room_min": 3,
+              "room_max": 3
+            }
+          },
+          {
+            "name": "13-03-2019 銷售安排資料",
+            "type": "sa",
+            "file_size": 239223,
+            "path": "https://res-fh.hkp.com.hk/prod/new-property/files/190407/258041_42530398209096138485cfc040fadebf.pdf",
+            "update_date": "2019-03-12T16:00:00.000Z",
+            "tender": {
+              "unit_count": 1,
+              "date_max": "2019-03-18T16:00:00.000Z",
+              "net_area_min": 4575,
+              "net_area_max": 4575,
+              "room_min": 5,
+              "room_max": 5
+            }
+          },
+          {
+            "name": "14-03-2018 銷售安排資料",
+            "type": "sa",
+            "file_size": 370466,
+            "path": "https://res-fh.hkp.com.hk/prod/new-property/files/180419/187824_5f53e6858b29288334bc714a9ab8093f.pdf",
+            "update_date": "2018-03-13T16:00:00.000Z",
+            "tender": {
+              "unit_count": 1,
+              "date_max": "2018-03-18T16:00:00.000Z",
+              "net_area_min": 4575,
+              "net_area_max": 4575,
+              "room_min": 5,
+              "room_max": 5
+            }
+          },
+          {
+            "name": "18-12-2017 銷售安排資料",
+            "type": "sa",
+            "file_size": 323498,
+            "path": "https://res-fh.hkp.com.hk/prod/new-property/files/180119/164202_0f4c2934df64a25f34b9f67e5c977ede.pdf",
+            "update_date": "2017-12-17T16:00:00.000Z",
+            "tender": {
+              "unit_count": 2,
+              "date_max": "2017-12-21T16:00:00.000Z",
+              "net_area_min": 4575,
+              "net_area_max": 4602,
+              "room_min": 4,
+              "room_max": 5
+            }
+          },
+          {
+            "name": "03-08-2017 銷售安排資料",
+            "type": "sa",
+            "file_size": 235725,
+            "path": "https://res-fh.hkp.com.hk/prod/new-property/files/171020/149301_a12c949ab1e65ded96181d01c71d3a42.pdf",
+            "update_date": "2017-08-02T16:00:00.000Z",
+            "tender": {
+              "unit_count": 1,
+              "date_max": "2017-08-06T16:00:00.000Z",
+              "net_area_min": 4602,
+              "net_area_max": 4602,
+              "room_min": 5,
+              "room_max": 5
+            }
+          },
+          {
+            "name": "10-11-2016 銷售安排資料",
+            "type": "sa",
+            "file_size": 235686,
+            "path": "https://res-fh.hkp.com.hk/prod/new-property/files/170123/102741_519f8a3735dc46016f4e4b53e5c502a5.pdf",
+            "update_date": "2016-11-09T16:00:00.000Z",
+            "tender": {
+              "unit_count": 1,
+              "date_max": "2016-11-13T16:00:00.000Z",
+              "net_area_min": 4575,
+              "net_area_max": 4575,
+              "room_min": 5,
+              "room_max": 5
+            }
+          },
+          {
+            "name": "13-10-2016 銷售安排資料",
+            "type": "sa",
+            "file_size": 237645,
+            "path": "https://res-fh.hkp.com.hk/prod/new-property/files/161104/81390_7039360f5c267b48e99a3c680492436d.pdf",
+            "update_date": "2016-10-12T16:00:00.000Z",
+            "tender": {
+              "unit_count": 1,
+              "date_max": "2016-10-16T16:00:00.000Z",
+              "net_area_min": 4575,
+              "net_area_max": 4575,
+              "room_min": 5,
+              "room_max": 5
+            }
+          },
+          {
+            "name": "14-09-2015 銷售安排資料",
+            "type": "sa",
+            "file_size": 222689,
+            "path": "https://res-fh.hkp.com.hk/prod/new-property/files/161104/81389_bf6ec3e1dfffd6aa55cb57510e6934c7.pdf",
+            "update_date": "2015-09-13T16:00:00.000Z",
+            "tender": {
+              "unit_count": 2,
+              "date_min": "2015-09-17T16:00:00.000Z",
+              "date_max": "2015-09-21T16:00:00.000Z",
+              "net_area_min": 4575,
+              "net_area_max": 4602,
+              "room_min": 4,
+              "room_max": 5
+            }
+          }
+        ],
+        "report": [],
+        "developer": "恒隆集團",
+        "management_co": "第一太平戴維斯物業管理有限公司",
+        "vender": "賣方：\n樂古有限公司\n藍塘道29號B單位（亦稱為7號屋B單位）、藍塘道33號A單位（亦稱為5號屋A單位）、藍塘道35號A單位（亦稱為3號屋A單位）\nRich Town Ventures Limited\n藍塘道25號B單位（亦稱為9號屋B單位）\nCity Lead Ventures Limited\n藍塘道35號B單位（亦稱為3號屋B單位）\nMaster Pathway Limited\n藍塘道31號A單位（亦稱為6號屋A單位）、藍塘道31號B單位（亦稱為6號屋B單位）\nRidge Eagle Limited\n藍塘道23號A單位（亦稱為10號屋A單位）、藍塘道23號B單位（亦稱為10號屋B單位）\n\n賣方的控權公司：\n就樂古有限公司：\n恒隆集團有限公司\n恒隆地產有限公司\nSpring Investments Limited\nNewhart Investments Limited\n\n就Rich Town Ventures Limited, City Lead Ventures Limited及Master Pathway Limited:\n恒隆集團有限公司\n恒隆地產有限公司\nNewhart Investments Limited\n\n就Ridge Eagle Limited:\n恒隆集團有限公司\n恒隆地產有限公司\nNewhart Investments Limited\nMastering Global Limited",
+        "school_net": {
+          "kindergarten": {
+            "id": "WC",
+            "name": "灣仔",
+            "url_desc": "https://app2.hkp.com.hk/school/inc/school_list.jsp?type=KS&distCode=WC&distNet="
+          },
+          "primary": {
+            "id": "12",
+            "url_desc": "https://app2.hkp.com.hk/school/inc/school_list.jsp?type=PS&distCode=WC&distNet=12"
+          },
+          "secondary": {
+            "id": "WC",
+            "name": "灣仔",
+            "url_desc": "https://app2.hkp.com.hk/school/inc/school_list.jsp?type=SS&distCode=WC&distNet="
+          }
+        },
+        "update_date": "2026-06-27T08:07:38.000Z",
+        "floorplan": [
+          {
+            "id": "52023",
+            "name": "A號屋 (藍塘道23號) 地下, 1/F及2/F",
+            "desc": "地下, 1/F及2/F",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061309240646&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F312%2FB000080312_1686646583620.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080312",
+              "name": "A號屋 (藍塘道23號)"
+            }
+          },
+          {
+            "id": "52024",
+            "name": "A號屋 (藍塘道23號) 地下, 1/F及最新審批圖",
+            "desc": "地下, 1/F及最新審批圖",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061309240627&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F312%2FB000080312_1686646583627.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080312",
+              "name": "A號屋 (藍塘道23號)"
+            }
+          },
+          {
+            "id": "52025",
+            "name": "A號屋 (藍塘道23號) 天台及上層天台",
+            "desc": "天台及上層天台",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061309240639&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F312%2FB000080312_1686646583651.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080312",
+              "name": "A號屋 (藍塘道23號)"
+            }
+          },
+          {
+            "id": "52022",
+            "name": "A號屋 (藍塘道23號) 2/F, 3/F及最新審批圖",
+            "desc": "2/F, 3/F及最新審批圖",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061309240641&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F312%2FB000080312_1686646583612.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080312",
+              "name": "A號屋 (藍塘道23號)"
+            }
+          },
+          {
+            "id": "52046",
+            "name": "B號屋 (藍塘道23號) 地下, 1/F及2/F",
+            "desc": "地下, 1/F及2/F",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061309240605&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F313%2FB000080313_1686646583699.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080313",
+              "name": "B號屋 (藍塘道23號)"
+            }
+          },
+          {
+            "id": "52047",
+            "name": "B號屋 (藍塘道23號) 地下, 1/F及最新審批圖",
+            "desc": "地下, 1/F及最新審批圖",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061309240652&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F313%2FB000080313_1686646583721.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080313",
+              "name": "B號屋 (藍塘道23號)"
+            }
+          },
+          {
+            "id": "52048",
+            "name": "B號屋 (藍塘道23號) 天台及上層天台",
+            "desc": "天台及上層天台",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061309240605&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F313%2FB000080313_1686646583731.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080313",
+              "name": "B號屋 (藍塘道23號)"
+            }
+          },
+          {
+            "id": "52045",
+            "name": "B號屋 (藍塘道23號) 2/F, 3/F及最新審批圖",
+            "desc": "2/F, 3/F及最新審批圖",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061309240600&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F313%2FB000080313_1686646583669.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080313",
+              "name": "B號屋 (藍塘道23號)"
+            }
+          },
+          {
+            "id": "52026",
+            "name": "A號屋 (藍塘道25號) 地下, 1/F及2/F",
+            "desc": "地下, 1/F及2/F",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061308240627&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F314%2FB000080314_1686646583737.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080314",
+              "name": "A號屋 (藍塘道25號)"
+            }
+          },
+          {
+            "id": "52027",
+            "name": "A號屋 (藍塘道25號) 天台及上層天台",
+            "desc": "天台及上層天台",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061308240627&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F314%2FB000080314_1686646583742.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080314",
+              "name": "A號屋 (藍塘道25號)"
+            }
+          },
+          {
+            "id": "52049",
+            "name": "B號屋 (藍塘道25號) 地下, 1/F及2/F",
+            "desc": "地下, 1/F及2/F",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061308240628&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F315%2FB000080315_1686646583746.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080315",
+              "name": "B號屋 (藍塘道25號)"
+            }
+          },
+          {
+            "id": "52050",
+            "name": "B號屋 (藍塘道25號) 天台及上層天台",
+            "desc": "天台及上層天台",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061308240628&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F315%2FB000080315_1686646583751.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080315",
+              "name": "B號屋 (藍塘道25號)"
+            }
+          },
+          {
+            "id": "52028",
+            "name": "A號屋 (藍塘道27號) 地下, 1/F及2/F",
+            "desc": "地下, 1/F及2/F",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061308240627&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F316%2FB000080316_1686646583756.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080316",
+              "name": "A號屋 (藍塘道27號)"
+            }
+          },
+          {
+            "id": "52029",
+            "name": "A號屋 (藍塘道27號) 天台及上層天台",
+            "desc": "天台及上層天台",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061308240627&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F316%2FB000080316_1686646583765.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080316",
+              "name": "A號屋 (藍塘道27號)"
+            }
+          },
+          {
+            "id": "52051",
+            "name": "B號屋 (藍塘道27號) 地下, 1/F及2/F",
+            "desc": "地下, 1/F及2/F",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061308240628&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F317%2FB000080317_1686646583770.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080317",
+              "name": "B號屋 (藍塘道27號)"
+            }
+          },
+          {
+            "id": "52052",
+            "name": "B號屋 (藍塘道27號) 天台, 上層天台及2/F(現狀圖)",
+            "desc": "天台, 上層天台及2/F(現狀圖)",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061309240641&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F317%2FB000080317_1686646583775.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080317",
+              "name": "B號屋 (藍塘道27號)"
+            }
+          },
+          {
+            "id": "52030",
+            "name": "A號屋 (藍塘道29號) 地下, 1/F及2/F",
+            "desc": "地下, 1/F及2/F",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061308240627&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F318%2FB000080318_1686646583780.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080318",
+              "name": "A號屋 (藍塘道29號)"
+            }
+          },
+          {
+            "id": "52031",
+            "name": "A號屋 (藍塘道29號) 天台及上層天台",
+            "desc": "天台及上層天台",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061308240627&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F318%2FB000080318_1686646583784.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080318",
+              "name": "A號屋 (藍塘道29號)"
+            }
+          },
+          {
+            "id": "57044",
+            "name": "B號屋 (藍塘道29號) 地下, 1/F及2/F",
+            "desc": "地下, 1/F及2/F",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2024083007240824&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F319%2FB000080319_1725004339096.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080319",
+              "name": "B號屋 (藍塘道29號)"
+            }
+          },
+          {
+            "id": "54542",
+            "name": "B號屋 (藍塘道29號) 天台及上層天台",
+            "desc": "天台及上層天台",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2024083007240822&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F319%2FB000080319_1709267970462.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080319",
+              "name": "B號屋 (藍塘道29號)"
+            }
+          },
+          {
+            "id": "57045",
+            "name": "B號屋 (藍塘道29號) 1/F-2/F 現狀圖",
+            "desc": "1/F-2/F 現狀圖",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2024083007240854&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F319%2FB000080319_1725004382431.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080319",
+              "name": "B號屋 (藍塘道29號)"
+            }
+          },
+          {
+            "id": "52069",
+            "name": "A號屋 (藍塘道31號) 地下及1/F",
+            "desc": "地下及1/F",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061309240650&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F320%2FB000080320_1686646961179.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080320",
+              "name": "A號屋 (藍塘道31號)"
+            }
+          },
+          {
+            "id": "52032",
+            "name": "A號屋 (藍塘道31號) 2/F及天台",
+            "desc": "2/F及天台",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061309240650&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F320%2FB000080320_1686646583818.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080320",
+              "name": "A號屋 (藍塘道31號)"
+            }
+          },
+          {
+            "id": "52034",
+            "name": "A號屋 (藍塘道31號) 上層天台",
+            "desc": "上層天台",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061309240650&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F320%2FB000080320_1686646583830.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080320",
+              "name": "A號屋 (藍塘道31號)"
+            }
+          },
+          {
+            "id": "52071",
+            "name": "B號屋 (藍塘道31號) 地下及1/F",
+            "desc": "地下及1/F",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061309240649&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F321%2FB000080321_1686647503781.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080321",
+              "name": "B號屋 (藍塘道31號)"
+            }
+          },
+          {
+            "id": "52058",
+            "name": "B號屋 (藍塘道31號) 2/F及天台",
+            "desc": "2/F及天台",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061309240649&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F321%2FB000080321_1686646583845.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080321",
+              "name": "B號屋 (藍塘道31號)"
+            }
+          },
+          {
+            "id": "52060",
+            "name": "B號屋 (藍塘道31號) 上層天台",
+            "desc": "上層天台",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061309240649&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F321%2FB000080321_1686646583865.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080321",
+              "name": "B號屋 (藍塘道31號)"
+            }
+          },
+          {
+            "id": "57046",
+            "name": "A號屋 (藍塘道33號) 地下, 1/F及2/F",
+            "desc": "地下, 1/F及2/F",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2024083007240804&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F322%2FB000080322_1725004624531.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080322",
+              "name": "A號屋 (藍塘道33號)"
+            }
+          },
+          {
+            "id": "57047",
+            "name": "A號屋 (藍塘道33號) 天台及上層天台",
+            "desc": "天台及上層天台",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2024083007240804&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F322%2FB000080322_1725004624535.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080322",
+              "name": "A號屋 (藍塘道33號)"
+            }
+          },
+          {
+            "id": "57048",
+            "name": "A號屋 (藍塘道33號) 1/F-2/F 現狀圖",
+            "desc": "1/F-2/F 現狀圖",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2024083007240827&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F322%2FB000080322_1725004653270.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080322",
+              "name": "A號屋 (藍塘道33號)"
+            }
+          },
+          {
+            "id": "52061",
+            "name": "B號屋 (藍塘道33號) 地下, 1/F及2/F",
+            "desc": "地下, 1/F及2/F",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061308240628&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F323%2FB000080323_1686646583888.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080323",
+              "name": "B號屋 (藍塘道33號)"
+            }
+          },
+          {
+            "id": "52062",
+            "name": "B號屋 (藍塘道33號) 天台及上層天台",
+            "desc": "天台及上層天台",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061308240628&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F323%2FB000080323_1686646583894.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080323",
+              "name": "B號屋 (藍塘道33號)"
+            }
+          },
+          {
+            "id": "52070",
+            "name": "A號屋 (藍塘道35號) 地下, 1/F及2/F",
+            "desc": "地下, 1/F及2/F",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061309240658&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F324%2FB000080324_1686647152491.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080324",
+              "name": "A號屋 (藍塘道35號)"
+            }
+          },
+          {
+            "id": "52040",
+            "name": "A號屋 (藍塘道35號) 天台及上層天台",
+            "desc": "天台及上層天台",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061309240658&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F324%2FB000080324_1686646583902.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080324",
+              "name": "A號屋 (藍塘道35號)"
+            }
+          },
+          {
+            "id": "52063",
+            "name": "B號屋 (藍塘道35號) 地下, 1/F及2/F",
+            "desc": "地下, 1/F及2/F",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061308240628&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F325%2FB000080325_1686646583907.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080325",
+              "name": "B號屋 (藍塘道35號)"
+            }
+          },
+          {
+            "id": "52064",
+            "name": "B號屋 (藍塘道35號) 天台及上層天台",
+            "desc": "天台及上層天台",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061308240628&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F325%2FB000080325_1686646583913.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080325",
+              "name": "B號屋 (藍塘道35號)"
+            }
+          },
+          {
+            "id": "52041",
+            "name": "A號屋 (藍塘道37號) 地下, 1/F及2/F",
+            "desc": "地下, 1/F及2/F",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061308240628&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F326%2FB000080326_1686646583917.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080326",
+              "name": "A號屋 (藍塘道37號)"
+            }
+          },
+          {
+            "id": "52042",
+            "name": "A號屋 (藍塘道37號) 天台及上層天台",
+            "desc": "天台及上層天台",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061308240628&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F326%2FB000080326_1686646583921.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080326",
+              "name": "A號屋 (藍塘道37號)"
+            }
+          },
+          {
+            "id": "52065",
+            "name": "B號屋 (藍塘道37號) 地下, 1/F及2/F",
+            "desc": "地下, 1/F及2/F",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061308240628&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F327%2FB000080327_1686646583531.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080327",
+              "name": "B號屋 (藍塘道37號)"
+            }
+          },
+          {
+            "id": "52066",
+            "name": "B號屋 (藍塘道37號) 天台及上層天台",
+            "desc": "天台及上層天台",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061308240628&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F327%2FB000080327_1686646583537.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080327",
+              "name": "B號屋 (藍塘道37號)"
+            }
+          },
+          {
+            "id": "52043",
+            "name": "A號屋 (藍塘道39號) 地下, 1/F及2/F",
+            "desc": "地下, 1/F及2/F",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061308240628&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F328%2FB000080328_1686646583556.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080328",
+              "name": "A號屋 (藍塘道39號)"
+            }
+          },
+          {
+            "id": "52044",
+            "name": "A號屋 (藍塘道39號) 天台及上層天台",
+            "desc": "天台及上層天台",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061308240628&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F328%2FB000080328_1686646583580.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080328",
+              "name": "A號屋 (藍塘道39號)"
+            }
+          },
+          {
+            "id": "52067",
+            "name": "B號屋 (藍塘道39號) 地下, 1/F及2/F",
+            "desc": "地下, 1/F及2/F",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061308240629&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F329%2FB000080329_1686646583594.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080329",
+              "name": "B號屋 (藍塘道39號)"
+            }
+          },
+          {
+            "id": "52068",
+            "name": "B號屋 (藍塘道39號) 天台及上層天台",
+            "desc": "天台及上層天台",
+            "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061308240629&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F329%2FB000080329_1686646583602.jpg",
+            "estate": {
+              "id": "E000015461"
+            },
+            "building": {
+              "id": "B000080329",
+              "name": "B號屋 (藍塘道39號)"
+            }
+          }
+        ],
+        "buildings": [
+          {
+            "id": "E000015461",
+            "name": "藍塘道29-39號（獨立屋）",
+            "type": "ESTATE",
+            "bldg_type": "HOUSE",
+            "buildings": [
+              {
+                "id": "E000015461",
+                "name": "藍塘道29-39號（獨立屋）",
+                "type": "ESTATE",
+                "bldg_type": "HOUSE"
+              }
+            ]
+          }
+        ],
+        "last_tx_building": "E000015461",
+        "news_photo": [],
+        "news_video": [],
+        "facilityGroup": [],
+        "interval": [
+          {
+            "room_type": "獨立屋\n",
+            "area_from": 4571,
+            "area_to": 4599,
+            "count": 18
+          }
+        ],
+        "mortgage_text": "專人幫您免費格價\n95%獲銀行成功批核",
+        "mortgage_apply": "了解按揭計劃",
+        "mortgage_link": "https://www.mreferral.com/%E6%96%B0%E7%9B%A4%E6%8C%89%E6%8F%AD/?referral_name=MidlandWeb&utm_source=Midland&utm_medium=Web&utm_campaign=NewPropertyDetail",
+        "mortgage": {
+          "price": 10000000,
+          "loan_rate": 90,
+          "loan_year": 30,
+          "interest_rate_percent": 3.25
+        },
+        "news_url_desc": "https://www.hkp.com.hk/zh-hk/property-news/%E8%97%8D%E5%A1%98%E9%81%9323-39%E8%99%9F",
+        "url_desc": {
+          "zh-hk": "https://www.hkp.com.hk/zh-hk/new-property/%E6%B8%AF%E5%B3%B6-%E8%B7%91%E9%A6%AC%E5%9C%B0-%E6%B8%A3%E7%94%B8%E5%B1%B1-%E8%97%8D%E5%A1%98%E9%81%9323-39%E8%99%9F-E000015461",
+          "zh-cn": "https://www.hkp.com.hk/zh-cn/new-property/%E6%B8%AF%E5%B2%9B-%E8%B7%91%E9%A9%AC%E5%9C%B0-%E6%B8%A3%E7%94%B8%E5%B1%B1-%E8%93%9D%E5%A1%98%E9%81%9323-39%E5%8F%B7-E000015461",
+          "en": "https://www.hkp.com.hk/en/new-property/Hong-Kong-Island-Happy-Valley-Jardine-s-Lookout-23-39-Blue-Pool-Road-E000015461"
+        },
+        "mreferral_url": "https://www.mreferral.com/%E6%96%B0%E7%9B%A4%E6%8C%89%E6%8F%AD/?referral_name=HKPWeb&utm_source=HKP&utm_medium=Web&utm_campaign=NewPropertyDetail",
+        "search": {
+          "url_desc": "https://www.hkp.com.hk/zh-hk/list/new-property/",
+          "url_desc_zh": "https://www.hkp.com.hk/zh-hk/list/new-property/",
+          "url_desc_cn": "https://www.hkp.com.hk/zh-cn/list/new-property/",
+          "url_desc_en": "https://www.hkp.com.hk/en/list/new-property/",
+          "school_net": {
+            "buy": {
+              "url_desc": "https://www.hkp.com.hk/zh-hk/list/new-property/%E6%A0%A1%E7%B6%B2-12-S-12"
+            },
+            "rent": {
+              "url_desc": "https://www.hkp.com.hk/zh-hk/list/new-property/%E6%A0%A1%E7%B6%B2-12-S-12"
+            }
+          },
+          "transaction": "https://www.hkp.com.hk/zh-hk/list/transaction/%E8%97%8D%E5%A1%98%E9%81%9323-39%E8%99%9F-E-E000015461"
+        },
+        "time_line": [
+          {
+            "checked": true,
+            "id": "sell_status",
+            "sell_status": "coming_soon"
+          },
+          {
+            "checked": true,
+            "id": "first_op_date",
+            "date": "2014-09-11T16:00:00.000Z"
+          },
+          {
+            "checked": true,
+            "id": "first_price_list_date",
+            "show_price_list_btn": false
+          },
+          {
+            "checked": true,
+            "id": "sell_status",
+            "sell_status": "registration"
+          },
+          {
+            "checked": true,
+            "id": "first_sale_date",
+            "date": "2015-09-17T16:00:00.000Z"
+          },
+          {
+            "checked": true,
+            "id": "sell_status",
+            "sell_status": "on_sale"
+          },
+          {
+            "checked": false,
+            "id": "key_date"
+          }
+        ],
+        "payment": []
+      },
+      "agentId": null,
+      "agentApiData": null,
+      "urls": {
+        "zh-hk": "https://www.hkp.com.hk/zh-hk/new-property/%E6%B8%AF%E5%B3%B6-%E8%B7%91%E9%A6%AC%E5%9C%B0-%E6%B8%A3%E7%94%B8%E5%B1%B1-%E8%97%8D%E5%A1%98%E9%81%9323-39%E8%99%9F-E000015461",
+        "zh-cn": "https://www.hkp.com.hk/zh-cn/new-property/%E6%B8%AF%E5%B2%9B-%E8%B7%91%E9%A9%AC%E5%9C%B0-%E6%B8%A3%E7%94%B8%E5%B1%B1-%E8%93%9D%E5%A1%98%E9%81%9323-39%E5%8F%B7-E000015461",
+        "en": "https://www.hkp.com.hk/en/new-property/Hong-Kong-Island-Happy-Valley-Jardine-s-Lookout-23-39-Blue-Pool-Road-E000015461"
+      },
+      "langCode": "zh-hk",
+      "newPropertyNewsApiData": [],
+      "transactionDataWithApiCall": {
+        "count": 4,
+        "show_count": true,
+        "filter": {
+          "hash": false,
+          "redirect": false,
+          "lang": "zh-hk",
+          "currency": "HKD",
+          "unit": "feet",
+          "est_ids": "E000015461",
+          "tx_type": "S",
+          "mkt_type": "1",
+          "page": 1,
+          "limit": 10
+        },
+        "result": [
+          {
+            "id": "NO2025122225122200840391",
+            "region": {
+              "id": "10",
+              "name": "港島"
+            },
+            "subregion": {
+              "id": "1002",
+              "name": "灣仔"
+            },
+            "district": {
+              "id": "100205",
+              "name": "跑馬地 / 渣甸山"
+            },
+            "sm_district": {
+              "id": "10020004",
+              "name": "跑馬地 / 東半山"
+            },
+            "combined_district": {
+              "id": "100205-10020004",
+              "name": "跑馬地 / 東半山"
+            },
+            "estate": {
+              "id": "E000015461",
+              "name": "藍塘道23-39號"
+            },
+            "building": {
+              "id": "B000080322",
+              "name": "藍塘道29-39號（獨立屋）",
+              "first_op_date": "2014-09-11T16:00:00.000Z"
+            },
+            "bedroom": "4",
+            "sitting_room": "3",
+            "area": 0,
+            "net_area": 4575,
+            "price": 227880000,
+            "tags": [
+              "LANDREG",
+              "FIRSTHAND"
+            ],
+            "tx_type": "S",
+            "tx_date": "2025-12-21T16:00:00.000Z",
+            "mkt_type": 1,
+            "source": "LANDREG",
+            "original_source": "LANDREG",
+            "update_date": "2025-12-23T23:04:19.000Z",
+            "url_desc": "https://www.hkp.com.hk/zh-hk/transaction/%E6%B8%AF%E5%B3%B6-%E8%B7%91%E9%A6%AC%E5%9C%B0-%E6%B8%A3%E7%94%B8%E5%B1%B1-%E8%97%8D%E5%A1%98%E9%81%9323-39%E8%99%9F-NO2025122225122200840391",
+            "related_properties_url_desc": "https://www.hkp.com.hk/zh-hk/new-property/%E6%B8%AF%E5%B3%B6-%E8%B7%91%E9%A6%AC%E5%9C%B0-%E6%B8%A3%E7%94%B8%E5%B1%B1-%E8%97%8D%E5%A1%98%E9%81%9323-39%E8%99%9F-E000015461",
+            "location": {
+              "lat": 22.26840794444444,
+              "lon": 114.18759055555557
+            },
+            "photo": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&src=http%3A%2F%2Fimg.midland.com.hk%2Fphoto_db%2Foutlook%2Festate%2FEE000015461_11.jpg",
+            "feature": [
+              {
+                "id": "carpark",
+                "name": "車位"
+              },
+              {
+                "id": "garden",
+                "name": "花園"
+              },
+              {
+                "id": "roof",
+                "name": "天台"
+              },
+              {
+                "id": "flat_roof",
+                "name": "平台"
+              },
+              {
+                "id": "balcony",
+                "name": "露台"
+              }
+            ],
+            "floorplan": [
+              {
+                "id": "57046",
+                "name": "A號屋 (藍塘道33號) 地下, 1/F及2/F",
+                "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2024083007240804&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F322%2FB000080322_1725004624531.jpg",
+                "source": "FIRSTHAND"
+              },
+              {
+                "id": "57048",
+                "name": "A號屋 (藍塘道33號) 1/F-2/F 現狀圖",
+                "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2024083007240827&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F322%2FB000080322_1725004653270.jpg",
+                "source": "FIRSTHAND"
+              },
+              {
+                "id": "57046",
+                "name": "A號屋 (藍塘道33號) 地下, 1/F及2/F",
+                "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2024083007240804&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F322%2FB000080322_1725004624531.jpg",
+                "source": "FIRSTHAND"
+              },
+              {
+                "id": "57048",
+                "name": "A號屋 (藍塘道33號) 1/F-2/F 現狀圖",
+                "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2024083007240827&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F322%2FB000080322_1725004653270.jpg",
+                "source": "FIRSTHAND"
+              },
+              {
+                "id": "57048",
+                "name": "A號屋 (藍塘道33號) 1/F-2/F 現狀圖",
+                "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2024083007240827&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F322%2FB000080322_1725004653270.jpg",
+                "source": "FIRSTHAND"
+              },
+              {
+                "id": "57046",
+                "name": "A號屋 (藍塘道33號) 地下, 1/F及2/F",
+                "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2024083007240804&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F322%2FB000080322_1725004624531.jpg",
+                "source": "FIRSTHAND"
+              },
+              {
+                "id": "57047",
+                "name": "A號屋 (藍塘道33號) 天台及上層天台",
+                "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2024083007240804&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F322%2FB000080322_1725004624535.jpg",
+                "source": "FIRSTHAND"
+              },
+              {
+                "id": "57047",
+                "name": "A號屋 (藍塘道33號) 天台及上層天台",
+                "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2024083007240804&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F322%2FB000080322_1725004624535.jpg",
+                "source": "FIRSTHAND"
+              }
+            ],
+            "unit_price_net": 49810
+          },
+          {
+            "id": "NO2024060524060500300144",
+            "region": {
+              "id": "10",
+              "name": "港島"
+            },
+            "subregion": {
+              "id": "1002",
+              "name": "灣仔"
+            },
+            "district": {
+              "id": "100205",
+              "name": "跑馬地 / 渣甸山"
+            },
+            "sm_district": {
+              "id": "10020004",
+              "name": "跑馬地 / 東半山"
+            },
+            "combined_district": {
+              "id": "100205-10020004",
+              "name": "跑馬地 / 東半山"
+            },
+            "estate": {
+              "id": "E000015461",
+              "name": "藍塘道23-39號"
+            },
+            "building": {
+              "id": "B000080319",
+              "name": "藍塘道29-39號（獨立屋）",
+              "first_op_date": "2014-09-11T16:00:00.000Z"
+            },
+            "bedroom": "4",
+            "sitting_room": "3",
+            "area": 0,
+            "net_area": 4602,
+            "price": 250000000,
+            "tags": [
+              "LANDREG",
+              "FIRSTHAND"
+            ],
+            "tx_type": "S",
+            "tx_date": "2024-06-04T16:00:00.000Z",
+            "mkt_type": 1,
+            "source": "LANDREG",
+            "original_source": "LANDREG",
+            "update_date": "2024-06-06T03:13:13.000Z",
+            "url_desc": "https://www.hkp.com.hk/zh-hk/transaction/%E6%B8%AF%E5%B3%B6-%E8%B7%91%E9%A6%AC%E5%9C%B0-%E6%B8%A3%E7%94%B8%E5%B1%B1-%E8%97%8D%E5%A1%98%E9%81%9323-39%E8%99%9F-NO2024060524060500300144",
+            "related_properties_url_desc": "https://www.hkp.com.hk/zh-hk/new-property/%E6%B8%AF%E5%B3%B6-%E8%B7%91%E9%A6%AC%E5%9C%B0-%E6%B8%A3%E7%94%B8%E5%B1%B1-%E8%97%8D%E5%A1%98%E9%81%9323-39%E8%99%9F-E000015461",
+            "location": {
+              "lat": 22.26840794444444,
+              "lon": 114.18759055555557
+            },
+            "photo": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&src=http%3A%2F%2Fimg.midland.com.hk%2Fphoto_db%2Foutlook%2Festate%2FEE000015461_9.jpg",
+            "feature": [
+              {
+                "id": "carpark",
+                "name": "車位"
+              },
+              {
+                "id": "garden",
+                "name": "花園"
+              },
+              {
+                "id": "roof",
+                "name": "天台"
+              },
+              {
+                "id": "flat_roof",
+                "name": "平台"
+              },
+              {
+                "id": "balcony",
+                "name": "露台"
+              }
+            ],
+            "floorplan": [
+              {
+                "id": "57045",
+                "name": "B號屋 (藍塘道29號) 1/F-2/F 現狀圖",
+                "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2024083007240854&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F319%2FB000080319_1725004382431.jpg",
+                "source": "FIRSTHAND"
+              },
+              {
+                "id": "57044",
+                "name": "B號屋 (藍塘道29號) 地下, 1/F及2/F",
+                "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2024083007240824&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F319%2FB000080319_1725004339096.jpg",
+                "source": "FIRSTHAND"
+              },
+              {
+                "id": "57045",
+                "name": "B號屋 (藍塘道29號) 1/F-2/F 現狀圖",
+                "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2024083007240854&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F319%2FB000080319_1725004382431.jpg",
+                "source": "FIRSTHAND"
+              },
+              {
+                "id": "57044",
+                "name": "B號屋 (藍塘道29號) 地下, 1/F及2/F",
+                "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2024083007240824&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F319%2FB000080319_1725004339096.jpg",
+                "source": "FIRSTHAND"
+              },
+              {
+                "id": "57045",
+                "name": "B號屋 (藍塘道29號) 1/F-2/F 現狀圖",
+                "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2024083007240854&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F319%2FB000080319_1725004382431.jpg",
+                "source": "FIRSTHAND"
+              },
+              {
+                "id": "57044",
+                "name": "B號屋 (藍塘道29號) 地下, 1/F及2/F",
+                "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2024083007240824&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F319%2FB000080319_1725004339096.jpg",
+                "source": "FIRSTHAND"
+              },
+              {
+                "id": "54542",
+                "name": "B號屋 (藍塘道29號) 天台及上層天台",
+                "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2024083007240822&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F319%2FB000080319_1709267970462.jpg",
+                "source": "FIRSTHAND"
+              },
+              {
+                "id": "54542",
+                "name": "B號屋 (藍塘道29號) 天台及上層天台",
+                "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2024083007240822&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F319%2FB000080319_1709267970462.jpg",
+                "source": "FIRSTHAND"
+              }
+            ],
+            "unit_price_net": 54324
+          },
+          {
+            "id": "I20240101300",
+            "region": {
+              "id": "10",
+              "name": "港島"
+            },
+            "subregion": {
+              "id": "1002",
+              "name": "灣仔"
+            },
+            "district": {
+              "id": "100205",
+              "name": "跑馬地 / 渣甸山"
+            },
+            "sm_district": {
+              "id": "10020004",
+              "name": "跑馬地 / 東半山"
+            },
+            "combined_district": {
+              "id": "100205-10020004",
+              "name": "跑馬地 / 東半山"
+            },
+            "estate": {
+              "id": "E000015461",
+              "name": "藍塘道23-39號"
+            },
+            "building": {
+              "id": "B000080323",
+              "name": "藍塘道29-39號（獨立屋）",
+              "first_op_date": "2014-09-11T16:00:00.000Z"
+            },
+            "bedroom": "5",
+            "sitting_room": "3",
+            "area": 0,
+            "net_area": 4602,
+            "price": 230000000,
+            "tags": [
+              "LANDREG",
+              "FIRSTHAND"
+            ],
+            "tx_type": "S",
+            "tx_date": "2024-02-08T16:00:00.000Z",
+            "mkt_type": 1,
+            "source": "LANDREG",
+            "original_source": "MIDLAND",
+            "update_date": "2024-02-13T23:10:14.369Z",
+            "url_desc": "https://www.hkp.com.hk/zh-hk/transaction/%E6%B8%AF%E5%B3%B6-%E8%B7%91%E9%A6%AC%E5%9C%B0-%E6%B8%A3%E7%94%B8%E5%B1%B1-%E8%97%8D%E5%A1%98%E9%81%9323-39%E8%99%9F-I20240101300",
+            "related_properties_url_desc": "https://www.hkp.com.hk/zh-hk/new-property/%E6%B8%AF%E5%B3%B6-%E8%B7%91%E9%A6%AC%E5%9C%B0-%E6%B8%A3%E7%94%B8%E5%B1%B1-%E8%97%8D%E5%A1%98%E9%81%9323-39%E8%99%9F-E000015461",
+            "location": {
+              "lat": 22.26840794444444,
+              "lon": 114.18759055555557
+            },
+            "photo": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&src=http%3A%2F%2Fimg.midland.com.hk%2Fphoto_db%2Foutlook%2Festate%2FEE000015461_10.jpg",
+            "feature": [
+              {
+                "id": "garden",
+                "name": "花園"
+              },
+              {
+                "id": "roof",
+                "name": "天台"
+              },
+              {
+                "id": "flat_roof",
+                "name": "平台"
+              },
+              {
+                "id": "balcony",
+                "name": "露台"
+              }
+            ],
+            "floorplan": [
+              {
+                "id": "52061",
+                "name": "B號屋 (藍塘道33號) 地下, 1/F及2/F",
+                "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061308240628&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F323%2FB000080323_1686646583888.jpg",
+                "source": "FIRSTHAND"
+              },
+              {
+                "id": "52061",
+                "name": "B號屋 (藍塘道33號) 地下, 1/F及2/F",
+                "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061308240628&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F323%2FB000080323_1686646583888.jpg",
+                "source": "FIRSTHAND"
+              },
+              {
+                "id": "52061",
+                "name": "B號屋 (藍塘道33號) 地下, 1/F及2/F",
+                "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061308240628&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F323%2FB000080323_1686646583888.jpg",
+                "source": "FIRSTHAND"
+              },
+              {
+                "id": "52062",
+                "name": "B號屋 (藍塘道33號) 天台及上層天台",
+                "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061308240628&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F323%2FB000080323_1686646583894.jpg",
+                "source": "FIRSTHAND"
+              },
+              {
+                "id": "52062",
+                "name": "B號屋 (藍塘道33號) 天台及上層天台",
+                "wan_doc_path": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&v=2023061308240628&src=http%3A%2F%2Fimg.midland.com.hk%2Ffloorplan_db%2Ffh_building%2F323%2FB000080323_1686646583894.jpg",
+                "source": "FIRSTHAND"
+              }
+            ],
+            "unit_price_net": 49978
+          },
+          {
+            "id": "100121",
+            "region": {
+              "id": "10",
+              "name": "港島"
+            },
+            "subregion": {
+              "id": "1002",
+              "name": "灣仔"
+            },
+            "district": {
+              "id": "100205",
+              "name": "跑馬地 / 渣甸山"
+            },
+            "sm_district": {
+              "id": "10020004",
+              "name": "跑馬地 / 東半山"
+            },
+            "combined_district": {
+              "id": "100205-10020004",
+              "name": "跑馬地 / 東半山"
+            },
+            "estate": {
+              "id": "E000015461",
+              "name": "藍塘道23-39號"
+            },
+            "building": {
+              "id": "B000080328",
+              "name": "藍塘道29-39號（獨立屋）",
+              "first_op_date": "2014-09-11T16:00:00.000Z"
+            },
+            "bedroom": "5",
+            "sitting_room": "3",
+            "area": 0,
+            "net_area": 4575,
+            "price": 288300000,
+            "tags": [
+              "SRPE",
+              "FIRSTHAND"
+            ],
+            "tx_type": "S",
+            "tx_date": "2016-10-17T16:00:00.000Z",
+            "mkt_type": 1,
+            "source": "SRPE",
+            "original_source": "LANDREG",
+            "update_date": "2025-12-12T15:16:53.765Z",
+            "url_desc": "https://www.hkp.com.hk/zh-hk/transaction/%E6%B8%AF%E5%B3%B6-%E8%B7%91%E9%A6%AC%E5%9C%B0-%E6%B8%A3%E7%94%B8%E5%B1%B1-%E8%97%8D%E5%A1%98%E9%81%9323-39%E8%99%9F-100121",
+            "related_properties_url_desc": "https://www.hkp.com.hk/zh-hk/new-property/%E6%B8%AF%E5%B3%B6-%E8%B7%91%E9%A6%AC%E5%9C%B0-%E6%B8%A3%E7%94%B8%E5%B1%B1-%E8%97%8D%E5%A1%98%E9%81%9323-39%E8%99%9F-E000015461",
+            "location": {
+              "lat": 22.26840794444444,
+              "lon": 114.18759055555557
+            },
+            "photo": "https://wm.hkp.com.hk/img_wm_revamp.php?wm=hkp&src=http%3A%2F%2Fimg.midland.com.hk%2Fphoto_db%2Foutlook%2Festate%2FEE000015461_8.jpg",
+            "feature": [
+              {
+                "id": "garden",
+                "name": "花園"
+              },
+              {
+                "id": "roof",
+                "name": "天台"
+              },
+              {
+                "id": "flat_roof",
+                "name": "平台"
+              },
+              {
+                "id": "balcony",
+                "name": "露台"
+              }
+            ],
+            "unit_price_net": 63016
+          }
+        ]
+      }
+    },
+    "__N_SSP": true
+  },
+  "page": "/[locale]/new-property/[[...slug]]",
+  "query": {
+    "locale": "zh-hk",
+    "slug": [
+      "港島-跑馬地-渣甸山-藍塘道23-39號-E000015461"
+    ]
+  },
+  "buildId": "973332e4941d534d7708a0ba13412216a9382335",
+  "assetPrefix": "https://web-assets.hkp.com.hk/hkp-new-property-detail/973332e4941d534d7708a0ba13412216a9382335",
+  "isFallback": false,
+  "isExperimentalCompile": false,
+  "gssp": true,
+  "scriptLoader": []
+}

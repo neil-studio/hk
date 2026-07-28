@@ -1,0 +1,618 @@
+{
+  "1_28_B": {
+    "original_price": 7523000,
+    "discount_price": 4288100,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_27_B": {
+    "original_price": 7425000,
+    "discount_price": 4232200,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_26_B": {
+    "original_price": 7327000,
+    "discount_price": 4176300,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_25_B": {
+    "original_price": 7228000,
+    "discount_price": 4119900,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_23_B": {
+    "original_price": 7178000,
+    "discount_price": 4091400,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_22_B": {
+    "original_price": 7130000,
+    "discount_price": 4064100,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_21_B": {
+    "original_price": 7080000,
+    "discount_price": 4035600,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_20_B": {
+    "original_price": 7031000,
+    "discount_price": 4007600,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_19_B": {
+    "original_price": 6983000,
+    "discount_price": 3980300,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_18_B": {
+    "original_price": 6933000,
+    "discount_price": 3951800,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_17_B": {
+    "original_price": 6909000,
+    "discount_price": 3938100,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_16_B": {
+    "original_price": 6859000,
+    "discount_price": 3909600,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_15_B": {
+    "original_price": 6810000,
+    "discount_price": 3881700,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_12_B": {
+    "original_price": 6762000,
+    "discount_price": 3854300,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_11_B": {
+    "original_price": 6712000,
+    "discount_price": 3825800,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_10_B": {
+    "original_price": 66630006863000,
+    "discount_price": 37979103911900,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_9_B": {
+    "original_price": 6614000,
+    "discount_price": 3769900,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_8_B": {
+    "original_price": 6589000,
+    "discount_price": 3755700,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_7_B": {
+    "original_price": 6540000,
+    "discount_price": 3727800,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_6_B": {
+    "original_price": 6467000,
+    "discount_price": 3686100,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_28_G": {
+    "original_price": 5634000,
+    "discount_price": 3211300,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_27_G": {
+    "original_price": 5598000,
+    "discount_price": 3190800,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_26_G": {
+    "original_price": 5562000,
+    "discount_price": 3170300,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_25_G": {
+    "original_price": 5526000,
+    "discount_price": 3149800,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_23_G": {
+    "original_price": 5489000,
+    "discount_price": 3128700,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_22_G": {
+    "original_price": 5452000,
+    "discount_price": 3107600,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_21_G": {
+    "original_price": 5416000,
+    "discount_price": 3087100,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_20_G": {
+    "original_price": 5379000,
+    "discount_price": 3066000,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_19_G": {
+    "original_price": 5347000,
+    "discount_price": 3047700,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_18_G": {
+    "original_price": 5308000,
+    "discount_price": 3025500,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_17_G": {
+    "original_price": 5289000,
+    "discount_price": 3014700,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_16_G": {
+    "original_price": 5252000,
+    "discount_price": 2993600,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_15_G": {
+    "original_price": 5215000,
+    "discount_price": 2972500,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_12_G": {
+    "original_price": 5179000,
+    "discount_price": 2952000,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_11_G": {
+    "original_price": 5143000,
+    "discount_price": 2931500,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_10_G": {
+    "original_price": 5107000,
+    "discount_price": 2910900,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_9_G": {
+    "original_price": 5070000,
+    "discount_price": 2889900,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_8_G": {
+    "original_price": 5052000,
+    "discount_price": 2879600,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_7_G": {
+    "original_price": 5016000,
+    "discount_price": 2859100,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_6_G": {
+    "original_price": 4960000,
+    "discount_price": 2827200,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_28_H": {
+    "original_price": 6850000,
+    "discount_price": 3904500,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_27_H": {
+    "original_price": 6805000,
+    "discount_price": 3878800,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_26_H": {
+    "original_price": 6759000,
+    "discount_price": 3852600,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_25_H": {
+    "original_price": 6713000,
+    "discount_price": 3826400,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_23_H": {
+    "original_price": 6668000,
+    "discount_price": 3800700,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_22_H": {
+    "original_price": 6623000,
+    "discount_price": 3775100,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_21_H": {
+    "original_price": 6577000,
+    "discount_price": 3748800,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_20_H": {
+    "original_price": 6532000,
+    "discount_price": 3723200,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_19_H": {
+    "original_price": 6486000,
+    "discount_price": 3697000,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_18_H": {
+    "original_price": 6440000,
+    "discount_price": 3670800,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_17_H": {
+    "original_price": 6418000,
+    "discount_price": 3658200,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_16_H": {
+    "original_price": 6372000,
+    "discount_price": 3632000,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_15_H": {
+    "original_price": 6327000,
+    "discount_price": 3606300,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_12_H": {
+    "original_price": 62820007163000,
+    "discount_price": 35807404082900,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_11_H": {
+    "original_price": 6236000,
+    "discount_price": 3554500,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_10_H": {
+    "original_price": 6191000,
+    "discount_price": 3528800,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_9_H": {
+    "original_price": 6145000,
+    "discount_price": 3502600,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_8_H": {
+    "original_price": 6123000,
+    "discount_price": 3490100,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_7_H": {
+    "original_price": 6077000,
+    "discount_price": 3463800,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "1_6_H": {
+    "original_price": 60090006717000,
+    "discount_price": 34251303828600,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "2_26_A": {
+    "original_price": 11439000,
+    "discount_price": 6520200,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "2_25_A": {
+    "original_price": 11288000,
+    "discount_price": 6434100,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "2_23_A": {
+    "original_price": 11211000,
+    "discount_price": 6390200,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "2_22_A": {
+    "original_price": 11135000,
+    "discount_price": 6346900,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "2_21_A": {
+    "original_price": 11059000,
+    "discount_price": 6303600,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "2_30_B": {
+    "original_price": 7712000,
+    "discount_price": 4395800,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "2_29_B": {
+    "original_price": 7617000,
+    "discount_price": 4341600,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "2_28_B": {
+    "original_price": 7313000,
+    "discount_price": 4168400,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "2_17_B": {
+    "original_price": 6727000,
+    "discount_price": 3834300,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "2_16_B": {
+    "original_price": 6656000,
+    "discount_price": 3793900,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "2_15_B": {
+    "original_price": 6586000,
+    "discount_price": 3754000,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "2_30_C": {
+    "original_price": 7783000,
+    "discount_price": 4436300,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "2_29_C": {
+    "original_price": 7689000,
+    "discount_price": 4382700,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "2_28_C": {
+    "original_price": 7385000,
+    "discount_price": 4209400,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "2_30_D": {
+    "original_price": 64390006633000,
+    "discount_price": 36702303780800,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "2_29_D": {
+    "original_price": 63590006550000,
+    "discount_price": 36246303733500,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "2_28_D": {
+    "original_price": 60980006282000,
+    "discount_price": 34758603580700,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "2_27_D": {
+    "original_price": 60170006198000,
+    "discount_price": 34296903532800,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "2_7_H": {
+    "original_price": 6188000,
+    "discount_price": 3527100,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "2_6_H": {
+    "original_price": 6119000,
+    "discount_price": 3487800,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "2_23_K": {
+    "original_price": 7573000,
+    "discount_price": 4316600,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "2_22_K": {
+    "original_price": 7522000,
+    "discount_price": 4287500,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "2_21_K": {
+    "original_price": 7470000,
+    "discount_price": 4257900,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "2_20_K": {
+    "original_price": 7419000,
+    "discount_price": 4228800,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "2_7_K": {
+    "original_price": 6803000,
+    "discount_price": 3877700,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "2_6_K": {
+    "original_price": 6726000,
+    "discount_price": 3833800,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "2_7_L": {
+    "original_price": 5170000,
+    "discount_price": 2946900,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  },
+  "2_6_L": {
+    "original_price": 5112000,
+    "discount_price": 2913800,
+    "discount_percent_str": "43.00%",
+    "payment_method": "現金付款計劃 (減43.0%)",
+    "price_list": "3D"
+  }
+}

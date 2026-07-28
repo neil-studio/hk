@@ -1,0 +1,219 @@
+{
+  "1_36_C": {
+    "original_price": 19639000,
+    "discount_price": 18240900,
+    "discount_percent_str": "7.12%",
+    "payment_method": "現金付款計劃 (減3.5%) + 代繳從價印花稅",
+    "price_list": "4G"
+  },
+  "1_31_C": {
+    "original_price": 19412000,
+    "discount_price": 18732500,
+    "discount_percent_str": "3.50%",
+    "payment_method": "現金付款計劃 (減3.5%)",
+    "price_list": "4G"
+  },
+  "1_30_C": {
+    "original_price": 19355000,
+    "discount_price": 18677500,
+    "discount_percent_str": "3.50%",
+    "payment_method": "現金付款計劃 (減3.5%)",
+    "price_list": "4G"
+  },
+  "1_29_C": {
+    "original_price": 19298000,
+    "discount_price": 17924100,
+    "discount_percent_str": "7.12%",
+    "payment_method": "現金付款計劃 (減3.5%) + 代繳從價印花稅",
+    "price_list": "4G"
+  },
+  "1_27_C": {
+    "original_price": 19127000,
+    "discount_price": 17765300,
+    "discount_percent_str": "7.12%",
+    "payment_method": "現金付款計劃 (減3.5%) + 代繳從價印花稅",
+    "price_list": "4G"
+  },
+  "1_26_C": {
+    "original_price": 19070000,
+    "discount_price": 17712400,
+    "discount_percent_str": "7.12%",
+    "payment_method": "現金付款計劃 (減3.5%) + 代繳從價印花稅",
+    "price_list": "4G"
+  },
+  "1_23_C": {
+    "original_price": 18957000,
+    "discount_price": 17607400,
+    "discount_percent_str": "7.12%",
+    "payment_method": "現金付款計劃 (減3.5%) + 代繳從價印花稅",
+    "price_list": "4G"
+  },
+  "1_22_C": {
+    "original_price": 18900000,
+    "discount_price": 17554500,
+    "discount_percent_str": "7.12%",
+    "payment_method": "現金付款計劃 (減3.5%) + 代繳從價印花稅",
+    "price_list": "4G"
+  },
+  "1_36_D": {
+    "original_price": 15850000,
+    "discount_price": 14721600,
+    "discount_percent_str": "7.12%",
+    "payment_method": "現金付款計劃 (減3.5%) + 代繳從價印花稅",
+    "price_list": "4G"
+  },
+  "1_31_D": {
+    "original_price": 15668000,
+    "discount_price": 15119600,
+    "discount_percent_str": "3.50%",
+    "payment_method": "現金付款計劃 (減3.5%)",
+    "price_list": "4G"
+  },
+  "1_30_D": {
+    "original_price": 15622000,
+    "discount_price": 15075200,
+    "discount_percent_str": "3.50%",
+    "payment_method": "現金付款計劃 (減3.5%)",
+    "price_list": "4G"
+  },
+  "1_29_D": {
+    "original_price": 15576000,
+    "discount_price": 14467100,
+    "discount_percent_str": "7.12%",
+    "payment_method": "現金付款計劃 (減3.5%) + 代繳從價印花稅",
+    "price_list": "4G"
+  },
+  "1_27_D": {
+    "original_price": 15439000,
+    "discount_price": 14339900,
+    "discount_percent_str": "7.12%",
+    "payment_method": "現金付款計劃 (減3.5%) + 代繳從價印花稅",
+    "price_list": "4G"
+  },
+  "1_26_D": {
+    "original_price": 15393000,
+    "discount_price": 14297100,
+    "discount_percent_str": "7.12%",
+    "payment_method": "現金付款計劃 (減3.5%) + 代繳從價印花稅",
+    "price_list": "4G"
+  },
+  "1_23_D": {
+    "original_price": 15302000,
+    "discount_price": 14212600,
+    "discount_percent_str": "7.12%",
+    "payment_method": "現金付款計劃 (減3.5%) + 代繳從價印花稅",
+    "price_list": "4G"
+  },
+  "1_22_D": {
+    "original_price": 15256000,
+    "discount_price": 14169900,
+    "discount_percent_str": "7.12%",
+    "payment_method": "現金付款計劃 (減3.5%) + 代繳從價印花稅",
+    "price_list": "4G"
+  },
+  "1_39_E": {
+    "original_price": 16515000,
+    "discount_price": 15936900,
+    "discount_percent_str": "3.50%",
+    "payment_method": "現金付款計劃 (減3.5%)",
+    "price_list": "4G"
+  },
+  "1_27_J": {
+    "original_price": 107360008857000,
+    "discount_price": 93545459717200,
+    "discount_percent_str": "12.87%",
+    "payment_method": "現金付款計劃 (減9.0%) + 代繳從價印花稅",
+    "price_list": "4G"
+  },
+  "1_26_J": {
+    "original_price": 107040008831000,
+    "discount_price": 93266635694600,
+    "discount_percent_str": "12.87%",
+    "payment_method": "現金付款計劃 (減9.0%) + 代繳從價印花稅",
+    "price_list": "4G"
+  },
+  "1_25_J": {
+    "original_price": 106720008804000,
+    "discount_price": 97115208011600,
+    "discount_percent_str": "9.00%",
+    "payment_method": "現金付款計劃 (減9.0%)",
+    "price_list": "4G"
+  },
+  "1_23_J": {
+    "original_price": 106400008778000,
+    "discount_price": 92708987648400,
+    "discount_percent_str": "12.87%",
+    "payment_method": "現金付款計劃 (減9.0%) + 代繳從價印花稅",
+    "price_list": "4G"
+  },
+  "1_22_J": {
+    "original_price": 106080008752000,
+    "discount_price": 92430163625800,
+    "discount_percent_str": "12.87%",
+    "payment_method": "現金付款計劃 (減9.0%) + 代繳從價印花稅",
+    "price_list": "4G"
+  },
+  "1_21_J": {
+    "original_price": 105750008724000,
+    "discount_price": 96232507938800,
+    "discount_percent_str": "9.00%",
+    "payment_method": "現金付款計劃 (減9.0%)",
+    "price_list": "4G"
+  },
+  "1_16_J": {
+    "original_price": 10447000,
+    "discount_price": 9506700,
+    "discount_percent_str": "9.00%",
+    "payment_method": "現金付款計劃 (減9.0%)",
+    "price_list": "4G"
+  },
+  "1_15_J": {
+    "original_price": 10415000,
+    "discount_price": 9477600,
+    "discount_percent_str": "9.00%",
+    "payment_method": "現金付款計劃 (減9.0%)",
+    "price_list": "4G"
+  },
+  "1_12_J": {
+    "original_price": 109930009069000,
+    "discount_price": 95784765151900,
+    "discount_percent_str": "12.87%",
+    "payment_method": "現金付款計劃 (減9.0%) + 代繳從價印花稅",
+    "price_list": "4G"
+  },
+  "1_10_J": {
+    "original_price": 103180008512000,
+    "discount_price": 93893807745900,
+    "discount_percent_str": "9.00%",
+    "payment_method": "現金付款計劃 (減9.0%)",
+    "price_list": "4G"
+  },
+  "1_9_J": {
+    "original_price": 10286000,
+    "discount_price": 9360200,
+    "discount_percent_str": "9.00%",
+    "payment_method": "現金付款計劃 (減9.0%)",
+    "price_list": "4G"
+  },
+  "1_8_J": {
+    "original_price": 102860008486000,
+    "discount_price": 93602607722200,
+    "discount_percent_str": "9.00%",
+    "payment_method": "現金付款計劃 (減9.0%)",
+    "price_list": "4G"
+  },
+  "1_7_J": {
+    "original_price": 102540008460000,
+    "discount_price": 93311407698600,
+    "discount_percent_str": "9.00%",
+    "payment_method": "現金付款計劃 (減9.0%)",
+    "price_list": "4G"
+  },
+  "1_6_J": {
+    "original_price": 10223000,
+    "discount_price": 9302900,
+    "discount_percent_str": "9.00%",
+    "payment_method": "現金付款計劃 (減9.0%)",
+    "price_list": "4G"
+  }
+}
