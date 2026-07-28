@@ -2599,52 +2599,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  // 🔒 专属访问密码保护门 (Password Gate: lm8888)
-  function initSiteAuth() {
-    const AUTH_KEY = 'hk_site_auth_token';
-    const TARGET_PWD = 'lm8888';
-
-    const isUnlocked = sessionStorage.getItem(AUTH_KEY) === 'unlocked_lm8888' || localStorage.getItem(AUTH_KEY) === 'unlocked_lm8888';
-
-    const overlay = document.getElementById('siteAuthOverlay');
-    if (!overlay) return;
-
-    if (isUnlocked) {
-      overlay.classList.add('unlocked');
-      return;
-    }
-
-    const pwdInput = document.getElementById('siteAuthPassword');
-    const authBtn = document.getElementById('siteAuthBtn');
-    const errorMsg = document.getElementById('siteAuthError');
-
-    const verify = () => {
-      const inputVal = (pwdInput?.value || '').trim();
-      if (inputVal === TARGET_PWD) {
-        sessionStorage.setItem(AUTH_KEY, 'unlocked_lm8888');
-        localStorage.setItem(AUTH_KEY, 'unlocked_lm8888');
-        overlay.classList.add('unlocked');
-        if (errorMsg) errorMsg.textContent = '';
-      } else {
-        if (errorMsg) errorMsg.textContent = '❌ 密码错误，请重新输入';
-        if (pwdInput) {
-          pwdInput.style.borderColor = '#ef4444';
-          pwdInput.focus();
-          pwdInput.select();
-        }
-      }
-    };
-
-    if (authBtn) authBtn.onclick = verify;
-    if (pwdInput) {
-      pwdInput.onkeydown = (e) => {
-        if (e.key === 'Enter') verify();
-      };
-    }
-  }
-
-  initSiteAuth();
-
   // 启动主逻辑
   loadData();
 });
