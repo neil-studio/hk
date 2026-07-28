@@ -240,13 +240,14 @@ def load_real_history_analytics():
         return {}
 
 def build_leaderboard_data():
-    """从 SQLite 数据库 成交历史数据库.db 生成多维热销榜单数据"""
+    """从 SQLite 数据库 成交历史数据库.db 生成动态多维热销榜单数据"""
     db_path = os.path.join(BASE_DIR, "成交历史数据库.db")
     if not os.path.exists(db_path):
         return {}
 
     try:
         import sqlite3
+        from datetime import datetime
         conn = sqlite3.connect(db_path)
         c = conn.cursor()
 
@@ -274,48 +275,82 @@ def build_leaderboard_data():
                 })
             return res
 
-        # 1. 月榜 (2026-06 ~ 最新)
-        monthly = {
-            'overall': query_rankings("sold_date >= '2026-06-01'", 10),
-            'region_hk': query_rankings("sold_date >= '2026-01-01' AND region = '港岛'", 10),
-            'region_kl': query_rankings("sold_date >= '2026-01-01' AND region = '九龙'", 10),
-            'price_500_2000m': query_rankings("sold_date >= '2026-01-01' AND CAST(COALESCE(NULLIF(disc_price,''), price) AS REAL) BETWEEN 5000000 AND 20000000", 10),
-            'price_2000_5000m': query_rankings("sold_date >= '2026-01-01' AND CAST(COALESCE(NULLIF(disc_price,''), price) AS REAL) BETWEEN 20000000 AND 50000000", 10),
-            'price_5000_10000m': query_rankings("sold_date >= '2026-01-01' AND CAST(COALESCE(NULLIF(disc_price,''), price) AS REAL) BETWEEN 50000000 AND 100000000", 10),
-            'price_10000m_above': query_rankings("sold_date >= '2026-01-01' AND CAST(COALESCE(NULLIF(disc_price,''), price) AS REAL) >= 100000000", 10)
-        }
+        def get_category_bundle(where_prefix):
+            return {
+                'overall': query_rankings(f"{where_prefix}", 10),
+                'region_hk': query_rankings(f"{where_prefix} AND region = '港岛'", 10),
+                'region_kl': query_rankings(f"{where_prefix} AND region = '九龙'", 10),
+                'price_500_2000m': query_rankings(f"{where_prefix} AND CAST(COALESCE(NULLIF(disc_price,''), price) AS REAL) BETWEEN 5000000 AND 20000000", 10),
+                'price_2000_5000m': query_rankings(f"{where_prefix} AND CAST(COALESCE(NULLIF(disc_price,''), price) AS REAL) BETWEEN 20000000 AND 50000000", 10),
+                'price_5000_10000m': query_rankings(f"{where_prefix} AND CAST(COALESCE(NULLIF(disc_price,''), price) AS REAL) BETWEEN 50000000 AND 100000000", 10),
+                'price_10000m_above': query_rankings(f"{where_prefix} AND CAST(COALESCE(NULLIF(disc_price,''), price) AS REAL) >= 100000000", 10)
+            }
 
-        # 2. 周榜 (2026-07 ~ 最新)
-        weekly = {
-            'overall': query_rankings("sold_date >= '2026-07-01'", 10),
-            'region_hk': query_rankings("sold_date >= '2026-06-01' AND region = '港岛'", 10),
-            'region_kl': query_rankings("sold_date >= '2026-06-01' AND region = '九龙'", 10),
-            'price_500_2000m': query_rankings("sold_date >= '2026-06-01' AND CAST(COALESCE(NULLIF(disc_price,''), price) AS REAL) BETWEEN 5000000 AND 20000000", 10),
-            'price_2000_5000m': query_rankings("sold_date >= '2026-06-01' AND CAST(COALESCE(NULLIF(disc_price,''), price) AS REAL) BETWEEN 20000000 AND 50000000", 10),
-            'price_5000_10000m': query_rankings("sold_date >= '2026-06-01' AND CAST(COALESCE(NULLIF(disc_price,''), price) AS REAL) BETWEEN 50000000 AND 100000000", 10),
-            'price_10000m_above': query_rankings("sold_date >= '2026-06-01' AND CAST(COALESCE(NULLIF(disc_price,''), price) AS REAL) >= 100000000", 10)
-        }
+        # 1. 提取可用年份
+        c.execute("SELECT DISTINCT substr(sold_date, 1, 4) FROM sold_history WHERE sold_date IS NOT NULL AND sold_date != '' ORDER BY sold_date DESC LIMIT 5")
+        years = [r[0] for r in c.fetchall() if r[0] and len(r[0]) == 4]
+        
+        years_list = []
+        yearly_map = {}
+        for y in years:
+            label = f"{y}年度累计" if y == "2026" else f"{y}全年度"
+            years_list.append({'val': y, 'label': label})
+            yearly_map[y] = get_category_bundle(f"substr(sold_date, 1, 4) = '{y}'")
 
-        # 3. 2026 年榜
-        yearly = {
-            'overall': query_rankings("sold_date >= '2026-01-01'", 10),
-            'region_hk': query_rankings("sold_date >= '2026-01-01' AND region = '港岛'", 10),
-            'region_kl': query_rankings("sold_date >= '2026-01-01' AND region = '九龙'", 10),
-            'price_500_2000m': query_rankings("sold_date >= '2026-01-01' AND CAST(COALESCE(NULLIF(disc_price,''), price) AS REAL) BETWEEN 5000000 AND 20000000", 10),
-            'price_2000_5000m': query_rankings("sold_date >= '2026-01-01' AND CAST(COALESCE(NULLIF(disc_price,''), price) AS REAL) BETWEEN 20000000 AND 50000000", 10),
-            'price_5000_10000m': query_rankings("sold_date >= '2026-01-01' AND CAST(COALESCE(NULLIF(disc_price,''), price) AS REAL) BETWEEN 50000000 AND 100000000", 10),
-            'price_10000m_above': query_rankings("sold_date >= '2026-01-01' AND CAST(COALESCE(NULLIF(disc_price,''), price) AS REAL) >= 100000000", 10)
-        }
+        # 2. 提取可用月份
+        c.execute("SELECT DISTINCT substr(sold_date, 1, 7) FROM sold_history WHERE sold_date IS NOT NULL AND sold_date != '' ORDER BY sold_date DESC LIMIT 12")
+        months = [r[0] for r in c.fetchall() if r[0] and len(r[0]) == 7]
+
+        months_list = []
+        monthly_map = {}
+        for idx, m in enumerate(months):
+            parts = m.split('-')
+            m_label = f"{parts[0]}年{int(parts[1])}月" + (" (最新)" if idx == 0 else "")
+            months_list.append({'val': m, 'label': m_label})
+            monthly_map[m] = get_category_bundle(f"substr(sold_date, 1, 7) = '{m}'")
+
+        # 3. 提取可用周度
+        c.execute("SELECT sold_date FROM sold_history WHERE sold_date >= '2026-01-01' AND sold_date IS NOT NULL AND sold_date != '' ORDER BY sold_date DESC")
+        date_rows = c.fetchall()
+        week_map_raw = {}
+        for r in date_rows:
+            dstr = str(r[0]).strip()
+            try:
+                dt_parts = [int(p) for p in dstr[:10].split('-')]
+                dt_obj = datetime(dt_parts[0], dt_parts[1], dt_parts[2])
+                iso_yr, iso_wk, _ = dt_obj.isocalendar()
+                w_key = f"{iso_yr}-W{iso_wk:02d}"
+                if w_key not in week_map_raw:
+                    week_map_raw[w_key] = {'year': iso_yr, 'week_num': iso_wk, 'min_date': dstr[:10], 'max_date': dstr[:10]}
+                else:
+                    if dstr[:10] < week_map_raw[w_key]['min_date']: week_map_raw[w_key]['min_date'] = dstr[:10]
+                    if dstr[:10] > week_map_raw[w_key]['max_date']: week_map_raw[w_key]['max_date'] = dstr[:10]
+            except:
+                continue
+
+        sorted_weeks = sorted(week_map_raw.keys(), reverse=True)[:10]
+        weeks_list = []
+        weekly_map = {}
+        for idx, w in enumerate(sorted_weeks):
+            w_info = week_map_raw[w]
+            w_label = f"{w_info['year']}年第{w_info['week_num']}周 ({w_info['min_date'][5:].replace('-','/')}-{w_info['max_date'][5:].replace('-','/')})" + (" (最新)" if idx == 0 else "")
+            weeks_list.append({'val': w, 'label': w_label})
+            weekly_map[w] = get_category_bundle(f"sold_date BETWEEN '{w_info['min_date']}' AND '{w_info['max_date']}'")
 
         conn.close()
 
         return {
-            'weekly': weekly,
-            'monthly': monthly,
-            'yearly': yearly
+            'options': {
+                'months': months_list,
+                'weeks': weeks_list,
+                'years': years_list
+            },
+            'monthly_map': monthly_map,
+            'weekly_map': weekly_map,
+            'yearly_map': yearly_map
         }
     except Exception as e:
-        print(f"构建排行榜失败: {e}")
+        print(f"构建动态排行榜失败: {e}")
         return {}
 
 def main():

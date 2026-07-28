@@ -160,12 +160,60 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!container) return;
 
     const lbData = window.APP_DATA?.leaderboards || {};
-    let currentTime = 'monthly';
+    const optionsData = lbData.options || {};
+
+    let currentTime = 'monthly'; // 'weekly', 'monthly', 'yearly'
     let currentCat = 'overall';
+    let currentPeriodVal = '';
+
+    const periodSelect = document.getElementById('lbPeriodSelect');
+    const periodBadge = document.getElementById('lbPeriodBadge');
+
+    const updateDropdownOptions = () => {
+      if (!periodSelect) return;
+      periodSelect.innerHTML = '';
+      
+      let list = [];
+      if (currentTime === 'monthly') list = optionsData.months || [];
+      else if (currentTime === 'weekly') list = optionsData.weeks || [];
+      else if (currentTime === 'yearly') list = optionsData.years || [];
+
+      list.forEach(opt => {
+        const optionElem = document.createElement('option');
+        optionElem.value = opt.val;
+        optionElem.textContent = opt.label;
+        periodSelect.appendChild(optionElem);
+      });
+
+      if (list.length > 0) {
+        currentPeriodVal = list[0].val;
+        periodSelect.value = currentPeriodVal;
+      } else {
+        currentPeriodVal = '';
+      }
+    };
 
     const render = () => {
-      const timeData = lbData[currentTime] || {};
-      const list = timeData[currentCat] || [];
+      let timeMap = {};
+      if (currentTime === 'monthly') timeMap = lbData.monthly_map || {};
+      else if (currentTime === 'weekly') timeMap = lbData.weekly_map || {};
+      else if (currentTime === 'yearly') timeMap = lbData.yearly_map || {};
+
+      if (!currentPeriodVal && periodSelect && periodSelect.value) {
+        currentPeriodVal = periodSelect.value;
+      }
+
+      const periodBundle = timeMap[currentPeriodVal] || (lbData[currentTime] ? lbData[currentTime] : {});
+      const list = periodBundle[currentCat] || [];
+
+      // 更新副标题显示
+      if (periodBadge) {
+        let labelText = '';
+        if (periodSelect && periodSelect.options && periodSelect.selectedIndex >= 0) {
+          labelText = periodSelect.options[periodSelect.selectedIndex].text;
+        }
+        periodBadge.innerHTML = `📅 统计时间: <span style="color:#0284c7; font-weight:700;">${labelText || '最新周期'}</span> (共收录 4.4万+ 条真实成交数据)`;
+      }
 
       if (!list || list.length === 0) {
         container.innerHTML = `<div style="text-align:center; padding:2.5rem; color:#94a3b8; font-size:0.9rem;">该时间段及分类下暂无成交榜单记录</div>`;
@@ -189,6 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <div class="podium-stat-val">${item.volume} <span style="font-size:0.75rem; font-weight:normal; color:#64748b;">套成交</span></div>
               <div class="podium-stat-sub">均价: $${item.avg_price_wan || '-'}万 | $${item.avg_sqft ? item.avg_sqft.toLocaleString() : '-'}/呎</div>
             </div>
+            <button onclick="goToProjectAnalytics('${item.project_name}')" class="btn-podium-trend" style="margin-top:0.6rem; padding:0.3rem 0.7rem; border-radius:6px; border:1px solid #0284c7; background:#ffffff; color:#0284c7; font-size:0.76rem; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:0.25rem;">📈 查看成交趋势</button>
           </div>
         `;
       }
@@ -205,6 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <div class="podium-stat-val">${item.volume} <span style="font-size:0.75rem; font-weight:normal; color:#64748b;">套成交</span></div>
               <div class="podium-stat-sub">均价: $${item.avg_price_wan || '-'}万 | $${item.avg_sqft ? item.avg_sqft.toLocaleString() : '-'}/呎</div>
             </div>
+            <button onclick="goToProjectAnalytics('${item.project_name}')" class="btn-podium-trend" style="margin-top:0.6rem; padding:0.35rem 0.8rem; border-radius:6px; border:none; background:linear-gradient(135deg, #0284c7, #0369a1); color:#ffffff; font-size:0.78rem; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:0.25rem; box-shadow:0 2px 6px rgba(2,132,199,0.25);">📈 查看成交趋势</button>
           </div>
         `;
       }
@@ -221,6 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <div class="podium-stat-val">${item.volume} <span style="font-size:0.75rem; font-weight:normal; color:#64748b;">套成交</span></div>
               <div class="podium-stat-sub">均价: $${item.avg_price_wan || '-'}万 | $${item.avg_sqft ? item.avg_sqft.toLocaleString() : '-'}/呎</div>
             </div>
+            <button onclick="goToProjectAnalytics('${item.project_name}')" class="btn-podium-trend" style="margin-top:0.6rem; padding:0.3rem 0.7rem; border-radius:6px; border:1px solid #0284c7; background:#ffffff; color:#0284c7; font-size:0.76rem; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:0.25rem;">📈 查看成交趋势</button>
           </div>
         `;
       }
@@ -239,9 +290,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span class="rank-title">${item.project_name}</span>
                 <span class="rank-tag">${item.region} ${item.district}</span>
               </div>
-              <div class="rank-metrics">
-                <span class="rank-vol"><strong>${item.volume}</strong> 套</span>
-                <span class="rank-sqft">$${item.avg_sqft ? item.avg_sqft.toLocaleString() : '-'}/呎</span>
+              <div class="rank-metrics" style="display:flex; align-items:center; gap:0.6rem;">
+                <div>
+                  <span class="rank-vol"><strong>${item.volume}</strong> 套</span>
+                  <span class="rank-sqft">$${item.avg_sqft ? item.avg_sqft.toLocaleString() : '-'}/呎</span>
+                </div>
+                <button onclick="goToProjectAnalytics('${item.project_name}')" style="border:1px solid #0284c7; background:#f0f9ff; color:#0284c7; font-size:0.75rem; font-weight:700; padding:0.25rem 0.55rem; border-radius:6px; cursor:pointer; white-space:nowrap;">📈 趋势</button>
               </div>
             </div>
           `;
@@ -252,12 +306,21 @@ document.addEventListener('DOMContentLoaded', () => {
       container.innerHTML = html;
     };
 
+    // 绑定下拉切换事件
+    if (periodSelect) {
+      periodSelect.addEventListener('change', (e) => {
+        currentPeriodVal = e.target.value;
+        render();
+      });
+    }
+
     // 绑定时间 Tabs
     document.querySelectorAll('#lbTimeTabs .time-tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('#lbTimeTabs .time-tab-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         currentTime = btn.dataset.time || 'monthly';
+        updateDropdownOptions();
         render();
       });
     });
@@ -272,8 +335,19 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
 
+    // 初始化下拉菜单与视图
+    updateDropdownOptions();
     render();
   }
+
+  // 全局调取项目成交走势函数
+  window.goToProjectAnalytics = (projName) => {
+    if (typeof window.openAnalyticsModal === 'function') {
+      window.openAnalyticsModal(projName);
+    } else {
+      window.location.href = `analytics.html?project=${encodeURIComponent(projName)}`;
+    }
+  };
 
   // 点击榜单直接定位唤起盘源 Modal
   window.openProjectGrid = (projName) => {

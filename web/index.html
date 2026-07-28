@@ -132,25 +132,33 @@
 
     <!-- 🏆 一手新盘销量排行榜与实时洞察 -->
     <section class="leaderboard-section" id="leaderboardSection" style="margin-top: 2.5rem;">
-      <div class="leaderboard-header">
+      <div class="leaderboard-header" style="flex-wrap: wrap; gap: 1rem; align-items: center;">
         <div class="leaderboard-title-group">
           <h2>🏆 一手新盘成交销量榜</h2>
-          <span class="leaderboard-subtitle">基于 4.4万+ 条真实成交数据实时计算</span>
+          <span class="leaderboard-subtitle" id="lbPeriodBadge">基于 4.4万+ 条真实成交数据实时计算</span>
         </div>
         
-        <!-- 时间段切换（周榜 / 月榜 / 年榜） -->
-        <div class="leaderboard-time-tabs" id="lbTimeTabs">
-          <button class="time-tab-btn" data-time="weekly">📅 周度热销榜</button>
-          <button class="time-tab-btn active" data-time="monthly">📅 月度热销榜</button>
-          <button class="time-tab-btn" data-time="yearly">📅 2026年榜</button>
+        <!-- 时间段与历史周期自由选择控制栏 -->
+        <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+          <div class="leaderboard-time-tabs" id="lbTimeTabs">
+            <button class="time-tab-btn" data-time="weekly">📅 周榜</button>
+            <button class="time-tab-btn active" data-time="monthly">📅 月榜</button>
+            <button class="time-tab-btn" data-time="yearly">📅 年榜</button>
+          </div>
+          
+          <div class="period-select-box" style="display: flex; align-items: center; gap: 0.4rem; background: #ffffff; padding: 0.25rem 0.6rem; border-radius: 10px; border: 1px solid var(--border-color, #E2E8F0); box-shadow: 0 1px 4px rgba(0,0,0,0.04);">
+            <span style="font-size: 0.8rem; font-weight: 700; color: #475569;">选择时间区间:</span>
+            <select id="lbPeriodSelect" style="border: none; background: transparent; color: #0284C7; font-weight: 700; font-size: 0.86rem; cursor: pointer; outline: none; padding: 0.2rem 0.1rem;">
+            </select>
+          </div>
         </div>
       </div>
 
       <!-- 分类维度切片 Tab -->
       <div class="leaderboard-category-bar" id="lbCategoryBar">
         <button class="cat-tab-btn active" data-cat="overall">🔥 全港总榜 Top 10</button>
-        <button class="cat-tab-btn" data-cat="region_hk">🏝️ 港岛区 Top 5</button>
-        <button class="cat-tab-btn" data-cat="region_kl">🏙️ 九龙区 Top 5</button>
+        <button class="cat-tab-btn" data-cat="region_hk">🏝️ 港岛区 Top 10</button>
+        <button class="cat-tab-btn" data-cat="region_kl">🏙️ 九龙区 Top 10</button>
         <div class="cat-divider"></div>
         <button class="cat-tab-btn" data-cat="price_500_2000m">💰 500-2000万</button>
         <button class="cat-tab-btn" data-cat="price_2000_5000m">💎 2000-5000万</button>
