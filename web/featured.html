@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>聚焦盘精选盘专页 - 香港一手新盘一站通</title>
+  <!-- 引入 Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+  <!-- 引入全量预编译静态数据 (零延迟离线载入) -->
+  <script src="data.js?v=20260724_direct"></script>
+  <!-- 引入自定义样式 -->
+  <link rel="stylesheet" href="style.css?v=20260724_fresh">
+  <!-- 引入 SheetJS 用于在线解析 Excel -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <!-- 引入 Chart.js 用于悬浮趋势弹窗 -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+
+  <!-- 背景环境光效果 -->
+  <div class="glow-bg">
+    <div class="glow-circle circle-1"></div>
+    <div class="glow-circle circle-2"></div>
+  </div>
+
+  <div class="container">
+    <!-- 统一页头与全局导航栏 -->
+    <header class="app-header">
+      <div class="logo-area">
+        <a href="index.html" class="logo-link">
+          <h1>香港一手新盘一站通</h1>
+        </a>
+        <p class="subtitle">精选评级 • 内地高净值买家卖点 • 租金回报率与营销工具</p>
+      </div>
+      
+      <nav class="main-nav">
+        <a href="index.html" class="nav-item">🏠 首页门户</a>
+        <a href="sales.html" class="nav-item">🏢 销控查询</a>
+        <a href="analytics.html" class="nav-item">📈 历史成交分析</a>
+        <a href="featured.html" class="nav-item active">💎 聚焦精选盘</a>
+      </nav>
+
+      <div class="header-actions">
+        <div class="update-badge" id="lastUpdatedBadge">数据载入中...</div>
+      </div>
+    </header>
+
+    <!-- 顶栏与四大价位段筛选过滤器 -->
+    <section class="featured-filter-bar">
+      <div class="filter-bar-top" style="display:flex; justify-shadow:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+        <div class="title-group">
+          <h2>全港精选楼盘全景结构化列表</h2>
+          <p>针对内地高净值买家避税配资、学区及资产保值需求精选出的旗舰盘源（一页高密度全览）</p>
+        </div>
+        
+        <!-- 实时搜索框 -->
+        <div style="display:flex; align-items:center; gap:0.8rem; flex-wrap:wrap;">
+          <input type="text" id="featuredSearchInput" placeholder="🔍 搜索精选楼盘/商圈/卖点..." style="padding:0.5rem 1rem; border-radius:10px; border:1px solid #cbd5e1; font-size:0.85rem; width:260px; outline:none;">
+        </div>
+      </div>
+
+      <!-- 4 大价位段分类 Filter Tabs -->
+      <div class="price-tier-tabs" style="margin-top:1rem;">
+        <button class="tier-btn active" data-tier="all">全部精选盘</button>
+        <button class="tier-btn" data-tier="1000-2000">💎 投资配置类 (1000-2000万)</button>
+        <button class="tier-btn" data-tier="2000-5000">🏙️ 自用保值类 (2000-5000万)</button>
+        <button class="tier-btn" data-tier="5000-10000">🏰 豪宅购置类 (5000-1亿)</button>
+        <button class="tier-btn" data-tier="10000+">👑 顶豪收藏类 (1亿以上)</button>
+      </div>
+    </section>
+
+    <!-- 高密度全景列表视图 (Structured List View) -->
+    <section class="featured-table-section" id="featuredTableSection" style="margin-top: 1.5rem;">
+      <div class="featured-table-wrapper">
+        <table class="featured-dense-table" id="featuredTable">
+          <thead>
+            <tr>
+              <th style="width:140px;">项目名称 / 评级</th>
+              <th style="width:110px;">城区商圈</th>
+              <th style="width:120px;">分类 / 价位</th>
+              <th style="width:130px;">主推户型 / 呎价</th>
+              <th style="width:110px;">预估月租 / ROI</th>
+              <th>推荐理由与卖点</th>
+              <th style="width:280px;">对内地客户专属卖点</th>
+              <th style="width:130px; text-align:center;">快捷操作</th>
+            </tr>
+          </thead>
+          <tbody id="featuredTableBody">
+            <!-- 动态渲染 -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="app-footer" style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border-color); text-align: center; color: var(--text-secondary); font-size: 0.85rem;">
+      <p>© 2026 香港一手新盘一站通 版权所有</p>
+    </footer>
+  </div>
+
+  <!-- 销控图纸 Modal -->
+  <div class="modal-overlay" id="gridModal">
+    <div class="modal-container">
+      <header class="modal-header">
+        <div class="modal-header-compact-left">
+          <h2 class="modal-header-compact-title" id="modalProjectTitle">销控可视化网格图</h2>
+          <div class="building-tabs" id="buildingTabs"></div>
+        </div>
+        <div style="display:flex; align-items:center; gap:0.6rem;">
+          <div class="zoom-controls" style="margin-right:0.3rem;">
+            <button class="zoom-btn" id="zoomOutBtn" title="缩小">-</button>
+            <span class="zoom-val" id="zoomVal">100%</span>
+            <button class="zoom-btn" id="zoomInBtn" title="放大">+</button>
+            <button class="zoom-btn reset-btn" id="resetZoomBtn" title="重置 100%">↺ 重置</button>
+          </div>
+          <button id="openAnalyticsFromGridBtn" class="btn btn-secondary" style="font-size:0.78rem; padding:0.3rem 0.75rem;">📈 成交走势</button>
+          <button class="close-btn" id="closeModalBtn" style="background:#f1f5f9; border:none; border-radius:50%; width:32px; height:32px; cursor:pointer; font-size:1.1rem; display:flex; align-items:center; justify-content:center; color:#64748b;">✕</button>
+        </div>
+      </header>
+
+      <!-- 微型销量统计与操控整合栏 -->
+      <div class="stats-panel-slim" id="buildingStatsPanel"></div>
+
+      <!-- 主网格展示区域 (极大化视口空间) -->
+      <div class="excel-grid-wrapper-max" id="gridDisplayArea">
+        <div style="padding:2rem; text-align:center; color:#06AABD;">正在加载并解析楼栋 Excel 销控表...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 全屏网格抽屉 Drawer -->
+  <div class="fullscreen-drawer" id="fullScreenDrawer">
+    <div class="drawer-header">
+      <div class="drawer-title" id="drawerTitle">全屏独占销控图纸</div>
+      <button class="btn btn-secondary btn-close-drawer" id="closeDrawerBtn">退出全屏</button>
+    </div>
+    <div class="drawer-body" id="drawerBody"></div>
+  </div>
+
+  <!-- 引入主程序逻辑 -->
+  <script src="app.js?v=20260724_MODAL_FIX"></script>
+</body>
+</html>
