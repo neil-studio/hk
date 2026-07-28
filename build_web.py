@@ -374,7 +374,7 @@ def main():
         'last_updated': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     }
     
-    # 0. 读取 config_admin.json 配置
+    # 0. 读取 config_admin.json 配置 与 香港新房精选项目.xlsx
     admin_config = {}
     config_path = os.path.join(BASE_DIR, "config_admin.json")
     if os.path.exists(config_path):
@@ -387,6 +387,81 @@ def main():
     focus_projects = admin_config.get('focus_projects', [])
     featured_by_price = admin_config.get('featured_by_price', {})
     projects_data = admin_config.get('projects_data', {})
+
+    # 优先从 香港新房精选项目.xlsx 动态更新聚焦精选盘内容
+    def load_featured_from_excel():
+        excel_paths = [
+            "/Users/nb/google/Antigravity/工作/运营/聚焦盘精选盘/香港新房精选项目.xlsx",
+            os.path.join(BASE_DIR, "香港新房精选项目.xlsx")
+        ]
+        target_path = None
+        for p in excel_paths:
+            if os.path.exists(p):
+                target_path = p
+                break
+                
+        if not target_path:
+            return None, None
+
+        try:
+            wb = openpyxl.load_workbook(target_path, data_only=True)
+            sheet = wb.active
+
+            f_by_price = {'1000-2000': [], '2000-5000': [], '5000-10000': [], '10000+': []}
+            p_data = {}
+            current_tier = '1000-2000'
+
+            for r in range(3, sheet.max_row + 1):
+                name = sheet.cell(r, 1).value
+                if not name: continue
+                name_str = str(name).strip()
+                if '1️⃣' in name_str or '投资配置类' in name_str:
+                    current_tier = '1000-2000'; continue
+                if '2️⃣' in name_str or '自用保值类' in name_str:
+                    current_tier = '2000-5000'; continue
+                if '3️⃣' in name_str or '豪宅购置类' in name_str:
+                    current_tier = '5000-10000'; continue
+                if '4️⃣' in name_str or '顶豪收藏类' in name_str:
+                    current_tier = '10000+'; continue
+                if name_str == '项目名': continue
+
+                raw_tier = str(sheet.cell(r, 5).value or '').strip()
+                tier_key = current_tier
+                if '1000-2000' in raw_tier or '1000万-2000' in raw_tier or '500万' in raw_tier:
+                    tier_key = '1000-2000'
+                elif '2000-5000' in raw_tier or '2000万-5000' in raw_tier:
+                    tier_key = '2000-5000'
+                elif '5000-1亿' in raw_tier or '5000万-1亿' in raw_tier or '5000-10000' in raw_tier:
+                    tier_key = '5000-10000'
+                elif '1亿' in raw_tier or '未开售' in raw_tier or '10000+' in raw_tier:
+                    tier_key = '10000+'
+
+                if name_str not in f_by_price[tier_key]:
+                    f_by_price[tier_key].append(name_str)
+
+                p_data[name_str] = {
+                    'grade': str(sheet.cell(r, 2).value or 'A').strip(),
+                    'region': str(sheet.cell(r, 3).value or '九龙').strip(),
+                    'district': str(sheet.cell(r, 4).value or '').strip(),
+                    'price_tier': tier_key,
+                    'main_layout': str(sheet.cell(r, 6).value or '').strip(),
+                    'total_price': str(sheet.cell(r, 7).value or '').strip(),
+                    'sqft_price': str(sheet.cell(r, 8).value or '').strip(),
+                    'rent_range': str(sheet.cell(r, 9).value or '').strip(),
+                    'roi': str(sheet.cell(r, 10).value or '').strip(),
+                    'reason': str(sheet.cell(r, 11).value or '').strip(),
+                    'mainland_selling_points': str(sheet.cell(r, 12).value or '').strip(),
+                }
+            print(f"成功从 Excel [{target_path}] 载入 {len(p_data)} 个精选聚焦盘源数据。")
+            return f_by_price, p_data
+        except Exception as e:
+            print(f"警告: 从 Excel 读取精选项目失败: {e}")
+            return None, None
+
+    excel_f_by_price, excel_p_data = load_featured_from_excel()
+    if excel_f_by_price and excel_p_data:
+        featured_by_price = excel_f_by_price
+        projects_data.update(excel_p_data)
 
     rental_bm_file = os.path.join(BASE_DIR, "rental_benchmarks.json")
     rental_benchmarks = {}
