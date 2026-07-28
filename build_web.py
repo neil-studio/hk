@@ -446,8 +446,11 @@ def main():
                     'price_tier': tier_key,
                     'main_layout': str(sheet.cell(r, 6).value or '').strip(),
                     'total_price': str(sheet.cell(r, 7).value or '').strip(),
+                    'total_price_desc': str(sheet.cell(r, 7).value or '').strip(),
                     'sqft_price': str(sheet.cell(r, 8).value or '').strip(),
+                    'sqft_price_desc': str(sheet.cell(r, 8).value or '').strip(),
                     'rent_range': str(sheet.cell(r, 9).value or '').strip(),
+                    'rent_range_desc': str(sheet.cell(r, 9).value or '').strip(),
                     'roi': str(sheet.cell(r, 10).value or '').strip(),
                     'reason': str(sheet.cell(r, 11).value or '').strip(),
                     'mainland_selling_points': str(sheet.cell(r, 12).value or '').strip(),
@@ -704,11 +707,11 @@ def main():
     
     json_path = os.path.join(WEB_DIR, "data.json")
     with open(json_path, 'w', encoding='utf-8') as f:
-        json.dump(db_data, f, ensure_ascii=False, indent=2)
+        json.dump(db_data, f, ensure_ascii=False, separators=(',', ':'))
 
     js_path = os.path.join(WEB_DIR, "data.js")
     with open(js_path, 'w', encoding='utf-8') as f:
-        f.write("window.APP_DATA = " + json.dumps(db_data, ensure_ascii=False) + ";")
+        f.write("window.APP_DATA=" + json.dumps(db_data, ensure_ascii=False, separators=(',', ':')) + ";")
         
     # 检查是否有新增项目需要建 Google Drive 文件夹提醒
     known_folders_cache_file = os.path.join(BASE_DIR, "known_folders.json")

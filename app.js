@@ -442,10 +442,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const grid = document.getElementById('projectGrid');
     if (!grid) return;
 
+    const pinyinAliasMap = {
+      'qide': '启德', 'qd': '启德',
+      'huangzhukeng': '黄竹坑', 'hzk': '黄竹坑',
+      'hewentian': '何文田', 'hwt': '何文田',
+      'wangjiao': '旺角', 'wj': '旺角',
+      'hongkan': '红磡', 'hk': '红磡',
+      'beijiao': '北角', 'bj': '北角',
+      'jiulong': '九龙', 'jl': '九龙',
+      'gangdao': '港岛', 'gd': '港岛',
+      'changshawan': '长沙湾', 'csw': '长沙湾',
+      'jianidecheng': '坚尼地城', 'jndc': '坚尼地城',
+      'chizhu': '赤柱', 'shanding': '山顶',
+      'banshan': '半山', 'wanzai': '湾仔',
+      'shaojiwan': '筲箕湾', 'paomadi': '跑马地', 'tongluowan': '铜锣湾'
+    };
+
+    const expandedQuery = pinyinAliasMap[searchQuery] || searchQuery;
+
     let filtered = allProjects.filter(p => {
       const matchRegion = activeRegion === 'all' || p.region === activeRegion;
       const matchDistrict = activeDistrict === 'all' || p.district === activeDistrict;
-      const matchSearch = !searchQuery || p.name.toLowerCase().includes(searchQuery) || (p.district && p.district.toLowerCase().includes(searchQuery));
+      const matchSearch = !searchQuery || 
+        p.name.toLowerCase().includes(searchQuery) || 
+        p.name.toLowerCase().includes(expandedQuery) ||
+        (p.district && (p.district.toLowerCase().includes(searchQuery) || p.district.includes(expandedQuery))) ||
+        (p.region && (p.region.toLowerCase().includes(searchQuery) || p.region.includes(expandedQuery)));
       return matchRegion && matchDistrict && matchSearch;
     });
 
