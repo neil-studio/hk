@@ -2466,7 +2466,10 @@ document.addEventListener('DOMContentLoaded', () => {
         tr.innerHTML = `
           <td>
             <div style="font-weight:800; font-size:0.95rem; color:#0f172a;">${item.name}</div>
-            <span class="${item.grade === 'A+' ? 'grade-badge-aplus' : 'grade-badge-a'}" style="font-size:0.75rem; padding:0.15rem 0.5rem; display:inline-block; margin-top:0.3rem;">${item.grade}级评级</span>
+            <div style="display:flex; gap:0.3rem; align-items:center; flex-wrap:wrap; margin-top:0.3rem;">
+              <span class="${item.grade === 'A+' ? 'grade-badge-aplus' : (item.grade === 'A' ? 'grade-badge-a' : 'grade-badge-b')}" style="font-size:0.75rem; padding:0.15rem 0.5rem; display:inline-block;">${item.grade}级评级</span>
+              ${(window.APP_DATA?.focus_projects || []).some(fp => item.name.includes(fp) || fp.includes(item.name)) ? '<span style="font-size:0.72rem; padding:0.15rem 0.45rem; display:inline-block; background:linear-gradient(135deg, #f59e0b, #d97706); color:#ffffff; font-weight:700; border-radius:6px; box-shadow:0 1px 4px rgba(245,158,11,0.3);">🔥 核心聚焦盘</span>' : ''}
+            </div>
           </td>
           <td>
             <span class="badge badge-region">${item.region}</span><br>
