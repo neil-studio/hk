@@ -19,6 +19,20 @@
 </head>
 <body>
 
+  <!-- 🔒 专属访问密码保护门 (Password Gate: lm8888) -->
+  <div id="siteAuthOverlay" class="site-auth-overlay">
+    <div class="site-auth-card">
+      <div class="auth-icon">🔒</div>
+      <h2>香港一手新盘一站通</h2>
+      <p class="auth-subtitle">访问受限，请输入专属授权密码开启体验</p>
+      <div class="auth-input-group">
+        <input type="password" id="siteAuthPassword" placeholder="请输入访问密码" autocomplete="current-password" autofocus />
+        <button id="siteAuthBtn">解锁进入 →</button>
+      </div>
+      <div id="siteAuthError" class="auth-error-msg"></div>
+    </div>
+  </div>
+
 
   <!-- 背景环境光效果 -->
   <div class="glow-bg">
