@@ -205,11 +205,68 @@
           <div class="chart-header">
             <div class="chart-title">
               <h3>🎯 竞品多维综合竞争力雷达比对</h3>
-              <span class="chart-sub">维度：成交热度、呎价吸引力、预估ROI、门槛亲民度、去化占比</span>
+              <span class="chart-sub">维度：价格吸引力、去化热度、预估ROI、成交活跃度、户型丰富度</span>
             </div>
           </div>
-          <div class="chart-wrapper" style="height: 320px;">
+          <div class="chart-wrapper" style="height: 300px;">
             <canvas id="compareRadarChart"></canvas>
+          </div>
+
+          <!-- 💡 方案A：5大维度计算法则与公式说明面板 -->
+          <div class="radar-rules-panel" style="margin-top: 0.8rem; border-top: 1px dashed rgba(226, 232, 240, 0.8); padding-top: 0.6rem;">
+            <div class="radar-rules-header" onclick="toggleRadarRules()" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none; padding: 0.45rem 0.75rem; background: rgba(241, 245, 249, 0.8); border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.85rem; font-weight: 600; color: #1e293b; transition: all 0.2s ease;">
+              <span style="display: flex; align-items: center; gap: 0.4rem;">💡 维度计算法则与评分公式说明</span>
+              <span id="radarRulesToggleIcon" style="font-size: 0.78rem; color: #06AABD; font-weight: 700;">展开说明 ▾</span>
+            </div>
+            
+            <div id="radarRulesBody" style="display: none; margin-top: 0.6rem; flex-direction: column; gap: 0.6rem;">
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.5rem;">
+                <div style="background: rgba(248, 250, 252, 0.95); border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.55rem 0.75rem;">
+                  <div style="font-weight: 700; color: #0f172a; font-size: 0.82rem; margin-bottom: 0.2rem;">🏷️ 1. 价格吸引力 (3-10分)</div>
+                  <div style="font-size: 0.75rem; color: #475569; line-height: 1.45;">
+                    评估入手性价比。反向比价公式：<br/>
+                    <code style="background:#e2e8f0; color:#0f172a; padding:1px 4px; border-radius:4px; font-size:0.72rem;">MinSqftPrice / ProjPrice × 10</code><br/>
+                    组内平均呎价越低/越亲民，得分越高。
+                  </div>
+                </div>
+
+                <div style="background: rgba(248, 250, 252, 0.95); border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.55rem 0.75rem;">
+                  <div style="font-weight: 700; color: #0f172a; font-size: 0.82rem; margin-bottom: 0.2rem;">🔥 2. 去化热度 (3-10分)</div>
+                  <div style="font-size: 0.75rem; color: #475569; line-height: 1.45;">
+                    评估累积去化规模与市场吸纳量：<br/>
+                    <code style="background:#e2e8f0; color:#0f172a; padding:1px 4px; border-radius:4px; font-size:0.72rem;">ProjSales / MaxSales × 10</code><br/>
+                    以组内最高成交套数盘源为 10分基准。
+                  </div>
+                </div>
+
+                <div style="background: rgba(248, 250, 252, 0.95); border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.55rem 0.75rem;">
+                  <div style="font-weight: 700; color: #0f172a; font-size: 0.82rem; margin-bottom: 0.2rem;">📈 3. 预估 ROI (3-10分)</div>
+                  <div style="font-size: 0.75rem; color: #475569; line-height: 1.45;">
+                    评估年化租金回报率：<br/>
+                    <code style="background:#e2e8f0; color:#0f172a; padding:1px 4px; border-radius:4px; font-size:0.72rem;">(月呎租 × 12) / 平均呎价 × 100%</code><br/>
+                    结合商圈预估呎租与收益率归一化打分。
+                  </div>
+                </div>
+
+                <div style="background: rgba(248, 250, 252, 0.95); border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.55rem 0.75rem;">
+                  <div style="font-weight: 700; color: #0f172a; font-size: 0.82rem; margin-bottom: 0.2rem;">⚡ 4. 成交活跃度 (5/7/9分)</div>
+                  <div style="font-size: 0.75rem; color: #475569; line-height: 1.45;">
+                    评估近期二手/新盘转手流动性：<br/>
+                    • 成交 &gt; 30套得 9分（高流动性）<br/>
+                    • 成交 10-30套得 7分；&le; 10套得 5分。
+                  </div>
+                </div>
+
+                <div style="background: rgba(248, 250, 252, 0.95); border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.55rem 0.75rem;">
+                  <div style="font-weight: 700; color: #0f172a; font-size: 0.82rem; margin-bottom: 0.2rem;">🧩 5. 户型丰富度 (4-10分)</div>
+                  <div style="font-size: 0.75rem; color: #475569; line-height: 1.45;">
+                    评估产品线覆盖广度：<br/>
+                    • 覆盖 4种及以上户型得 8-10分；<br/>
+                    • 覆盖 2-3种得 6-7分；单一户型得 4-5分。
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -286,6 +343,21 @@
     </footer>
   </div>
 
+  <!-- 💡 雷达图维度法则展开收起逻辑 -->
+  <script>
+    function toggleRadarRules() {
+      const body = document.getElementById('radarRulesBody');
+      const icon = document.getElementById('radarRulesToggleIcon');
+      if (!body) return;
+      if (body.style.display === 'none' || body.style.display === '') {
+        body.style.display = 'flex';
+        icon.innerHTML = '收起说明 ▴';
+      } else {
+        body.style.display = 'none';
+        icon.innerHTML = '展开说明 ▾';
+      }
+    }
+  </script>
   <!-- 引入主程序逻辑 -->
   <script src="app.js?v=20260724_FIXED_FINAL"></script>
 </body>
