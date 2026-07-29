@@ -603,24 +603,29 @@ def main():
             '首岸第4期': ('九龙', '红磡', '首岸'),
         }
 
-        def clean_master_folder_name(reg_val, dist_val, name_val):
-            m = name_val.strip()
-            if m in custom_map:
-                r_c, d_c, master_n = custom_map[m]
-        def clean_master_folder_name(reg_val, dist_val, name_val):
-            m = name_val.strip()
-            m_clean = re.sub(r'\(第.*?\)', '', m)
-            m_clean = re.sub(r'第\s*[0-9A-Za-z\-]+期.*$', '', m_clean)
-            m_clean = re.sub(r'Phase\s*[0-9A-Za-z\-]+.*$', '', m_clean, flags=re.IGNORECASE)
-            m_clean = re.sub(r'II\s*\(.*\)$', '', m_clean)
-            m_clean = re.sub(r'第[I|V|X|A-Z0-9]+期', '', m_clean)
-            m_clean = re.sub(r'\s+I{1,3}$', '', m_clean)
-            m_clean = re.sub(r'\s+II$', '', m_clean)
-            m_clean = re.sub(r'\s+III$', '', m_clean)
-            m_clean = re.sub(r'\(.*?\)', '', m_clean)
+        def strip_phase_suffix(name):
+            s = str(name).strip()
+            s = re.sub(r'\(第.*?\)', '', s)
+            s = re.sub(r'第\s*[0-9A-Za-z\-]+期.*$', '', s)
+            s = re.sub(r'Phase\s*[0-9A-Za-z\-]+.*$', '', s, flags=re.IGNORECASE)
+            s = re.sub(r'第[I|V|X|A-Z0-9]+期', '', s)
+            s = re.sub(r'第[0-9A-Za-z]+$', '', s)
+            s = re.sub(r'[0-9]+[a-zA-Z]+$', '', s)
+            s = re.sub(r'\s+[0-9]+$', '', s)
+            s = re.sub(r'\s+I{1,3}$', '', s)
+            s = re.sub(r'\s+II$', '', s)
+            s = re.sub(r'\s+III$', '', s)
+            s = re.sub(r'\(.*?\)', '', s)
+            return s.strip()
+
+        p_meta = projects_data.get(project_name, {})
+        clean_pname = strip_phase_suffix(project_name)
+        reg_val = p_meta.get('region') or region
+        dist_val = p_meta.get('district') or district
+
         PARENT_DRIVE_ID = "15tRwSlG1VTOKuEyj-H131zpNK6v6MY04"
-        g_folder = f"{region}-{district}-{project_name}"
-        # 100% 对齐网盘文件夹全名 ({区域}-{商圈}-{项目名}) 进行精确无缝匹配
+        # 100% 对齐网盘文件夹全名格式：{城区}-{商圈}-{无期数干净项目名}
+        g_folder = f"{reg_val}-{dist_val}-{clean_pname}"
         drive_q = f"parent:{PARENT_DRIVE_ID} {g_folder}"
         g_url = f"https://drive.google.com/drive/search?q={urllib.parse.quote(drive_q)}"
         

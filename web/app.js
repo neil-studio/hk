@@ -2430,7 +2430,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const parentDriveId = '15tRwSlG1VTOKuEyj-H131zpNK6v6MY04';
         const introUrl = proj.intro_url || proj.centaline_url || meta.centaline_url || meta.intro_url || `https://www.ricacorp.com/zh-hk/property/search?q=${encodeURIComponent(name)}`;
-        const folderName = proj.google_drive_folder || meta.google_drive_folder || `${proj.region || meta.region || '全港'}-${proj.district || meta.district || '核心区'}-${name}`;
+        const cleanName = name.replace(/\(第.*?\)/g, '').replace(/第\s*[0-9A-Za-z\-]+期.*$/, '').replace(/第[0-9A-Za-z]+$/g, '').replace(/[0-9]+[a-zA-Z]+$/g, '').replace(/\s+[0-9]+$/g, '').replace(/\s+I{1,3}$/g, '').replace(/\s+II$/g, '').replace(/\s+III$/g, '').trim() || name;
+        const regionName = proj.region || meta.region || '全港';
+        const districtName = proj.district || meta.district || '核心区';
+        const folderName = proj.google_drive_folder || meta.google_drive_folder || `${regionName}-${districtName}-${cleanName}`;
         const driveQ = `parent:${parentDriveId} ${folderName}`;
         const marketingUrl = proj.marketing_url || meta.marketing_url || `https://drive.google.com/drive/search?q=${encodeURIComponent(driveQ)}`;
 
