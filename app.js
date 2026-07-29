@@ -2382,7 +2382,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================================================
   // D. 聚焦盘精选盘专页逻辑 (featured.html)
   // ==========================================================================
-  let currentTier = 'all';
+  let currentTier = '1000-2000';
   let currentView = 'table';
   let featuredQuery = '';
 
@@ -2414,6 +2414,39 @@ document.addEventListener('DOMContentLoaded', () => {
     const tableBody = document.getElementById('featuredTableBody');
     if (!tableBody) return;
 
+    const showRoiCol = (currentTier === '1000-2000');
+
+    // 动态跟进 1000-2000万 模块是否显示 ROI 专列
+    const theadEl = document.querySelector('#featuredTable thead');
+    if (theadEl) {
+      if (showRoiCol) {
+        theadEl.innerHTML = `
+          <tr>
+            <th style="width:140px;">项目名称 / 评级</th>
+            <th style="width:110px;">城区商圈</th>
+            <th style="width:120px;">分类 / 价位</th>
+            <th style="width:130px;">主推户型 / 呎价</th>
+            <th style="width:110px;">预估月租 / ROI</th>
+            <th>推荐理由与卖点</th>
+            <th style="width:280px;">对内地客户专属卖点</th>
+            <th style="width:130px; text-align:center;">快捷操作</th>
+          </tr>
+        `;
+      } else {
+        theadEl.innerHTML = `
+          <tr>
+            <th style="width:140px;">项目名称 / 评级</th>
+            <th style="width:110px;">城区商圈</th>
+            <th style="width:120px;">分类 / 价位</th>
+            <th style="width:130px;">主推户型 / 呎价</th>
+            <th>推荐理由与卖点</th>
+            <th style="width:280px;">对内地客户专属卖点</th>
+            <th style="width:130px; text-align:center;">快捷操作</th>
+          </tr>
+        `;
+      }
+    }
+
     const tierLabels = {
       '1000-2000': '投资配置类 (1000-2000万)',
       '2000-5000': '自用保值类 (2000-5000万)',
@@ -2437,6 +2470,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const driveQ = `type:folder parent:${parentDriveId} "${folderName}"`;
         const marketingUrl = proj.marketing_url || meta.marketing_url || `https://drive.google.com/drive/search?q=${encodeURIComponent(driveQ)}`;
 
+        // 按商圈平均呎价与基准呎租倒算 ROI
+        let calcRoiStr = meta.roi || proj.roi || '';
+        if (!calcRoiStr || calcRoiStr === '暂无' || calcRoiStr === 'null') {
+          const avgU = proj.avg_uprice || meta.avg_uprice || 22000;
+          const bRent = proj.base_sqft_rent || meta.base_sqft_rent || 50;
+          if (avgU > 0 && bRent > 0) {
+            calcRoiStr = `${(bRent * 12 / avgU * 100).toFixed(2)}%`;
+          } else {
+            calcRoiStr = '3.80%';
+          }
+        }
+
         featuredList.push({
           name: name,
           filename: proj.filename || '',
@@ -2449,7 +2494,7 @@ document.addEventListener('DOMContentLoaded', () => {
           priceRange: proj.total_price_desc || meta.total_price || (proj.stats ? `约 ${(proj.stats.total * 850 / 10000).toFixed(0)}万` : '价格详询'),
           sqftPrice: proj.sqft_price_desc || meta.sqft_price || '市场实时呎价',
           rentRange: proj.rent_range_desc || meta.rent_range || '详见月租分析',
-          roi: proj.roi || meta.roi || '3.5% ~ 4.8%',
+          roi: calcRoiStr,
           reason: proj.reason || meta.reason || proj.selling_points || '精选香港优质稀缺地产资产，升值与收租兼备。',
           points: proj.selling_points || meta.selling_points || '地段优越，交通便利，居住品质高。',
           mainlandPoints: proj.mainland_selling_points || meta.mainland_selling_points || '适合内地专才落户、子女读书教育配置。',
@@ -2501,8 +2546,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 渲染全景高密度结构化表格视图 (Table View)
     tableBody.innerHTML = '';
+    const colCount = showRoiCol ? 8 : 7;
     if (filtered.length === 0) {
-      tableBody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:3rem; color:#94a3b8;">未找到符合条件的精选盘源</td></tr>`;
+      tableBody.innerHTML = `<tr><td colspan="${colCount}" style="text-align:center; padding:3rem; color:#94a3b8;">未找到符合条件的精选盘源</td></tr>`;
     } else {
       filtered.forEach((item, idx) => {
         const tr = document.createElement('tr');
@@ -2527,10 +2573,11 @@ document.addEventListener('DOMContentLoaded', () => {
             <strong style="color:#0f172a;">${item.layout}</strong><br>
             <span style="color:#64748b; font-size:0.78rem;">${item.sqftPrice}</span>
           </td>
+          ${showRoiCol ? `
           <td>
             <span style="color:#475569; font-size:0.78rem;">${item.rentRange}</span><br>
             <strong class="roi-val" style="font-size:1.05rem;">${item.roi}</strong>
-          </td>
+          </td>` : ''}
           <td>
             <div style="font-size:0.8rem; color:#475569; max-width:240px; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; text-overflow:ellipsis;">
               ${item.reason}
@@ -2565,7 +2612,7 @@ document.addEventListener('DOMContentLoaded', () => {
         drawerTr.id = `drawer_${idx}`;
         drawerTr.style.display = 'none';
         drawerTr.innerHTML = `
-          <td colspan="8">
+          <td colspan="${colCount}">
             <div class="table-drawer-content">
               <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.8rem;">
                 <strong style="color:#045d68; font-size:0.92rem;">🇨🇳 ${item.name} - 对内地高净值客户专属卖点完整深度解析：</strong>
