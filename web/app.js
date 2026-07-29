@@ -2459,7 +2459,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const projNames = featuredByPriceData[tier] || [];
       projNames.forEach(name => {
         const proj = allProjects.find(p => p.name === name || p.name.includes(name) || name.includes(p.name) || (name.includes('波老道') && (p.name.includes('21 Borrett') || p.name.includes('应天')))) || {};
-        const meta = projectsDataMap[name] || {};
+        const meta = projectsDataMap[`${tier}_${name}`] || projectsDataMap[name] || {};
 
         const parentDriveId = '15tRwSlG1VTOKuEyj-H131zpNK6v6MY04';
         const introUrl = proj.intro_url || proj.centaline_url || meta.centaline_url || meta.intro_url || `https://www.ricacorp.com/zh-hk/property/search?q=${encodeURIComponent(name)}`;

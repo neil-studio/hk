@@ -523,7 +523,7 @@ def main():
                     except:
                         roi_val = str(c_roi).strip()
 
-                p_data[name_str] = {
+                meta_item = {
                     'grade': str(sheet.cell(r, 2).value or 'A').strip(),
                     'region': user_cd.get('region') or '九龙',
                     'district': user_cd.get('district') or '',
@@ -539,6 +539,8 @@ def main():
                     'reason': str(c_reason or '').strip(),
                     'mainland_selling_points': str(c_mainland or '').strip(),
                 }
+                p_data[f"{tier_key}_{name_str}"] = meta_item
+                p_data[name_str] = meta_item
             print(f"成功从 Excel [{target_path}] 载入 {len(p_data)} 个精选聚焦盘源数据。")
             return f_by_price, p_data
         except Exception as e:
