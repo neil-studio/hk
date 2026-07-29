@@ -475,6 +475,23 @@ def main():
         except Exception as e:
             print(f"读取 rental_benchmarks.json 失败: {e}")
 
+    drive_mapping_file = os.path.join(BASE_DIR, "google_drive_mapping.json")
+    drive_mapping = {}
+    if os.path.exists(drive_mapping_file):
+        try:
+            with open(drive_mapping_file, 'r', encoding='utf-8') as f:
+                drive_mapping = json.load(f)
+            print(f"成功载入 {len(drive_mapping)} 条 Google Drive 显式映射规则。")
+            # 为所有别名及不同写法补全 projects_data 映射
+            PARENT_DRIVE_ID = "15tRwSlG1VTOKuEyj-H131zpNK6v6MY04"
+            for k_alias, f_name in drive_mapping.items():
+                if k_alias not in projects_data:
+                    projects_data[k_alias] = {}
+                projects_data[k_alias]['google_drive_folder'] = f_name
+                projects_data[k_alias]['marketing_url'] = f"https://drive.google.com/drive/search?q={urllib.parse.quote('parent:' + PARENT_DRIVE_ID + ' ' + f_name)}"
+        except Exception as e:
+            print(f"读取 google_drive_mapping.json 失败: {e}")
+
     # 遍历 BASE_DIR 下的子文件夹
     for d in sorted(os.listdir(BASE_DIR)):
         dir_path = os.path.join(BASE_DIR, d)
@@ -624,8 +641,12 @@ def main():
         dist_val = p_meta.get('district') or district
 
         PARENT_DRIVE_ID = "15tRwSlG1VTOKuEyj-H131zpNK6v6MY04"
-        # 100% 对齐网盘文件夹全名格式：{城区}-{商圈}-{无期数干净项目名}
-        g_folder = f"{reg_val}-{dist_val}-{clean_pname}"
+        mapped_folder = drive_mapping.get(project_name) or drive_mapping.get(clean_pname)
+        if mapped_folder:
+            g_folder = mapped_folder
+        else:
+            g_folder = f"{reg_val}-{dist_val}-{clean_pname}"
+
         drive_q = f"parent:{PARENT_DRIVE_ID} {g_folder}"
         g_url = f"https://drive.google.com/drive/search?q={urllib.parse.quote(drive_q)}"
         
