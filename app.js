@@ -2337,7 +2337,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const tr = document.createElement('tr');
           const parentDriveId = '15tRwSlG1VTOKuEyj-H131zpNK6v6MY04';
           const folderName = item.googleDriveFolder || `${item.region || '全港'}-${item.district || '核心区'}-${item.name}`;
-          const driveQ = `type:folder parent:${parentDriveId} ${folderName}`;
+          const driveQ = `type:folder parent:${parentDriveId} "${folderName}"`;
           const mUrl = item.marketingUrl || `https://drive.google.com/drive/search?q=${encodeURIComponent(driveQ)}`;
 
           const minMonthRent = item.baseRent * 350 / 10000;
@@ -2434,7 +2434,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const regionName = proj.region || meta.region || '全港';
         const districtName = proj.district || meta.district || '核心区';
         const folderName = proj.google_drive_folder || meta.google_drive_folder || `${regionName}-${districtName}-${cleanName}`;
-        const driveQ = `type:folder parent:${parentDriveId} ${folderName}`;
+        const driveQ = `type:folder parent:${parentDriveId} "${folderName}"`;
         const marketingUrl = proj.marketing_url || meta.marketing_url || `https://drive.google.com/drive/search?q=${encodeURIComponent(driveQ)}`;
 
         featuredList.push({

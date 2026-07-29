@@ -488,7 +488,7 @@ def main():
                 if k_alias not in projects_data:
                     projects_data[k_alias] = {}
                 projects_data[k_alias]['google_drive_folder'] = f_name
-                projects_data[k_alias]['marketing_url'] = f"https://drive.google.com/drive/search?q={urllib.parse.quote('parent:' + PARENT_DRIVE_ID + ' ' + f_name)}"
+                projects_data[k_alias]['marketing_url'] = f"https://drive.google.com/drive/search?q={urllib.parse.quote('type:folder parent:' + PARENT_DRIVE_ID + ' \"' + f_name + '\"')}"
         except Exception as e:
             print(f"读取 google_drive_mapping.json 失败: {e}")
 
@@ -647,7 +647,7 @@ def main():
         else:
             g_folder = f"{reg_val}-{dist_val}-{clean_pname}"
 
-        drive_q = f"type:folder parent:{PARENT_DRIVE_ID} {g_folder}"
+        drive_q = f'type:folder parent:{PARENT_DRIVE_ID} "{g_folder}"'
         g_url = f"https://drive.google.com/drive/search?q={urllib.parse.quote(drive_q)}"
         
         dist_info = rental_benchmarks.get('districts', {}).get(district, rental_benchmarks.get('default_fallback', {'base_rent': 50, 'min_rent': 42, 'max_rent': 60}))
@@ -672,8 +672,8 @@ def main():
 
         proj_info = {
             'name': project_name,
-            'region': region,
-            'district': district,
+            'region': p_meta.get('region') or region,
+            'district': p_meta.get('district') or district,
             'filename': dest_filename,
             'file_size_kb': file_size_kb,
             'stats': stats,
