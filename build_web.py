@@ -607,22 +607,23 @@ def main():
             m = name_val.strip()
             if m in custom_map:
                 r_c, d_c, master_n = custom_map[m]
-                folder = f"{r_c}-{d_c}-{master_n}"
-            else:
-                m = re.sub(r'\(第.*?\)', '', m)
-                m = re.sub(r'第\s*[0-9A-Za-z\-]+期.*$', '', m)
-                m = re.sub(r'Phase\s*[0-9A-Za-z\-]+.*$', '', m, flags=re.IGNORECASE)
-                m = re.sub(r'II\s*\(.*\)$', '', m)
-                m = re.sub(r'第[I|V|X|A-Z0-9]+期', '', m)
-                m = re.sub(r'\s+I{1,3}$', '', m)
-                m = re.sub(r'\s+II$', '', m)
-                m = re.sub(r'\s+III$', '', m)
-                m = re.sub(r'\(.*?\)', '', m)
-                master_name = m if m else name_val
-                folder = f"{reg_val}-{dist_val}-{master_name}"
+        def clean_master_folder_name(reg_val, dist_val, name_val):
+            m = name_val.strip()
+            m_clean = re.sub(r'\(第.*?\)', '', m)
+            m_clean = re.sub(r'第\s*[0-9A-Za-z\-]+期.*$', '', m_clean)
+            m_clean = re.sub(r'Phase\s*[0-9A-Za-z\-]+.*$', '', m_clean, flags=re.IGNORECASE)
+            m_clean = re.sub(r'II\s*\(.*\)$', '', m_clean)
+            m_clean = re.sub(r'第[I|V|X|A-Z0-9]+期', '', m_clean)
+            m_clean = re.sub(r'\s+I{1,3}$', '', m_clean)
+            m_clean = re.sub(r'\s+II$', '', m_clean)
+            m_clean = re.sub(r'\s+III$', '', m_clean)
+            m_clean = re.sub(r'\(.*?\)', '', m_clean)
+            master_name = m_clean.strip() if m_clean.strip() else name_val.strip()
+
             PARENT_DRIVE_ID = "15tRwSlG1VTOKuEyj-H131zpNK6v6MY04"
-            drive_q = f'parent:{PARENT_DRIVE_ID} "{folder}"'
+            drive_q = f"parent:{PARENT_DRIVE_ID} {master_name}"
             drive_url = f"https://drive.google.com/drive/search?q={urllib.parse.quote(drive_q)}"
+            folder = f"{reg_val}-{dist_val}-{master_name}"
             return folder, drive_url
 
         g_folder, g_url = clean_master_folder_name(region, district, project_name)
