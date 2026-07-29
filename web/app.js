@@ -2425,7 +2425,7 @@ document.addEventListener('DOMContentLoaded', () => {
     Object.keys(featuredByPriceData).forEach(tier => {
       const projNames = featuredByPriceData[tier] || [];
       projNames.forEach(name => {
-        const proj = allProjects.find(p => p.name === name) || {};
+        const proj = allProjects.find(p => p.name === name || p.name.includes(name) || name.includes(p.name) || (name.includes('波老道') && (p.name.includes('21 Borrett') || p.name.includes('应天')))) || {};
         const meta = projectsDataMap[name] || {};
 
         const parentDriveId = '15tRwSlG1VTOKuEyj-H131zpNK6v6MY04';
@@ -2459,14 +2459,32 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
 
+    const aliasMap = {
+      '波老道21号': ['21 borrett', 'borrett', '应天', '波老道', '波老道21号', '波老道21號', '21 borrett road'],
+      '21 borrett road': ['21 borrett', 'borrett', '应天', '波老道', '波老道21号', '波老道21號', '21 borrett road'],
+      '海盈山': ['海盈山', '海盈山4b', '海盈山4a', 'la montagne'],
+      '傲玟': ['傲玟', 'grand homm', '何文田傲玟'],
+      '瑜一': ['瑜一', 'in one', '瑜一天海', '瑜一ic'],
+      '朗贤峰': ['朗贤峰', 'on manor'],
+      '天玺天': ['天玺天', 'cullinan sky', '天玺．天'],
+      '天玺海': ['天玺海', 'cullinan harbour', '天玺．海']
+    };
+
     // 过滤价位段与搜索过滤
     const filtered = featuredList.filter(item => {
       const matchTier = currentTier === 'all' || item.tier === currentTier;
+      const lowerQ = (featuredQuery || '').toLowerCase().strip ? (featuredQuery || '').toLowerCase().strip() : (featuredQuery || '').toLowerCase();
+      const nameKey = item.name.toLowerCase();
+      const aliases = aliasMap[item.name] || aliasMap[nameKey] || [];
+      const matchName = nameKey.includes(lowerQ) || aliases.some(a => a.includes(lowerQ) || lowerQ.includes(a));
+
       const matchQuery = !featuredQuery || 
-        item.name.toLowerCase().includes(featuredQuery) || 
-        item.district.toLowerCase().includes(featuredQuery) || 
-        item.reason.toLowerCase().includes(featuredQuery) ||
-        item.mainlandPoints.toLowerCase().includes(featuredQuery);
+        matchName || 
+        item.district.toLowerCase().includes(lowerQ) || 
+        item.region.toLowerCase().includes(lowerQ) ||
+        item.reason.toLowerCase().includes(lowerQ) ||
+        item.mainlandPoints.toLowerCase().includes(lowerQ);
+
       return matchTier && matchQuery;
     });
 

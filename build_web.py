@@ -439,6 +439,8 @@ def main():
     def load_featured_from_excel():
         excel_paths = [
             os.path.join(BASE_DIR, "聚焦盘精选盘", "香港新房精选项目.xlsx"),
+            os.path.join(os.path.dirname(BASE_DIR), "聚焦盘精选盘", "香港新房精选项目.xlsx"),
+            "/Users/nb/google/Antigravity/工作/运营/聚焦盘精选盘/香港新房精选项目.xlsx",
             os.path.join(BASE_DIR, "香港新房精选项目.xlsx")
         ]
         target_path = None
