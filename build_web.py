@@ -460,11 +460,14 @@ def main():
             p_data = {}
             current_tier = '1000-2000'
 
+            header_col3 = str(sheet.cell(2, 3).value or '').strip()
+            is_10_col_mode = ('价位' in header_col3 or '1000' in str(sheet.cell(3, 3).value or ''))
+
             for r in range(3, sheet.max_row + 1):
                 name = sheet.cell(r, 1).value
                 if not name: continue
                 name_str = str(name).strip()
-                if '1️⃣' in name_str or '首套刚需类' in name_str:
+                if '1️⃣' in name_str or '首套刚需类' in name_str or '投资配置类' in name_str:
                     current_tier = '1000-2000'; continue
                 if '2️⃣' in name_str or '自用保值类' in name_str:
                     current_tier = '2000-5000'; continue
@@ -474,7 +477,25 @@ def main():
                     current_tier = '10000+'; continue
                 if name_str == '项目名': continue
 
-                raw_tier = str(sheet.cell(r, 5).value or '').strip()
+                if is_10_col_mode:
+                    raw_tier = str(sheet.cell(r, 3).value or '').strip()
+                    c_layout = sheet.cell(r, 4).value
+                    c_total = sheet.cell(r, 5).value
+                    c_sqft = sheet.cell(r, 6).value
+                    c_rent = sheet.cell(r, 7).value
+                    c_roi = sheet.cell(r, 8).value
+                    c_reason = sheet.cell(r, 9).value
+                    c_mainland = sheet.cell(r, 10).value
+                else:
+                    raw_tier = str(sheet.cell(r, 5).value or '').strip()
+                    c_layout = sheet.cell(r, 6).value
+                    c_total = sheet.cell(r, 7).value
+                    c_sqft = sheet.cell(r, 8).value
+                    c_rent = sheet.cell(r, 9).value
+                    c_roi = sheet.cell(r, 10).value
+                    c_reason = sheet.cell(r, 11).value
+                    c_mainland = sheet.cell(r, 12).value
+
                 tier_key = current_tier
                 if '1000-2000' in raw_tier or '1000万-2000' in raw_tier or '500万' in raw_tier:
                     tier_key = '1000-2000'
@@ -491,21 +512,32 @@ def main():
                 clean_name = re.sub(r'\(第.*?\)', '', name_str).replace('4B', '').replace('4b', '').strip()
                 user_cd = custom_districts.get(name_str) or custom_districts.get(clean_name) or {}
 
+                roi_val = ''
+                if c_roi is not None:
+                    try:
+                        r_float = float(c_roi)
+                        if 0 < r_float < 1:
+                            roi_val = f"{round(r_float * 100, 2)}%"
+                        else:
+                            roi_val = str(c_roi).strip()
+                    except:
+                        roi_val = str(c_roi).strip()
+
                 p_data[name_str] = {
                     'grade': str(sheet.cell(r, 2).value or 'A').strip(),
-                    'region': user_cd.get('region') or str(sheet.cell(r, 3).value or '九龙').strip(),
-                    'district': user_cd.get('district') or str(sheet.cell(r, 4).value or '').strip(),
+                    'region': user_cd.get('region') or '九龙',
+                    'district': user_cd.get('district') or '',
                     'price_tier': tier_key,
-                    'main_layout': str(sheet.cell(r, 6).value or '').strip(),
-                    'total_price': str(sheet.cell(r, 7).value or '').strip(),
-                    'total_price_desc': str(sheet.cell(r, 7).value or '').strip(),
-                    'sqft_price': str(sheet.cell(r, 8).value or '').strip(),
-                    'sqft_price_desc': str(sheet.cell(r, 8).value or '').strip(),
-                    'rent_range': str(sheet.cell(r, 9).value or '').strip(),
-                    'rent_range_desc': str(sheet.cell(r, 9).value or '').strip(),
-                    'roi': str(sheet.cell(r, 10).value or '').strip(),
-                    'reason': str(sheet.cell(r, 11).value or '').strip(),
-                    'mainland_selling_points': str(sheet.cell(r, 12).value or '').strip(),
+                    'main_layout': str(c_layout or '').strip(),
+                    'total_price': str(c_total or '').strip(),
+                    'total_price_desc': str(c_total or '').strip(),
+                    'sqft_price': str(c_sqft or '').strip(),
+                    'sqft_price_desc': str(c_sqft or '').strip(),
+                    'rent_range': str(c_rent or '').strip(),
+                    'rent_range_desc': str(c_rent or '').strip(),
+                    'roi': roi_val,
+                    'reason': str(c_reason or '').strip(),
+                    'mainland_selling_points': str(c_mainland or '').strip(),
                 }
             print(f"成功从 Excel [{target_path}] 载入 {len(p_data)} 个精选聚焦盘源数据。")
             return f_by_price, p_data
