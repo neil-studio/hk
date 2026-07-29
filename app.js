@@ -2337,7 +2337,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const tr = document.createElement('tr');
           const parentDriveId = '15tRwSlG1VTOKuEyj-H131zpNK6v6MY04';
           const cleanProjectName = item.name.replace(/\(第.*?\)/g, '').replace(/第\s*[0-9A-Za-z\-]+期.*$/, '').replace(/\s+I{1,3}$/g, '').replace(/\s+II$/g, '').trim() || item.name;
-          const driveQ = `parent:${parentDriveId} ${cleanProjectName}`;
+          const driveQ = `type:folder parent:${parentDriveId} ${cleanProjectName}`;
           const mUrl = item.marketingUrl || `https://drive.google.com/drive/search?q=${encodeURIComponent(driveQ)}`;
 
           const minMonthRent = item.baseRent * 350 / 10000;
@@ -2431,7 +2431,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const parentDriveId = '15tRwSlG1VTOKuEyj-H131zpNK6v6MY04';
         const introUrl = proj.intro_url || proj.centaline_url || meta.centaline_url || meta.intro_url || `https://www.ricacorp.com/zh-hk/property/search?q=${encodeURIComponent(name)}`;
         const cleanProjectName = name.replace(/\(第.*?\)/g, '').replace(/第\s*[0-9A-Za-z\-]+期.*$/, '').replace(/\s+I{1,3}$/g, '').replace(/\s+II$/g, '').trim() || name;
-        const driveQ = `parent:${parentDriveId} ${cleanProjectName}`;
+        const driveQ = `type:folder parent:${parentDriveId} ${cleanProjectName}`;
         const marketingUrl = proj.marketing_url || meta.marketing_url || `https://drive.google.com/drive/search?q=${encodeURIComponent(driveQ)}`;
 
         featuredList.push({

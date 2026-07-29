@@ -621,7 +621,8 @@ def main():
             master_name = m_clean.strip() if m_clean.strip() else name_val.strip()
 
             PARENT_DRIVE_ID = "15tRwSlG1VTOKuEyj-H131zpNK6v6MY04"
-            drive_q = f"parent:{PARENT_DRIVE_ID} {master_name}"
+            # 严格限定搜索结果只返回文件夹 (type:folder)
+            drive_q = f"type:folder parent:{PARENT_DRIVE_ID} {master_name}"
             drive_url = f"https://drive.google.com/drive/search?q={urllib.parse.quote(drive_q)}"
             folder = f"{reg_val}-{dist_val}-{master_name}"
             return folder, drive_url
@@ -669,7 +670,7 @@ def main():
             'intro_url': p_meta.get('intro_url', p_meta.get('centaline_url', '')),
             'price_tier': p_meta.get('price_tier', ''),
             'google_drive_folder': g_folder,
-            'marketing_url': g_url,
+            'marketing_url': p_meta.get('marketing_url') or p_meta.get('drive_url') or g_url,
             'main_layout': p_meta.get('main_layout', ''),
             'total_price_desc': p_meta.get('total_price', ''),
             'sqft_price_desc': p_meta.get('sqft_price', ''),
