@@ -388,10 +388,20 @@ def main():
     featured_by_price = admin_config.get('featured_by_price', {})
     projects_data = admin_config.get('projects_data', {})
 
+    custom_dist_file = os.path.join(BASE_DIR, "custom_districts.json")
+    custom_districts = {}
+    if os.path.exists(custom_dist_file):
+        try:
+            with open(custom_dist_file, 'r', encoding='utf-8') as f:
+                custom_districts = json.load(f)
+            print(f"成功载入 {len(custom_districts)} 条用户自定义商圈规则。")
+        except Exception as e:
+            print(f"读取 custom_districts.json 失败: {e}")
+
     # 优先从 香港新房精选项目.xlsx 动态更新聚焦精选盘内容
     def load_featured_from_excel():
         excel_paths = [
-            "/Users/nb/google/Antigravity/工作/运营/聚焦盘精选盘/香港新房精选项目.xlsx",
+            os.path.join(BASE_DIR, "聚焦盘精选盘", "香港新房精选项目.xlsx"),
             os.path.join(BASE_DIR, "香港新房精选项目.xlsx")
         ]
         target_path = None
@@ -415,7 +425,7 @@ def main():
                 name = sheet.cell(r, 1).value
                 if not name: continue
                 name_str = str(name).strip()
-                if '1️⃣' in name_str or '投资配置类' in name_str:
+                if '1️⃣' in name_str or '首套刚需类' in name_str:
                     current_tier = '1000-2000'; continue
                 if '2️⃣' in name_str or '自用保值类' in name_str:
                     current_tier = '2000-5000'; continue
@@ -439,10 +449,13 @@ def main():
                 if name_str not in f_by_price[tier_key]:
                     f_by_price[tier_key].append(name_str)
 
+                clean_name = re.sub(r'\(第.*?\)', '', name_str).replace('4B', '').replace('4b', '').strip()
+                user_cd = custom_districts.get(name_str) or custom_districts.get(clean_name) or {}
+
                 p_data[name_str] = {
                     'grade': str(sheet.cell(r, 2).value or 'A').strip(),
-                    'region': str(sheet.cell(r, 3).value or '九龙').strip(),
-                    'district': str(sheet.cell(r, 4).value or '').strip(),
+                    'region': user_cd.get('region') or str(sheet.cell(r, 3).value or '九龙').strip(),
+                    'district': user_cd.get('district') or str(sheet.cell(r, 4).value or '').strip(),
                     'price_tier': tier_key,
                     'main_layout': str(sheet.cell(r, 6).value or '').strip(),
                     'total_price': str(sheet.cell(r, 7).value or '').strip(),
@@ -483,9 +496,10 @@ def main():
                 custom_districts = json.load(f)
             print(f"成功载入 {len(custom_districts)} 条用户自定义商圈规则。")
             for pname, cd in custom_districts.items():
-                if pname in projects_data:
-                    if 'region' in cd: projects_data[pname]['region'] = cd['region']
-                    if 'district' in cd: projects_data[pname]['district'] = cd['district']
+                if pname not in projects_data:
+                    projects_data[pname] = {}
+                if 'region' in cd: projects_data[pname]['region'] = cd['region']
+                if 'district' in cd: projects_data[pname]['district'] = cd['district']
         except Exception as e:
             print(f"读取 custom_districts.json 失败: {e}")
 
