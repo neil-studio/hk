@@ -618,16 +618,11 @@ def main():
             m_clean = re.sub(r'\s+II$', '', m_clean)
             m_clean = re.sub(r'\s+III$', '', m_clean)
             m_clean = re.sub(r'\(.*?\)', '', m_clean)
-            master_name = m_clean.strip() if m_clean.strip() else name_val.strip()
-
-            PARENT_DRIVE_ID = "15tRwSlG1VTOKuEyj-H131zpNK6v6MY04"
-            # 严格限定搜索结果只返回文件夹 (type:folder)
-            drive_q = f"type:folder parent:{PARENT_DRIVE_ID} {master_name}"
-            drive_url = f"https://drive.google.com/drive/search?q={urllib.parse.quote(drive_q)}"
-            folder = f"{reg_val}-{dist_val}-{master_name}"
-            return folder, drive_url
-
-        g_folder, g_url = clean_master_folder_name(region, district, project_name)
+        PARENT_DRIVE_ID = "15tRwSlG1VTOKuEyj-H131zpNK6v6MY04"
+        g_folder = f"{region}-{district}-{project_name}"
+        # 100% 对齐网盘文件夹全名 ({区域}-{商圈}-{项目名}) 进行精确无缝匹配
+        drive_q = f"parent:{PARENT_DRIVE_ID} {g_folder}"
+        g_url = f"https://drive.google.com/drive/search?q={urllib.parse.quote(drive_q)}"
         
         dist_info = rental_benchmarks.get('districts', {}).get(district, rental_benchmarks.get('default_fallback', {'base_rent': 50, 'min_rent': 42, 'max_rent': 60}))
         base_rent = dist_info.get('base_rent', 50)
