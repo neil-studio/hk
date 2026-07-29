@@ -265,17 +265,29 @@ def build_leaderboard_data():
     if not os.path.exists(db_path):
         return {}
 
+    custom_dist_file = os.path.join(BASE_DIR, "custom_districts.json")
+    custom_districts = {}
+    if os.path.exists(custom_dist_file):
+        try:
+            with open(custom_dist_file, 'r', encoding='utf-8') as f:
+                custom_districts = json.load(f)
+        except:
+            pass
+
     try:
         import sqlite3
         from datetime import datetime
         conn = sqlite3.connect(db_path)
         c = conn.cursor()
 
+        price_sql = "CAST(CASE WHEN disc_price IS NOT NULL AND disc_price != '' AND disc_price != '暂无' AND disc_price != '-' THEN disc_price ELSE price END AS REAL)"
+        sqft_sql = "CAST(CASE WHEN disc_unit_price IS NOT NULL AND disc_unit_price != '' AND disc_unit_price != '暂无' AND disc_unit_price != '-' THEN disc_unit_price ELSE unit_price END AS REAL)"
+
         def query_rankings(where_clause, limit=10):
             q = f'''
                 SELECT project_name, region, district, COUNT(*) as volume, 
-                       AVG(CAST(COALESCE(NULLIF(disc_price,''), price) AS REAL)) as avg_price,
-                       AVG(CAST(COALESCE(NULLIF(disc_unit_price,''), unit_price) AS REAL)) as avg_sqft
+                       AVG({price_sql}) as avg_price,
+                       AVG({sqft_sql}) as avg_sqft
                 FROM sold_history 
                 WHERE sold_date IS NOT NULL AND sold_date != '' AND {where_clause}
                 GROUP BY project_name
@@ -285,10 +297,15 @@ def build_leaderboard_data():
             c.execute(q)
             res = []
             for r in c.fetchall():
+                pname = r[0]
+                clean_name = re.sub(r'\(第.*?\)', '', pname).replace('4B', '').replace('4b', '').strip()
+                user_cd = custom_districts.get(pname) or custom_districts.get(clean_name) or {}
+                reg_val = user_cd.get('region') or r[1] or '九龙'
+                dist_val = user_cd.get('district') or r[2] or ''
                 res.append({
-                    'project_name': r[0],
-                    'region': r[1] or '九龙',
-                    'district': r[2] or '',
+                    'project_name': pname,
+                    'region': reg_val,
+                    'district': dist_val,
                     'volume': r[3],
                     'avg_price_wan': round(r[4] / 10000, 1) if r[4] else 0,
                     'avg_sqft': round(r[5]) if r[5] else 0
@@ -300,10 +317,10 @@ def build_leaderboard_data():
                 'overall': query_rankings(f"{where_prefix}", 10),
                 'region_hk': query_rankings(f"{where_prefix} AND region = '港岛'", 10),
                 'region_kl': query_rankings(f"{where_prefix} AND region = '九龙'", 10),
-                'price_500_2000m': query_rankings(f"{where_prefix} AND CAST(COALESCE(NULLIF(disc_price,''), price) AS REAL) BETWEEN 5000000 AND 20000000", 10),
-                'price_2000_5000m': query_rankings(f"{where_prefix} AND CAST(COALESCE(NULLIF(disc_price,''), price) AS REAL) BETWEEN 20000000 AND 50000000", 10),
-                'price_5000_10000m': query_rankings(f"{where_prefix} AND CAST(COALESCE(NULLIF(disc_price,''), price) AS REAL) BETWEEN 50000000 AND 100000000", 10),
-                'price_10000m_above': query_rankings(f"{where_prefix} AND CAST(COALESCE(NULLIF(disc_price,''), price) AS REAL) >= 100000000", 10)
+                'price_500_2000m': query_rankings(f"{where_prefix} AND {price_sql} BETWEEN 5000000 AND 20000000", 10),
+                'price_2000_5000m': query_rankings(f"{where_prefix} AND {price_sql} BETWEEN 20000000 AND 50000000", 10),
+                'price_5000_10000m': query_rankings(f"{where_prefix} AND {price_sql} BETWEEN 50000000 AND 100000000", 10),
+                'price_10000m_above': query_rankings(f"{where_prefix} AND {price_sql} >= 100000000", 10)
             }
 
         # 1. 提取可用年份
