@@ -1,0 +1,447 @@
+  1. 港岛-东半山-Central Peak
+  2. 港岛-东半山-Central Peak I
+  3. 港岛-东半山-Central Peak II
+  4. 港岛-东半山-御峰
+  5. 港岛-中半山-帝景园
+  6. 港岛-中半山-波老道21号
+  7. 港岛-中半山-雅盈峰
+  8. 港岛-中西区-Castle one
+  9. 港岛-中西区-海嵎
+ 10. 港岛-北角-101 Kings Road
+ 11. 港岛-北角-君誉峰
+ 12. 港岛-北角-嘉居．天后
+ 13. 港岛-北角-柏蔚山
+ 14. 港岛-北角-海璇
+ 15. 港岛-北角-海璇 II
+ 16. 港岛-北角-海璇 II (第2B-3期)
+ 17. 港岛-半山区西部-21 Borrett Road 第1期
+ 18. 港岛-半山区西部-Upper Central
+ 19. 港岛-半山区西部-大学阁
+ 20. 港岛-半山区西部-帝汇豪庭
+ 21. 港岛-半山区西部-应天
+ 22. 港岛-半山区西部-罗便臣道80号
+ 23. 港岛-坚尼地城-Kennedy 38
+ 24. 港岛-坚尼地城及摩星岭-吉喆
+ 25. 港岛-大潭及石澳-皇府湾
+ 26. 港岛-寿臣山-南天第
+ 27. 港岛-寿臣山-寿臣山15号
+ 28. 港岛-寿臣山及浅水湾-No.3 Repulse Bay Road
+ 29. 港岛-寿臣山及浅水湾-Shouson Peak
+ 30. 港岛-寿臣山及浅水湾-浅水湾108
+ 31. 港岛-寿臣山及浅水湾-深水湾径8号
+ 32. 港岛-山顶区-Mount Nicholson I
+ 33. 港岛-山顶区-Mount Nicholson II
+ 34. 港岛-山顶区-Twelve Peaks
+ 35. 港岛-山顶区-宾吉道3号
+ 36. 港岛-柴湾-海德园
+ 37. 港岛-柴湾-海德园第1期
+ 38. 港岛-浅水湾-迎夏
+ 39. 港岛-海天径-海天山墅
+ 40. 港岛-渣甸山-峻誉渣甸山
+ 41. 港岛-渣甸山-峻誉．渣甸山
+ 42. 港岛-渣甸山及黄泥涌峡-皇第
+ 43. 港岛-湾仔-Woodis
+ 44. 港岛-湾仔-活道1号
+ 45. 港岛-筲箕湾-One Eighty
+ 46. 港岛-筲箕湾-傲华
+ 47. 港岛-筲箕湾-远晴
+ 48. 港岛-薄扶林-Victoria Coast
+ 49. 港岛-西半山-Mount Pokfulam
+ 50. 港岛-西半山-天御
+ 51. 港岛-西半山-天御第1期
+ 52. 港岛-西半山-天御第2期
+ 53. 港岛-西半山-宝峰
+ 54. 港岛-西营盘及上环-15 Western Street
+ 55. 港岛-西营盘及上环-42 Tung St.
+ 56. 港岛-西营盘及上环-尚逸
+ 57. 港岛-赤柱-50 Stanley Village Road
+ 58. 港岛-赤柱-One Stanley
+ 59. 港岛-赤柱-Solace
+ 60. 港岛-赤柱-one Stanley
+ 61. 港岛-赤柱-solace
+ 62. 港岛-赤柱-海天径 1号, 舂磡角道 44, 46, 48, 50号
+ 63. 港岛-赤柱-环角道7号、9号及11号
+ 64. 港岛-跑马地-339 Tai Hang Road
+ 65. 港岛-铜锣湾-宏丰台10号
+ 66. 港岛-香港仔及鸭脷洲-PORTO
+ 67. 港岛-香港仔及鸭脷洲-弦岸
+ 68. 港岛-香港仔及鸭脷洲-晋环
+ 69. 港岛-香港仔及鸭脷洲-璟南
+ 70. 港岛-香港仔及鸭脷洲-逸南
+ 71. 港岛-鲗鱼涌-君豪峰
+ 72. 港岛-鸭脷洲-凯玥
+ 73. 港岛-黄泥涌-Eight Kwai Fong Happy Valley
+ 74. 港岛-黄泥涌-蓝塘道23-39号
+ 75. 港岛-黄竹坑-Blue Coast
+ 76. 港岛-黄竹坑-Blue Coast II
+ 77. 港岛-黄竹坑-Deep Water South 第6A期
+ 78. 港岛-黄竹坑-Deep Water South 第6B期
+ 79. 港岛-黄竹坑-Deep water south
+ 80. 港岛-黄竹坑-扬海
+ 81. 港岛-黄竹坑-海盈山
+ 82. 港岛-黄竹坑-海盈山4B
+ 83. 港岛-黄竹坑-海盈山第4A期
+ 84. 港岛-黄竹坑-海盈山第4B期
+ 85. 港岛-黄竹坑-滶晨
+ 86. 港岛-黄竹坑-滶晨 II
+ 87. 九龙--Beacon peak
+ 88. 九龙-九龙塘-Park College
+ 89. 九龙-九龙塘-博峰
+ 90. 九龙-九龙塘-喇沙汇
+ 91. 九龙-九龙塘-滶蕴
+ 92. 九龙-九龙塘-皇廷汇
+ 93. 九龙-九龙站-天玺
+ 94. 九龙-何文田-128 Waterloo
+ 95. 九龙-何文田-Prince Central
+ 96. 九龙-何文田-VAU Residence
+ 97. 九龙-何文田-st. george's mansions
+ 98. 九龙-何文田-名钻
+ 99. 九龙-何文田-天铸 (第2期)
+100. 九龙-何文田-太子道西233号
+101. 九龙-何文田-明寓
+102. 九龙-何文田-朗贤峰第IIA期
+103. 九龙-何文田-朗贤峰第IIB期
+104. 九龙-何文田-瑜一
+105. 九龙-何文田-瑜一第IC期
+106. 九龙-何文田-瑜一．天海
+107. 九龙-何文田-耀爵台
+108. 九龙-何文田-芳菲
+109. 九龙-何文田-誉林
+110. 九龙-何文田-隆敍
+111. 九龙-启德-Double Coast I
+112. 九龙-启德-Double Coast III
+113. 九龙-启德-Henley Park
+114. 九龙-启德-Miami Quay
+115. 九龙-启德-Miami Quay I
+116. 九龙-启德-Miami Quay II
+117. 九龙-启德-Monaco Marine
+118. 九龙-启德-Monaco One
+119. 九龙-启德-Monaco 第1期
+120. 九龙-启德-The Henley I
+121. 九龙-启德-The Henley II
+122. 九龙-启德-The Henley III
+123. 九龙-启德-henley park
+124. 九龙-启德-the henley
+125. 九龙-启德-傲玟
+126. 九龙-启德-启德海湾
+127. 九龙-启德-启德海湾 1
+128. 九龙-启德-启德海湾 2
+129. 九龙-启德-天泷
+130. 九龙-启德-天玺天
+131. 九龙-启德-天玺海
+132. 九龙-启德-天玺．天
+133. 九龙-启德-天玺．天第2期
+134. 九龙-启德-天玺．海第1期
+135. 九龙-启德-天玺．海第2A期
+136. 九龙-启德-天玺．海第2B期
+137. 九龙-启德-柏蔚森 I
+138. 九龙-启德-柏蔚森 II
+139. 九龙-启德-柏蔚森 III
+140. 九龙-启德-沄璟
+141. 九龙-启德-澐璟
+142. 九龙-启德-维港1号
+143. 九龙-启德-维港．双钻
+144. 九龙-启德-维港．湾畔第1A期
+145. 九龙-启德-维港．湾畔第1B期
+146. 九龙-启德-维港．湾畔第2B期
+147. 九龙-尖沙咀-本木
+148. 九龙-旺角-The Boundary
+149. 九龙-旺角-Upper Prince
+150. 九龙-旺角-利奥坊．凯岸
+151. 九龙-旺角-利奥坊．壹隅
+152. 九龙-旺角-利奥坊．曦岸
+153. 九龙-旺角-映居
+154. 九龙-油麻地-22 square
+155. 九龙-油麻地-原舍
+156. 九龙-石硖尾-Beacon Peak 第1期
+157. 九龙-笔架山-The Monet
+158. 九龙-笔架山-The Monet 第1期
+159. 九龙-笔架山-The Monet 第2期
+160. 九龙-笔架山-The Monet 第3期
+161. 九龙-笔架山-缇外
+162. 九龙-红磡-The Haddon
+163. 九龙-红磡-必嘉坊．曦汇
+164. 九龙-红磡-必嘉坊．迎汇
+165. 九龙-红磡-悦麓
+166. 九龙-红磡-首岸第1期
+167. 九龙-红磡-首岸第2期
+168. 九龙-红磡-首岸第3期
+169. 九龙-红磡-首岸第4期
+170. 九龙-红磡-首汇
+171. 九龙-西南九龙-汇玺III
+172. 九龙-西南九龙-维港汇 III
+173. 九龙-马头角-南首
+174. 九龙-马头角-壹沐第1期
+175. 九龙-马头角-壹沐第2期
+176. 九龙-马头角-文曜
+177. 九龙-马头角-瑧博
+178. 全港-核心区-101 KINGS ROAD
+179. 全港-核心区-101 kings road
+180. 全港-核心区-128 WATERLOO
+181. 全港-核心区-128 waterloo
+182. 全港-核心区-15 WESTERN STREET
+183. 全港-核心区-15 western street
+184. 全港-核心区-21 BORRETT ROAD
+185. 全港-核心区-21 BORRETT ROAD 第1期
+186. 全港-核心区-21 Borrett Road
+187. 全港-核心区-21 borrett road
+188. 全港-核心区-21 borrett road 第1期
+189. 全港-核心区-339 TAI HANG ROAD
+190. 全港-核心区-339 tai hang road
+191. 全港-核心区-42 TUNG ST.
+192. 全港-核心区-42 tung st.
+193. 全港-核心区-50 STANLEY VILLAGE ROAD
+194. 全港-核心区-50 stanley village road
+195. 全港-核心区-7779 PEAK ROAD
+196. 全港-核心区-7779 Peak Road
+197. 全港-核心区-7779 peak road
+198. 全港-核心区-BAKER CIRCLE．GREENWICH
+199. 全港-核心区-BAL RESIDENCE
+200. 全港-核心区-BEACON PEAK
+201. 全港-核心区-BEACON PEAK 第1期
+202. 全港-核心区-BELGRAVIA PLACE
+203. 全港-核心区-BELGRAVIA PLACE 第1期
+204. 全港-核心区-BELGRAVIA PLACE 第2期
+205. 全港-核心区-BLUE COAST
+206. 全港-核心区-BLUE COAST II
+207. 全港-核心区-Baker Circle．Greenwich
+208. 全港-核心区-Bal Residence
+209. 全港-核心区-Beacon Peak
+210. 全港-核心区-Belgravia Place
+211. 全港-核心区-Belgravia Place 第1期
+212. 全港-核心区-Belgravia Place 第2期
+213. 全港-核心区-CENTRAL PEAK
+214. 全港-核心区-CENTRAL PEAK I
+215. 全港-核心区-CENTRAL PEAK II
+216. 全港-核心区-COASTO
+217. 全港-核心区-Coasto
+218. 全港-核心区-DEEP WATER SOUTH
+219. 全港-核心区-DEEP WATER SOUTH 第6A期
+220. 全港-核心区-DEEP WATER SOUTH 第6B期
+221. 全港-核心区-DOUBLE COAST
+222. 全港-核心区-DOUBLE COAST I
+223. 全港-核心区-DOUBLE COAST III
+224. 全港-核心区-Deep Water South
+225. 全港-核心区-Double Coast
+226. 全港-核心区-EIGHT KWAI FONG HAPPY VALLEY
+227. 全港-核心区-EIGHT STAR STREET
+228. 全港-核心区-ELIZE PARK
+229. 全港-核心区-Eight Star Street
+230. 全港-核心区-Elize Park
+231. 全港-核心区-FINNIE
+232. 全港-核心区-GRAND SEASONS
+233. 全港-核心区-GRANDE MONACO
+234. 全港-核心区-Grand Seasons
+235. 全港-核心区-Grande Monaco
+236. 全港-核心区-HENLEY PARK
+237. 全港-核心区-KENNEDY
+238. 全港-核心区-KENNEDY 38
+239. 全港-核心区-KOKO HILLS
+240. 全港-核心区-KOKO MARE
+241. 全港-核心区-KOKO RESERVE
+242. 全港-核心区-KOKO ROSSO
+243. 全港-核心区-Kennedy
+244. 全港-核心区-LP10
+245. 全港-核心区-MIAMI QUAY
+246. 全港-核心区-MIAMI QUAY I
+247. 全港-核心区-MIAMI QUAY II
+248. 全港-核心区-MONACO
+249. 全港-核心区-MONACO MARINE
+250. 全港-核心区-MONACO ONE
+251. 全港-核心区-MONACO 第1期
+252. 全港-核心区-MOUNT NICHOLSON
+253. 全港-核心区-MOUNT NICHOLSON I
+254. 全港-核心区-MOUNT NICHOLSON II
+255. 全港-核心区-MOUNT POKFULAM
+256. 全港-核心区-Monaco
+257. 全港-核心区-Mount Nicholson
+258. 全港-核心区-NO.3 REPULSE BAY ROAD
+259. 全港-核心区-ONE EIGHTY
+260. 全港-核心区-ONE STANLEY
+261. 全港-核心区-PARK COLLEGE
+262. 全港-核心区-PARK SEASONS
+263. 全港-核心区-PRINCE CENTRAL
+264. 全港-核心区-Park Seasons
+265. 全港-核心区-SEASONS PLACE
+266. 全港-核心区-SHOUSON PEAK
+267. 全港-核心区-SOLACE
+268. 全港-核心区-SPRING GARDEN
+269. 全港-核心区-ST. GEORGE'S MANSIONS
+270. 全港-核心区-Seasons Place
+271. 全港-核心区-Spring Garden
+272. 全港-核心区-THE ASTER
+273. 全港-核心区-THE BOUNDARY
+274. 全港-核心区-THE HADDON
+275. 全港-核心区-THE HENLEY
+276. 全港-核心区-THE HENLEY I
+277. 全港-核心区-THE HENLEY II
+278. 全港-核心区-THE HENLEY III
+279. 全港-核心区-THE MONET
+280. 全港-核心区-THE MONET 第1期
+281. 全港-核心区-THE MONET 第2期
+282. 全港-核心区-THE MONET 第3期
+283. 全港-核心区-THE MVP
+284. 全港-核心区-TWELVE PEAKS
+285. 全港-核心区-The Aster
+286. 全港-核心区-The Henley
+287. 全港-核心区-UPPER CENTRAL
+288. 全港-核心区-UPPER PRINCE
+289. 全港-核心区-VAU RESIDENCE
+290. 全港-核心区-VICTORIA COAST
+291. 全港-核心区-WOODIS
+292. 全港-核心区-baker circle．greenwich
+293. 全港-核心区-bal residence
+294. 全港-核心区-beacon peak
+295. 全港-核心区-beacon peak 第1期
+296. 全港-核心区-belgravia place
+297. 全港-核心区-belgravia place 第1期
+298. 全港-核心区-belgravia place 第2期
+299. 全港-核心区-blue coast
+300. 全港-核心区-blue coast ii
+301. 全港-核心区-central peak
+302. 全港-核心区-central peak i
+303. 全港-核心区-central peak ii
+304. 全港-核心区-coasto
+305. 全港-核心区-deep water south
+306. 全港-核心区-deep water south 第6a期
+307. 全港-核心区-deep water south 第6b期
+308. 全港-核心区-double coast
+309. 全港-核心区-double coast i
+310. 全港-核心区-double coast iii
+311. 全港-核心区-eight kwai fong happy valley
+312. 全港-核心区-eight star street
+313. 全港-核心区-elize park
+314. 全港-核心区-finnie
+315. 全港-核心区-grand seasons
+316. 全港-核心区-grande monaco
+317. 全港-核心区-kennedy
+318. 全港-核心区-kennedy 38
+319. 全港-核心区-koko hills
+320. 全港-核心区-koko mare
+321. 全港-核心区-koko reserve
+322. 全港-核心区-koko rosso
+323. 全港-核心区-lp10
+324. 全港-核心区-miami quay
+325. 全港-核心区-miami quay i
+326. 全港-核心区-miami quay ii
+327. 全港-核心区-monaco
+328. 全港-核心区-monaco marine
+329. 全港-核心区-monaco one
+330. 全港-核心区-monaco 第1期
+331. 全港-核心区-mount nicholson
+332. 全港-核心区-mount nicholson i
+333. 全港-核心区-mount nicholson ii
+334. 全港-核心区-mount pokfulam
+335. 全港-核心区-no.3 repulse bay road
+336. 全港-核心区-one eighty
+337. 全港-核心区-one stanley
+338. 全港-核心区-park college
+339. 全港-核心区-park seasons
+340. 全港-核心区-porto
+341. 全港-核心区-prince central
+342. 全港-核心区-seasons place
+343. 全港-核心区-shouson peak
+344. 全港-核心区-spring garden
+345. 全港-核心区-the MVP
+346. 全港-核心区-the aster
+347. 全港-核心区-the boundary
+348. 全港-核心区-the haddon
+349. 全港-核心区-the henley i
+350. 全港-核心区-the henley ii
+351. 全港-核心区-the henley iii
+352. 全港-核心区-the monet
+353. 全港-核心区-the monet 第1期
+354. 全港-核心区-the monet 第2期
+355. 全港-核心区-the monet 第3期
+356. 全港-核心区-the mvp
+357. 全港-核心区-twelve peaks
+358. 全港-核心区-upper central
+359. 全港-核心区-upper prince
+360. 全港-核心区-vau residence
+361. 全港-核心区-victoria coast
+362. 全港-核心区-woodis
+363. 全港-核心区-亲海駅I
+364. 全港-核心区-亲海駅II
+365. 全港-核心区-亲海駅i
+366. 全港-核心区-亲海駅ii
+367. 全港-核心区-凯柏峰
+368. 全港-核心区-凯柏峰 I
+369. 全港-核心区-凯柏峰 II
+370. 全港-核心区-凯柏峰 III
+371. 全港-核心区-凯柏峰 i
+372. 全港-核心区-凯柏峰 ii
+373. 全港-核心区-凯柏峰 iii
+374. 全港-核心区-利奥坊．首隅
+375. 全港-核心区-半山名汇
+376. 全港-核心区-喜．扬
+377. 全港-核心区-坚尼地道33号
+378. 全港-核心区-壹沐
+379. 全港-核心区-大潭道45号
+380. 全港-核心区-天玺．海
+381. 全港-核心区-天玺．海第2a期
+382. 全港-核心区-天玺．海第2b期
+383. 全港-核心区-天铸
+384. 全港-核心区-家壹
+385. 全港-核心区-幸荟
+386. 全港-核心区-御海园
+387. 全港-核心区-恒珀
+388. 全港-核心区-映筑
+389. 全港-核心区-晓柏峰
+390. 全港-核心区-朗誉
+391. 全港-核心区-朗贤峰
+392. 全港-核心区-朗贤峰第iia期
+393. 全港-核心区-朗贤峰第iib期
+394. 全港-核心区-柏景峰
+395. 全港-核心区-柏蔚森
+396. 全港-核心区-柏蔚森 i
+397. 全港-核心区-柏蔚森 ii
+398. 全港-核心区-柏蔚森 iii
+399. 全港-核心区-汇玺iii
+400. 全港-核心区-波老道21號
+401. 全港-核心区-泰峰
+402. 全港-核心区-海傲湾
+403. 全港-核心区-海瑅湾
+404. 全港-核心区-海瑅湾 I
+405. 全港-核心区-海瑅湾 i
+406. 全港-核心区-海璇 ii
+407. 全港-核心区-海璇 ii (第2b-3期)
+408. 全港-核心区-海盈山4b
+409. 全港-核心区-海盈山第4a期
+410. 全港-核心区-海盈山第4b期
+411. 全港-核心区-海茵庄园
+412. 全港-核心区-滶晨 ii
+413. 全港-核心区-澄天
+414. 全港-核心区-焕然壹居
+415. 全港-核心区-珑碧
+416. 全港-核心区-瑜一第IB期
+417. 全港-核心区-瑜一第ib期
+418. 全港-核心区-瑜一第ic期
+419. 全港-核心区-瑜意
+420. 全港-核心区-瑧尔
+421. 全港-核心区-瑧玥
+422. 全港-核心区-皇都
+423. 全港-核心区-皓日
+424. 全港-核心区-睿峰
+425. 全港-核心区-碧丽轩
+426. 全港-核心区-维港汇
+427. 全港-核心区-维港汇 I
+428. 全港-核心区-维港汇 II
+429. 全港-核心区-维港汇 i
+430. 全港-核心区-维港汇 ii
+431. 全港-核心区-维港汇 iii
+432. 全港-核心区-维港．湾畔
+433. 全港-核心区-维港．湾畔第1a期
+434. 全港-核心区-维港．湾畔第1b期
+435. 全港-核心区-维港．湾畔第2b期
+436. 全港-核心区-翠雅山
+437. 全港-核心区-荟淳
+438. 全港-核心区-荟鸣
+439. 全港-核心区-蔚蓝东岸
+440. 全港-核心区-连方I
+441. 全港-核心区-连方II
+442. 全港-核心区-连方i
+443. 全港-核心区-连方ii
+444. 全港-核心区-隽睿
+445. 全港-核心区-隽荟
+446. 全港-核心区-首岸
+447. 全港-核心区-高临

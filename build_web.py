@@ -475,6 +475,20 @@ def main():
         except Exception as e:
             print(f"读取 rental_benchmarks.json 失败: {e}")
 
+    custom_dist_file = os.path.join(BASE_DIR, "custom_districts.json")
+    custom_districts = {}
+    if os.path.exists(custom_dist_file):
+        try:
+            with open(custom_dist_file, 'r', encoding='utf-8') as f:
+                custom_districts = json.load(f)
+            print(f"成功载入 {len(custom_districts)} 条用户自定义商圈规则。")
+            for pname, cd in custom_districts.items():
+                if pname in projects_data:
+                    if 'region' in cd: projects_data[pname]['region'] = cd['region']
+                    if 'district' in cd: projects_data[pname]['district'] = cd['district']
+        except Exception as e:
+            print(f"读取 custom_districts.json 失败: {e}")
+
     drive_mapping_file = os.path.join(BASE_DIR, "google_drive_mapping.json")
     drive_mapping = {}
     if os.path.exists(drive_mapping_file):
@@ -639,6 +653,13 @@ def main():
         clean_pname = strip_phase_suffix(project_name)
         reg_val = p_meta.get('region') or region
         dist_val = p_meta.get('district') or district
+        user_custom = custom_districts.get(project_name) or custom_districts.get(clean_pname)
+        if user_custom:
+            reg_val = user_custom.get('region') or reg_val
+            dist_val = user_custom.get('district') or dist_val
+            if project_name in projects_data:
+                projects_data[project_name]['region'] = reg_val
+                projects_data[project_name]['district'] = dist_val
 
         PARENT_DRIVE_ID = "15tRwSlG1VTOKuEyj-H131zpNK6v6MY04"
         mapped_folder = drive_mapping.get(project_name) or drive_mapping.get(clean_pname)

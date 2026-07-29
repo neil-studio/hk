@@ -1,0 +1,494 @@
+{
+  "Central Peak": {
+    "region": "港岛",
+    "district": "东半山"
+  },
+  "雅盈峰": {
+    "region": "港岛",
+    "district": "中半山"
+  },
+  "海嵎": {
+    "region": "港岛",
+    "district": "坚尼地城"
+  },
+  "101 Kings Road": {
+    "region": "港岛",
+    "district": "北角"
+  },
+  "君誉峰": {
+    "region": "港岛",
+    "district": "北角"
+  },
+  "嘉居．天后": {
+    "region": "港岛",
+    "district": "北角"
+  },
+  "柏蔚山": {
+    "region": "港岛",
+    "district": "北角"
+  },
+  "海璇": {
+    "region": "港岛",
+    "district": "北角"
+  },
+  "海璇 II": {
+    "region": "港岛",
+    "district": "北角"
+  },
+  "21 Borrett Road": {
+    "region": "港岛",
+    "district": "西半山"
+  },
+  "Upper Central": {
+    "region": "港岛",
+    "district": "西半山"
+  },
+  "大学阁": {
+    "region": "港岛",
+    "district": "西半山"
+  },
+  "帝汇豪庭": {
+    "region": "港岛",
+    "district": "西半山"
+  },
+  "应天": {
+    "region": "港岛",
+    "district": "西半山"
+  },
+  "罗便臣道80号": {
+    "region": "港岛",
+    "district": "西半山"
+  },
+  "Kennedy": {
+    "region": "港岛",
+    "district": "坚尼地城"
+  },
+  "吉喆": {
+    "region": "港岛",
+    "district": "坚尼地城"
+  },
+  "皇府湾": {
+    "region": "港岛",
+    "district": "大潭及石澳"
+  },
+  "寿臣山15号": {
+    "region": "港岛",
+    "district": "寿臣山及浅水湾"
+  },
+  "No.3 Repulse Bay Road": {
+    "region": "港岛",
+    "district": "寿臣山及浅水湾"
+  },
+  "Shouson Peak": {
+    "region": "港岛",
+    "district": "寿臣山及浅水湾"
+  },
+  "浅水湾108": {
+    "region": "港岛",
+    "district": "寿臣山及浅水湾"
+  },
+  "深水湾径8号": {
+    "region": "港岛",
+    "district": "寿臣山及浅水湾"
+  },
+  "Mount Nicholson": {
+    "region": "港岛",
+    "district": "山顶区"
+  },
+  "Twelve Peaks": {
+    "region": "港岛",
+    "district": "山顶区"
+  },
+  "宾吉道3号": {
+    "region": "港岛",
+    "district": "山顶区"
+  },
+  "海德园": {
+    "region": "港岛",
+    "district": "柴湾"
+  },
+  "峻誉．渣甸山": {
+    "region": "港岛",
+    "district": "渣甸山"
+  },
+  "皇第": {
+    "region": "港岛",
+    "district": "渣甸山"
+  },
+  "Woodis": {
+    "region": "港岛",
+    "district": "湾仔"
+  },
+  "活道1号": {
+    "region": "港岛",
+    "district": "湾仔"
+  },
+  "One Eighty": {
+    "region": "港岛",
+    "district": "筲箕湾"
+  },
+  "傲华": {
+    "region": "港岛",
+    "district": "筲箕湾"
+  },
+  "远晴": {
+    "region": "港岛",
+    "district": "筲箕湾"
+  },
+  "Victoria Coast": {
+    "region": "港岛",
+    "district": "薄扶林"
+  },
+  "Mount Pokfulam": {
+    "region": "港岛",
+    "district": "薄扶林"
+  },
+  "天御": {
+    "region": "港岛",
+    "district": "西半山"
+  },
+  "宝峰": {
+    "region": "港岛",
+    "district": "西半山"
+  },
+  "15 Western Street": {
+    "region": "港岛",
+    "district": "西营盘及上环"
+  },
+  "42 Tung St.": {
+    "region": "港岛",
+    "district": "西营盘及上环"
+  },
+  "尚逸": {
+    "region": "港岛",
+    "district": "西营盘及上环"
+  },
+  "50 Stanley Village Road": {
+    "region": "港岛",
+    "district": "赤柱"
+  },
+  "One Stanley": {
+    "region": "港岛",
+    "district": "赤柱"
+  },
+  "Solace": {
+    "region": "港岛",
+    "district": "赤柱"
+  },
+  "海天径 1号, 舂磡角道 44, 46, 48, 50号": {
+    "region": "港岛",
+    "district": "赤柱"
+  },
+  "环角道7号、9号及11号": {
+    "region": "港岛",
+    "district": "赤柱"
+  },
+  "339 Tai Hang Road": {
+    "region": "港岛",
+    "district": "跑马地"
+  },
+  "宏丰台10号": {
+    "region": "港岛",
+    "district": "铜锣湾"
+  },
+  "PORTO": {
+    "region": "港岛",
+    "district": "香港仔及鸭脷洲"
+  },
+  "弦岸": {
+    "region": "港岛",
+    "district": "香港仔及鸭脷洲"
+  },
+  "晋环": {
+    "region": "港岛",
+    "district": "黄竹坑"
+  },
+  "璟南": {
+    "region": "港岛",
+    "district": "香港仔及鸭脷洲"
+  },
+  "逸南": {
+    "region": "港岛",
+    "district": "香港仔及鸭脷洲"
+  },
+  "君豪峰": {
+    "region": "港岛",
+    "district": "鲗鱼涌"
+  },
+  "凯玥": {
+    "region": "港岛",
+    "district": "鸭脷洲"
+  },
+  "Eight Kwai Fong Happy Valley": {
+    "region": "港岛",
+    "district": "跑马地"
+  },
+  "蓝塘道23-39号": {
+    "region": "港岛",
+    "district": "跑马地"
+  },
+  "Blue Coast": {
+    "region": "港岛",
+    "district": "黄竹坑"
+  },
+  "Deep Water South": {
+    "region": "港岛",
+    "district": "黄竹坑"
+  },
+  "扬海": {
+    "region": "港岛",
+    "district": "黄竹坑"
+  },
+  "海盈山": {
+    "region": "港岛",
+    "district": "黄竹坑"
+  },
+  "滶晨": {
+    "region": "港岛",
+    "district": "黄竹坑"
+  },
+  "Park College": {
+    "region": "九龙",
+    "district": "九龙塘"
+  },
+  "博峰": {
+    "region": "九龙",
+    "district": "九龙塘"
+  },
+  "喇沙汇": {
+    "region": "九龙",
+    "district": "九龙塘"
+  },
+  "滶蕴": {
+    "region": "九龙",
+    "district": "九龙塘"
+  },
+  "皇廷汇": {
+    "region": "九龙",
+    "district": "九龙塘"
+  },
+  "天玺": {
+    "region": "九龙",
+    "district": "九龙站"
+  },
+  "128 Waterloo": {
+    "region": "九龙",
+    "district": "何文田"
+  },
+  "Prince Central": {
+    "region": "九龙",
+    "district": "何文田"
+  },
+  "VAU Residence": {
+    "region": "九龙",
+    "district": "何文田"
+  },
+  "st. george's mansions": {
+    "region": "九龙",
+    "district": "何文田"
+  },
+  "名钻": {
+    "region": "九龙",
+    "district": "何文田"
+  },
+  "天铸": {
+    "region": "九龙",
+    "district": "何文田"
+  },
+  "太子道西233号": {
+    "region": "九龙",
+    "district": "何文田"
+  },
+  "明寓": {
+    "region": "九龙",
+    "district": "何文田"
+  },
+  "朗贤峰": {
+    "region": "九龙",
+    "district": "何文田"
+  },
+  "瑜一": {
+    "region": "九龙",
+    "district": "何文田"
+  },
+  "瑜一．天海": {
+    "region": "九龙",
+    "district": "何文田"
+  },
+  "耀爵台": {
+    "region": "九龙",
+    "district": "何文田"
+  },
+  "芳菲": {
+    "region": "九龙",
+    "district": "何文田"
+  },
+  "誉林": {
+    "region": "九龙",
+    "district": "何文田"
+  },
+  "隆敍": {
+    "region": "九龙",
+    "district": "何文田"
+  },
+  "Double Coast": {
+    "region": "九龙",
+    "district": "启德"
+  },
+  "Henley Park": {
+    "region": "九龙",
+    "district": "启德"
+  },
+  "Miami Quay": {
+    "region": "九龙",
+    "district": "启德"
+  },
+  "Monaco": {
+    "region": "九龙",
+    "district": "启德"
+  },
+  "Monaco Marine": {
+    "region": "九龙",
+    "district": "启德"
+  },
+  "Monaco One": {
+    "region": "九龙",
+    "district": "启德"
+  },
+  "The Henley": {
+    "region": "九龙",
+    "district": "启德"
+  },
+  "傲玟": {
+    "region": "九龙",
+    "district": "启德"
+  },
+  "启德海湾": {
+    "region": "九龙",
+    "district": "启德"
+  },
+  "天泷": {
+    "region": "九龙",
+    "district": "启德"
+  },
+  "天玺．天": {
+    "region": "九龙",
+    "district": "启德"
+  },
+  "天玺．海": {
+    "region": "九龙",
+    "district": "启德"
+  },
+  "柏蔚森": {
+    "region": "九龙",
+    "district": "启德"
+  },
+  "沄璟": {
+    "region": "九龙",
+    "district": "启德"
+  },
+  "维港1号": {
+    "region": "九龙",
+    "district": "启德"
+  },
+  "维港．双钻": {
+    "region": "九龙",
+    "district": "启德"
+  },
+  "维港．湾畔": {
+    "region": "九龙",
+    "district": "启德"
+  },
+  "本木": {
+    "region": "九龙",
+    "district": "尖沙咀"
+  },
+  "The Boundary": {
+    "region": "九龙",
+    "district": "旺角"
+  },
+  "Upper Prince": {
+    "region": "九龙",
+    "district": "旺角"
+  },
+  "利奥坊．凯岸": {
+    "region": "九龙",
+    "district": "旺角"
+  },
+  "利奥坊．壹隅": {
+    "region": "九龙",
+    "district": "旺角"
+  },
+  "利奥坊．曦岸": {
+    "region": "九龙",
+    "district": "旺角"
+  },
+  "映居": {
+    "region": "九龙",
+    "district": "旺角"
+  },
+  "原舍": {
+    "region": "九龙",
+    "district": "油麻地"
+  },
+  "Beacon Peak": {
+    "region": "九龙",
+    "district": "石硖尾"
+  },
+  "The Monet": {
+    "region": "九龙",
+    "district": "笔架山"
+  },
+  "缇外": {
+    "region": "九龙",
+    "district": "笔架山"
+  },
+  "The Haddon": {
+    "region": "九龙",
+    "district": "红磡"
+  },
+  "必嘉坊．曦汇": {
+    "region": "九龙",
+    "district": "红磡"
+  },
+  "必嘉坊．迎汇": {
+    "region": "九龙",
+    "district": "红磡"
+  },
+  "悦麓": {
+    "region": "九龙",
+    "district": "红磡"
+  },
+  "首岸": {
+    "region": "九龙",
+    "district": "红磡"
+  },
+  "首汇": {
+    "region": "九龙",
+    "district": "红磡"
+  },
+  "汇玺III": {
+    "region": "九龙",
+    "district": "西南九龙"
+  },
+  "维港汇": {
+    "region": "九龙",
+    "district": "西南九龙"
+  },
+  "南首": {
+    "region": "九龙",
+    "district": "马头角"
+  },
+  "壹沐": {
+    "region": "九龙",
+    "district": "马头角"
+  },
+  "文曜": {
+    "region": "九龙",
+    "district": "马头角"
+  },
+  "瑧博": {
+    "region": "九龙",
+    "district": "马头角"
+  }
+}
