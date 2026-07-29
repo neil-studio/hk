@@ -647,7 +647,7 @@ def main():
         else:
             g_folder = f"{reg_val}-{dist_val}-{clean_pname}"
 
-        drive_q = f"parent:{PARENT_DRIVE_ID} {g_folder}"
+        drive_q = f"type:folder parent:{PARENT_DRIVE_ID} {g_folder}"
         g_url = f"https://drive.google.com/drive/search?q={urllib.parse.quote(drive_q)}"
         
         dist_info = rental_benchmarks.get('districts', {}).get(district, rental_benchmarks.get('default_fallback', {'base_rent': 50, 'min_rent': 42, 'max_rent': 60}))

@@ -25,16 +25,20 @@
   "The Henley III": "九龙-启德-The Henley",
   "The Henley": "九龙-启德-The Henley",
   "Henley Park": "九龙-启德-Henley Park",
+  "henley park": "九龙-启德-Henley Park",
+  "the henley": "九龙-启德-The Henley",
 
   "Blue Coast II": "港岛-黄竹坑-Blue Coast",
   "Blue Coast": "港岛-黄竹坑-Blue Coast",
 
   "天玺．天第2期": "九龙-启德-天玺．天",
   "天玺．天": "九龙-启德-天玺．天",
+  "天玺天": "九龙-启德-天玺．天",
   "天玺．海第1期": "九龙-启德-天玺．海",
   "天玺．海第2A期": "九龙-启德-天玺．海",
   "天玺．海第2B期": "九龙-启德-天玺．海",
   "天玺．海": "九龙-启德-天玺．海",
+  "天玺海": "九龙-启德-天玺．海",
 
   "柏蔚森 I": "九龙-启德-柏蔚森",
   "柏蔚森 II": "九龙-启德-柏蔚森",
@@ -66,6 +70,7 @@
   "Deep Water South 第6A期": "港岛-黄竹坑-Deep Water South",
   "Deep Water South 第6B期": "港岛-黄竹坑-Deep Water South",
   "Deep Water South": "港岛-黄竹坑-Deep Water South",
+  "Deep water south": "港岛-黄竹坑-Deep Water South",
 
   "The Monet 第1期": "九龙-笔架山-The Monet",
   "The Monet 第2期": "九龙-笔架山-The Monet",
@@ -85,6 +90,7 @@
 
   "Beacon Peak 第1期": "九龙-石硖尾-Beacon Peak",
   "Beacon Peak": "九龙-石硖尾-Beacon Peak",
+  "Beacon peak": "九龙-石硖尾-Beacon Peak",
 
   "Double Coast I": "九龙-启德-Double Coast",
   "Double Coast III": "九龙-启德-Double Coast",
@@ -118,5 +124,9 @@
   "瑜一": "九龙-何文田-瑜一",
 
   "峻誉．渣甸山": "港岛-渣甸山-峻誉．渣甸山",
-  "傲玟": "九龙-启德-傲玟"
+  "峻誉渣甸山": "港岛-渣甸山-峻誉．渣甸山",
+
+  "傲玟": "九龙-何文田-傲玟",
+  "One Stanley": "港岛-赤柱-One Stanley",
+  "one Stanley": "港岛-赤柱-One Stanley"
 }
