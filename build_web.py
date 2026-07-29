@@ -117,6 +117,7 @@ def load_real_history_analytics():
 
     try:
         import sqlite3
+        from datetime import datetime
         conn = sqlite3.connect(db_path)
         c = conn.cursor()
         c.execute('SELECT project_name, district, region, sold_date, price, disc_price, unit_price, disc_unit_price, layout, area FROM sold_history WHERE sold_date IS NOT NULL AND sold_date != ""')
@@ -137,6 +138,21 @@ def load_real_history_analytics():
             except:
                 return 0.0
 
+        def strip_phase(n):
+            s = str(n).strip()
+            s = re.sub(r'\(第.*?\)', '', s)
+            s = re.sub(r'第\s*[0-9A-Za-z\-]+期.*$', '', s)
+            s = re.sub(r'Phase\s*[0-9A-Za-z\-]+.*$', '', s, flags=re.IGNORECASE)
+            s = re.sub(r'第[I|V|X|A-Z0-9]+期', '', s)
+            s = re.sub(r'第[0-9A-Za-z]+$', '', s)
+            s = re.sub(r'[0-9]+[a-zA-Z]+$', '', s)
+            s = re.sub(r'\s+[0-9]+$', '', s)
+            s = re.sub(r'\s+I{1,3}$', '', s)
+            s = re.sub(r'\s+II$', '', s)
+            s = re.sub(r'\s+III$', '', s)
+            s = re.sub(r'\(.*?\)', '', s)
+            return s.strip()
+
         for row in rows:
             pname, dist, reg, sdate, price, dprice, uprice, duprice, layout, area = row
             if not pname: continue
@@ -149,27 +165,17 @@ def load_real_history_analytics():
             if f_uprice == 0 and f_price > 0 and f_area > 0:
                 f_uprice = round(f_price / f_area)
 
-            # 统一项目名称
             pname = pname.strip()
-            if pname not in projects_analytics:
-                projects_analytics[pname] = {
-                    'region': reg,
-                    'district': dist,
-                    'yearly': {},
-                    'monthly': {},
-                    'weekly': {},
-                    'layouts': {'开放式': 0, '1房': 0, '2房': 0, '3房': 0, '4房+': 0},
-                    'price_ranges': {'500万下': 0, '500-1000万': 0, '1000-2000万': 0, '2000-5000万': 0, '5000万+': 0}
-                }
+            clean_pname = strip_phase(pname)
 
-            pa = projects_analytics[pname]
+            target_keys = set([pname, clean_pname])
+            if '21 Borrett' in pname or '波老道' in pname or '应天' in pname:
+                target_keys.update(['21 Borrett Road', '波老道21号', '波老道21號', '应天'])
+
             sdate_clean = str(sdate).strip()
-
-            # 归类年、月、周
             try:
                 year = sdate_clean[:4]
                 month = sdate_clean[:7]
-                # 计算 ISO 周度
                 dt_parts = [int(p) for p in sdate_clean[:10].split('-')]
                 dt_obj = datetime(dt_parts[0], dt_parts[1], dt_parts[2])
                 iso_yr, iso_wk, _ = dt_obj.isocalendar()
@@ -177,48 +183,62 @@ def load_real_history_analytics():
             except:
                 continue
 
-            # 统计年度
-            if year not in pa['yearly']:
-                pa['yearly'][year] = {'volume': 0, 'total_price': 0.0, 'total_uprice': 0.0, 'uprices': []}
-            pa['yearly'][year]['volume'] += 1
-            pa['yearly'][year]['total_price'] += f_price
-            if f_uprice > 0:
-                pa['yearly'][year]['total_uprice'] += f_uprice
-                pa['yearly'][year]['uprices'].append(f_uprice)
+            for tkey in target_keys:
+                if tkey not in projects_analytics:
+                    projects_analytics[tkey] = {
+                        'region': reg,
+                        'district': dist,
+                        'yearly': {},
+                        'monthly': {},
+                        'weekly': {},
+                        'layouts': {'开放式': 0, '1房': 0, '2房': 0, '3房': 0, '4房+': 0},
+                        'price_ranges': {'500万下': 0, '500-1000万': 0, '1000-2000万': 0, '2000-5000万': 0, '5000万+': 0}
+                    }
 
-            # 统计月度
-            if month not in pa['monthly']:
-                pa['monthly'][month] = {'volume': 0, 'total_price': 0.0, 'total_uprice': 0.0, 'uprices': []}
-            pa['monthly'][month]['volume'] += 1
-            pa['monthly'][month]['total_price'] += f_price
-            if f_uprice > 0:
-                pa['monthly'][month]['total_uprice'] += f_uprice
-                pa['monthly'][month]['uprices'].append(f_uprice)
+                pa = projects_analytics[tkey]
 
-            # 统计周度
-            if week:
-                if week not in pa['weekly']:
-                    pa['weekly'][week] = {'volume': 0, 'total_price': 0.0, 'total_uprice': 0.0, 'uprices': []}
-                pa['weekly'][week]['volume'] += 1
-                pa['weekly'][week]['total_price'] += f_price
+                # 统计年度
+                if year not in pa['yearly']:
+                    pa['yearly'][year] = {'volume': 0, 'total_price': 0.0, 'total_uprice': 0.0, 'uprices': []}
+                pa['yearly'][year]['volume'] += 1
+                pa['yearly'][year]['total_price'] += f_price
                 if f_uprice > 0:
-                    pa['weekly'][week]['total_uprice'] += f_uprice
-                    pa['weekly'][week]['uprices'].append(f_uprice)
+                    pa['yearly'][year]['total_uprice'] += f_uprice
+                    pa['yearly'][year]['uprices'].append(f_uprice)
 
-            # 统计户型分布
-            l_str = str(layout) if layout else ''
-            if '开放式' in l_str or '开放' in l_str: pa['layouts']['开放式'] += 1
-            elif '1房' in l_str or '一房' in l_str: pa['layouts']['1房'] += 1
-            elif '2房' in l_str or '两房' in l_str or '二房' in l_str: pa['layouts']['2房'] += 1
-            elif '3房' in l_str or '三房' in l_str: pa['layouts']['3房'] += 1
-            else: pa['layouts']['4房+'] += 1
+                # 统计月度
+                if month not in pa['monthly']:
+                    pa['monthly'][month] = {'volume': 0, 'total_price': 0.0, 'total_uprice': 0.0, 'uprices': []}
+                pa['monthly'][month]['volume'] += 1
+                pa['monthly'][month]['total_price'] += f_price
+                if f_uprice > 0:
+                    pa['monthly'][month]['total_uprice'] += f_uprice
+                    pa['monthly'][month]['uprices'].append(f_uprice)
 
-            # 统计总价区间
-            if f_price < 5000000: pa['price_ranges']['500万下'] += 1
-            elif f_price < 10000000: pa['price_ranges']['500-1000万'] += 1
-            elif f_price < 20000000: pa['price_ranges']['1000-2000万'] += 1
-            elif f_price < 50000000: pa['price_ranges']['2000-5000万'] += 1
-            else: pa['price_ranges']['5000万+'] += 1
+                # 统计周度
+                if week:
+                    if week not in pa['weekly']:
+                        pa['weekly'][week] = {'volume': 0, 'total_price': 0.0, 'total_uprice': 0.0, 'uprices': []}
+                    pa['weekly'][week]['volume'] += 1
+                    pa['weekly'][week]['total_price'] += f_price
+                    if f_uprice > 0:
+                        pa['weekly'][week]['total_uprice'] += f_uprice
+                        pa['weekly'][week]['uprices'].append(f_uprice)
+
+                # 统计户型分布
+                l_str = str(layout) if layout else ''
+                if '开放式' in l_str or '开放' in l_str: pa['layouts']['开放式'] += 1
+                elif '1房' in l_str or '一房' in l_str: pa['layouts']['1房'] += 1
+                elif '2房' in l_str or '两房' in l_str or '二房' in l_str: pa['layouts']['2房'] += 1
+                elif '3房' in l_str or '三房' in l_str: pa['layouts']['3房'] += 1
+                else: pa['layouts']['4房+'] += 1
+
+                # 统计总价区间
+                if f_price < 5000000: pa['price_ranges']['500万下'] += 1
+                elif f_price < 10000000: pa['price_ranges']['500-1000万'] += 1
+                elif f_price < 20000000: pa['price_ranges']['1000-2000万'] += 1
+                elif f_price < 50000000: pa['price_ranges']['2000-5000万'] += 1
+                else: pa['price_ranges']['5000万+'] += 1
 
         # 计算平均与最大最小值
         for pname, pa in projects_analytics.items():
