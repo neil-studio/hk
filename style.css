@@ -3484,6 +3484,14 @@ body {
 }
 
 /* 🔒 专属访问密码保护门 (Password Gate: lm8888) - 100% 物理拦截 */
+html.unlocked-auth #siteAuthOverlay,
+.site-auth-overlay.unlocked {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
 html.site-locked body > *:not(#siteAuthOverlay) {
   display: none !important;
 }
@@ -3502,10 +3510,6 @@ html.site-locked body {
   align-items: center;
   justify-content: center;
   padding: 1.5rem;
-}
-
-.site-auth-overlay.unlocked {
-  display: none !important;
 }
 
 .site-auth-card {

@@ -2684,7 +2684,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const overlay = document.getElementById('siteAuthOverlay');
     if (!isUnlocked) {
       document.documentElement.classList.add('site-locked');
+      document.documentElement.classList.remove('unlocked-auth');
     } else {
+      document.documentElement.classList.add('unlocked-auth');
       document.documentElement.classList.remove('site-locked');
       if (overlay) overlay.classList.add('unlocked');
       return;
@@ -2701,6 +2703,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (inputVal === TARGET_PWD) {
         sessionStorage.setItem(AUTH_KEY, 'unlocked_lm8888');
         localStorage.setItem(AUTH_KEY, 'unlocked_lm8888');
+        document.documentElement.classList.add('unlocked-auth');
         document.documentElement.classList.remove('site-locked');
         overlay.classList.add('unlocked');
         if (errorMsg) errorMsg.textContent = '';

@@ -19,7 +19,9 @@
     (function() {
       var k = 'hk_site_auth_token';
       var isUnlocked = sessionStorage.getItem(k) === 'unlocked_lm8888' || localStorage.getItem(k) === 'unlocked_lm8888';
-      if (!isUnlocked) {
+      if (isUnlocked) {
+        document.documentElement.classList.add('unlocked-auth');
+      } else {
         document.documentElement.classList.add('site-locked');
       }
     })();
