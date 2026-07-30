@@ -498,5 +498,125 @@
   "波老道21號": {
     "region": "港岛",
     "district": "西半山"
+  },
+  "澐璟": {
+    "region": "九龙",
+    "district": "启德"
+  },
+  "22 square": {
+    "region": "九龙",
+    "district": "油麻地"
+  },
+  "22 Square": {
+    "region": "九龙",
+    "district": "油麻地"
+  },
+  "Castle one": {
+    "region": "港岛",
+    "district": "西半山"
+  },
+  "Castle One": {
+    "region": "港岛",
+    "district": "西半山"
+  },
+  "帝景园": {
+    "region": "港岛",
+    "district": "中半山"
+  },
+  "御峰": {
+    "region": "港岛",
+    "district": "中半山"
+  },
+  "南天第": {
+    "region": "港岛",
+    "district": "赤柱"
+  },
+  "迎夏": {
+    "region": "港岛",
+    "district": "赤柱"
+  },
+  "Beacon peak 第1期": {
+    "region": "九龙",
+    "district": "笔架山"
+  },
+  "solace": {
+    "region": "港岛",
+    "district": "赤柱"
+  },
+  "one Stanley": {
+    "region": "港岛",
+    "district": "赤柱"
+  },
+  "天玺海第1期": {
+    "region": "九龙",
+    "district": "启德"
+  },
+  "天玺．海第1期": {
+    "region": "九龙",
+    "district": "启德"
+  },
+  "天玺．海第2A期": {
+    "region": "九龙",
+    "district": "启德"
+  },
+  "天玺．天第2期": {
+    "region": "九龙",
+    "district": "启德"
+  },
+  "The Monet 第1期": {
+    "region": "九龙",
+    "district": "笔架山"
+  },
+  "The Monet 第3期": {
+    "region": "九龙",
+    "district": "笔架山"
+  },
+  "Deep water south 第6A期": {
+    "region": "港岛",
+    "district": "黄竹坑"
+  },
+  "Deep water south 第6B期": {
+    "region": "港岛",
+    "district": "黄竹坑"
+  },
+  "海盈山第4B期": {
+    "region": "港岛",
+    "district": "黄竹坑"
+  },
+  "海盈山第4A期": {
+    "region": "港岛",
+    "district": "黄竹坑"
+  },
+  "启德海湾 2": {
+    "region": "九龙",
+    "district": "启德"
+  },
+  "启德海湾 第2期": {
+    "region": "九龙",
+    "district": "启德"
+  },
+  "Miami Quay II": {
+    "region": "九龙",
+    "district": "启德"
+  },
+  "henley park": {
+    "region": "九龙",
+    "district": "启德"
+  },
+  "the henley II": {
+    "region": "九龙",
+    "district": "启德"
+  },
+  "the henley III": {
+    "region": "九龙",
+    "district": "启德"
+  },
+  "The Henley II": {
+    "region": "九龙",
+    "district": "启德"
+  },
+  "The Henley III": {
+    "region": "九龙",
+    "district": "启德"
   }
 }

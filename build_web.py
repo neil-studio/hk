@@ -530,7 +530,15 @@ def main():
                     f_by_price[tier_key].append(name_str)
 
                 clean_name = re.sub(r'\(第.*?\)', '', name_str).replace('4B', '').replace('4b', '').strip()
-                user_cd = custom_districts.get(name_str) or custom_districts.get(clean_name) or {}
+                user_cd = (custom_districts.get(name_str) or 
+                           custom_districts.get(clean_name) or 
+                           custom_districts.get(name_str.lower()) or 
+                           custom_districts.get(clean_name.lower()) or {})
+                if not user_cd.get('district'):
+                    for k, v in custom_districts.items():
+                        if k.lower() in name_str.lower() or name_str.lower() in k.lower():
+                            user_cd = v
+                            break
 
                 roi_val = ''
                 if c_roi is not None:
