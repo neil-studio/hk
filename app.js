@@ -1212,39 +1212,79 @@ document.addEventListener('DOMContentLoaded', () => {
       if (rowBottom) rowBottom.style.display = 'flex';
     }
     else if (status === '在售' || status === '已定价未售') {
-      // 【在售 / 已定价未售单位】显示原价划线、折实总价、最高折扣 Badge、折实呎价及付款计划
-      if (origPriceCont) {
-        origPriceCont.style.display = 'flex';
-        if (origPriceVal) origPriceVal.textContent = formatMoney(info.listPrice);
-      }
+      const isCullinanSky2 = (info.projectName === '天玺．天第2期' || info.projectName?.includes('天玺．天第2期'));
+      const rawListPrice = parseFloat(String(info.listPrice || '').replace(/[^0-9\.]/g, ''));
 
-      let rateStr = info.discountRate;
-      if (discountBadge) {
-        if (rateStr && rateStr !== '-' && rateStr !== '暂无') {
+      if (isCullinanSky2 && !isNaN(rawListPrice) && rawListPrice > 0) {
+        // 【天玺．天第2期 专属 2 行折实价弹窗逻辑】仅对在售/已定价未售且有原价单位生效
+        const p0 = rawListPrice;
+        const p1 = p0 * 0.90; // 10% 折后价 (360日付款计划)
+        const extraDisc = p1 * 0.04; // 4% 额外折扣 (基于10%折后价算)
+        const finalP = p1 - extraDisc; // 180天全款折实价
+
+        const sqftArea = parseFloat(String(info.area || '0').replace(/[^0-9\.]/g, ''));
+        const upriceP1 = sqftArea > 0 ? Math.round(p1 / sqftArea) : (info.sqftPrice ? Math.round(info.sqftPrice * 0.9) : 0);
+        const upriceFinal = sqftArea > 0 ? Math.round(finalP / sqftArea) : (upriceP1 ? Math.round(upriceP1 * 0.96) : 0);
+
+        if (origPriceCont) {
+          origPriceCont.style.display = 'flex';
+          if (origPriceVal) origPriceVal.textContent = formatMoney(p0);
+        }
+        if (discountBadge) {
           discountBadge.style.display = 'block';
-          discountBadge.textContent = String(rateStr).startsWith('-') ? rateStr : '-' + rateStr;
-        } else {
-          discountBadge.style.display = 'none';
+          discountBadge.textContent = '-10%';
         }
-      }
+        if (discPriceCont) discPriceCont.style.display = 'flex';
+        if (discPriceLabel) discPriceLabel.textContent = '折后价:';
+        if (discPriceVal) discPriceVal.textContent = formatMoney(p1);
 
-      if (discPriceCont) discPriceCont.style.display = 'flex';
-      if (discPriceLabel) discPriceLabel.textContent = '折实:';
-      if (discPriceVal) discPriceVal.textContent = formatMoney(info.discPrice || info.listPrice);
+        if (discFtPriceCont) discFtPriceCont.style.display = 'flex';
+        if (discFtLabel) discFtLabel.textContent = '折后呎:';
+        if (discFtVal) discFtVal.textContent = formatSqft(upriceP1);
 
-      if (discFtPriceCont) discFtPriceCont.style.display = 'flex';
-      if (discFtLabel) discFtLabel.textContent = '折实呎:';
-      if (discFtVal) discFtVal.textContent = formatSqft(info.discSqft || info.sqftPrice);
-
-      if (paymentCont) {
-        if (info.payment && info.payment !== '-' && info.payment !== '暂无') {
+        if (paymentCont) {
           paymentCont.style.display = 'flex';
-          if (paymentVal) paymentVal.textContent = info.payment;
-        } else {
-          paymentCont.style.display = 'none';
+          if (paymentVal) {
+            paymentVal.innerHTML = `<span style="color:#045d68; font-weight:600;">4%额外折扣(按折后价算): -${formatMoney(extraDisc)}</span> <span style="color:#cbd5e1; margin:0 0.3rem;">│</span> <strong style="color:#e11d48; font-weight:800;">180天全款折实: ${formatMoney(finalP)} (${formatSqft(upriceFinal)})</strong>`;
+          }
         }
+        if (rowBottom) rowBottom.style.display = 'flex';
       }
-      if (rowBottom) rowBottom.style.display = 'flex';
+      else {
+        // 【所有其他项目 / 标准项目】显示原价划线、折实总价、最高折扣 Badge、折实呎价及付款计划
+        if (origPriceCont) {
+          origPriceCont.style.display = 'flex';
+          if (origPriceVal) origPriceVal.textContent = formatMoney(info.listPrice);
+        }
+
+        let rateStr = info.discountRate;
+        if (discountBadge) {
+          if (rateStr && rateStr !== '-' && rateStr !== '暂无') {
+            discountBadge.style.display = 'block';
+            discountBadge.textContent = String(rateStr).startsWith('-') ? rateStr : '-' + rateStr;
+          } else {
+            discountBadge.style.display = 'none';
+          }
+        }
+
+        if (discPriceCont) discPriceCont.style.display = 'flex';
+        if (discPriceLabel) discPriceLabel.textContent = '折实:';
+        if (discPriceVal) discPriceVal.textContent = formatMoney(info.discPrice || info.listPrice);
+
+        if (discFtPriceCont) discFtPriceCont.style.display = 'flex';
+        if (discFtLabel) discFtLabel.textContent = '折实呎:';
+        if (discFtVal) discFtVal.textContent = formatSqft(info.discSqft || info.sqftPrice);
+
+        if (paymentCont) {
+          if (info.payment && info.payment !== '-' && info.payment !== '暂无') {
+            paymentCont.style.display = 'flex';
+            if (paymentVal) paymentVal.textContent = info.payment;
+          } else {
+            paymentCont.style.display = 'none';
+          }
+        }
+        if (rowBottom) rowBottom.style.display = 'flex';
+      }
     }
     else {
       // 【待售 / 暂停销售单位】
