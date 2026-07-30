@@ -2325,14 +2325,26 @@ body {
 
 .granularity-btn {
   background: transparent;
-  border: none;
-  padding: 0.5rem 1rem;
+  border: 1px solid transparent;
+  padding: 0.45rem 1.1rem;
   border-radius: 9px;
   font-size: 0.88rem;
   font-weight: 600;
-  color: var(--text-secondary);
+  color: #64748b;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
+}
+
+.granularity-btn:hover {
+  color: #0f172a;
+}
+
+.granularity-btn.active {
+  background: #ffffff;
+  color: #06AABD;
+  border-color: rgba(6, 170, 189, 0.25);
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(6, 170, 189, 0.18);
 }
 
 .selected-tags-pool {
