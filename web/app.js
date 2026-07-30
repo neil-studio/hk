@@ -1213,8 +1213,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     else if (status === '在售' || status === '已定价未售') {
       const curProj = info.projectName || window.currentGridProjectName || '';
+      const curProjLower = curProj.toLowerCase();
       const isCullinanSky2 = (curProj === '天玺．天第2期' || curProj.includes('天玺．天第2期') || (curProj.includes('天玺') && curProj.includes('2')));
-      const isHenleyPark = (curProj.toLowerCase().includes('henley') || curProj.includes('Henley') || curProj.includes('HENLEY'));
+      const isHenleyPark = (curProjLower.includes('henley park') || (curProjLower.includes('henley') && curProjLower.includes('park')));
+      const isTheHenley = (curProjLower.includes('henley') && !curProjLower.includes('park'));
 
       let rawListPrice = parseFloat(String(info.listPrice || '').replace(/[^0-9\.]/g, ''));
       if (isNaN(rawListPrice) || rawListPrice <= 0) {
@@ -1223,6 +1225,21 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!isNaN(rawListPrice) && rawListPrice > 0 && rawListPrice < 10000) {
         rawListPrice = rawListPrice * 10000;
       }
+
+      const calcIrdAvd = (price) => {
+        if (price <= 4000000) return 100;
+        if (price <= 4500000) return 100 + (price - 4000000) * 0.20;
+        if (price <= 5316670) return 67500 + (price - 4500000) * 0.10;
+        if (price <= 6000000) return price * 0.0225;
+        if (price <= 7528090) return 135000 + (price - 6000000) * 0.10;
+        if (price <= 9000000) return price * 0.03;
+        if (price <= 10859410) return 270000 + (price - 9000000) * 0.10;
+        if (price <= 20000000) return price * 0.0375;
+        if (price <= 21739130) return 750000 + (price - 20000000) * 0.10;
+        if (price <= 100000000) return price * 0.0425;
+        if (price <= 108333330) return 4250000 + (price - 100000000) * 0.30;
+        return price * 0.065;
+      };
 
       if (isCullinanSky2 && !isNaN(rawListPrice) && rawListPrice > 0) {
         // 【天玺．天第2期 专属 2 行折实价弹窗逻辑】仅对在售/已定价未售且有原价单位生效
@@ -1292,21 +1309,6 @@ document.addEventListener('DOMContentLoaded', () => {
           paymentCont.style.display = 'flex';
           if (paymentVal) {
             if (hasStampSubsidy) {
-              const calcIrdAvd = (price) => {
-                if (price <= 4000000) return 100;
-                if (price <= 4500000) return 100 + (price - 4000000) * 0.20;
-                if (price <= 5316670) return 67500 + (price - 4500000) * 0.10;
-                if (price <= 6000000) return price * 0.0225;
-                if (price <= 7528090) return 135000 + (price - 6000000) * 0.10;
-                if (price <= 9000000) return price * 0.03;
-                if (price <= 10859410) return 270000 + (price - 9000000) * 0.10;
-                if (price <= 20000000) return price * 0.0375;
-                if (price <= 21739130) return 750000 + (price - 20000000) * 0.10;
-                if (price <= 100000000) return price * 0.0425;
-                if (price <= 108333330) return 4250000 + (price - 100000000) * 0.30;
-                return price * 0.065;
-              };
-
               const stampAmt = calcIrdAvd(p1);
               const effectiveRate = ((stampAmt / p1) * 100).toFixed(2);
               const finalCost = p1 - stampAmt;
@@ -1315,6 +1317,51 @@ document.addEventListener('DOMContentLoaded', () => {
               paymentVal.innerHTML = `<span style="color:#38BDF8; font-weight:700; font-size:0.82rem;">🏛️ 发展商代缴从价印花税(AVD): -${formatMoney(stampAmt)} (${effectiveRate}%)</span> <span style="color:rgba(255,255,255,0.3); margin:0 0.4rem;">│</span> <strong style="color:#fb7185; font-weight:800; font-size:0.85rem;">扣税后实付: ${formatMoney(finalCost)} (${formatSqft(upriceFinal)})</strong>`;
             } else {
               paymentVal.innerHTML = `<span style="color:#94a3b8; font-size:0.82rem;">💳 付款办法: 现金付款计划 (减8.5%)</span> <span style="color:rgba(255,255,255,0.2); margin:0 0.4rem;">│</span> <span style="color:#cbd5e1; font-size:0.8rem;">不含代缴印花税优惠</span>`;
+            }
+          }
+        }
+        if (rowBottom) rowBottom.style.display = 'flex';
+      }
+      else if (isTheHenley && !isNaN(rawListPrice) && rawListPrice > 0) {
+        // 【THE HENLEY 1, 2, 3 期 专属折实价与从价印花税弹窗逻辑】
+        const p0 = rawListPrice;
+        const p1 = p0 * (1 - 0.035); // 基础折扣 3.5%
+
+        const sqftArea = parseFloat(String(info.area || '0').replace(/[^0-9\.]/g, ''));
+        const rawSqft = parseFloat(String(info.sqftPrice || '').replace(/[^0-9\.]/g, ''));
+        const upriceP1 = sqftArea > 0 ? Math.round(p1 / sqftArea) : (rawSqft ? Math.round(rawSqft * 0.965) : 0);
+
+        const pmText = String(info.payment || '');
+        const hasStampSubsidy = pmText.includes('代繳從價印花稅') || pmText.includes('代缴从价印花税') || pmText.includes('印花稅') || pmText.includes('印花税');
+
+        if (origPriceCont) {
+          origPriceCont.style.display = 'flex';
+          if (origPriceVal) origPriceVal.textContent = formatMoney(p0);
+        }
+        if (discountBadge) {
+          discountBadge.style.display = 'block';
+          discountBadge.textContent = '-3.5%';
+        }
+        if (discPriceCont) discPriceCont.style.display = 'flex';
+        if (discPriceLabel) discPriceLabel.textContent = '房款折实:';
+        if (discPriceVal) discPriceVal.textContent = formatMoney(p1);
+
+        if (discFtPriceCont) discFtPriceCont.style.display = 'flex';
+        if (discFtLabel) discFtLabel.textContent = '折实呎:';
+        if (discFtVal) discFtVal.textContent = formatSqft(upriceP1);
+
+        if (paymentCont) {
+          paymentCont.style.display = 'flex';
+          if (paymentVal) {
+            if (hasStampSubsidy) {
+              const stampAmt = calcIrdAvd(p1);
+              const effectiveRate = ((stampAmt / p1) * 100).toFixed(2);
+              const finalCost = p1 - stampAmt;
+              const upriceFinal = sqftArea > 0 ? Math.round(finalCost / sqftArea) : 0;
+
+              paymentVal.innerHTML = `<span style="color:#38BDF8; font-weight:700; font-size:0.82rem;">🏛️ 发展商代缴从价印花税(AVD): -${formatMoney(stampAmt)} (${effectiveRate}%)</span> <span style="color:rgba(255,255,255,0.3); margin:0 0.4rem;">│</span> <strong style="color:#fb7185; font-weight:800; font-size:0.85rem;">扣税后实付: ${formatMoney(finalCost)} (${formatSqft(upriceFinal)})</strong>`;
+            } else {
+              paymentVal.innerHTML = `<span style="color:#94a3b8; font-size:0.82rem;">💳 付款办法: 现金付款计划 (减3.5%)</span> <span style="color:rgba(255,255,255,0.2); margin:0 0.4rem;">│</span> <span style="color:#cbd5e1; font-size:0.8rem;">不含代缴印花税优惠</span>`;
             }
           }
         }
