@@ -1322,6 +1322,84 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (rowBottom) rowBottom.style.display = 'flex';
       }
+      else if (isTheHenley && !isNaN(rawListPrice) && rawListPrice > 0) {
+        // 【THE HENLEY 仅针对含有印花税组合折扣的单位进行剥离计算】
+        const pmText = String(info.payment || '');
+        const discText = String(info.discountRate || '');
+        const hasStampSubsidy = pmText.includes('代繳從價印花稅') || pmText.includes('代缴从价印花税') || pmText.includes('印花稅') || pmText.includes('印花税') || discText.includes('7.12') || discText.includes('7.6');
+
+        if (hasStampSubsidy) {
+          const p0 = rawListPrice;
+          const p1 = p0 * (1 - 0.035); // 基础折扣 3.5%
+
+          const sqftArea = parseFloat(String(info.area || '0').replace(/[^0-9\.]/g, ''));
+          const rawSqft = parseFloat(String(info.sqftPrice || '').replace(/[^0-9\.]/g, ''));
+          const upriceP1 = sqftArea > 0 ? Math.round(p1 / sqftArea) : (rawSqft ? Math.round(rawSqft * 0.965) : 0);
+
+          if (origPriceCont) {
+            origPriceCont.style.display = 'flex';
+            if (origPriceVal) origPriceVal.textContent = formatMoney(p0);
+          }
+          if (discountBadge) {
+            discountBadge.style.display = 'block';
+            discountBadge.textContent = '-3.5%';
+          }
+          if (discPriceCont) discPriceCont.style.display = 'flex';
+          if (discPriceLabel) discPriceLabel.textContent = '房款折实:';
+          if (discPriceVal) discPriceVal.textContent = formatMoney(p1);
+
+          if (discFtPriceCont) discFtPriceCont.style.display = 'flex';
+          if (discFtLabel) discFtLabel.textContent = '折实呎:';
+          if (discFtVal) discFtVal.textContent = formatSqft(upriceP1);
+
+          if (paymentCont) {
+            paymentCont.style.display = 'flex';
+            if (paymentVal) {
+              const stampAmt = calcIrdAvd(p1);
+              const effectiveRate = ((stampAmt / p1) * 100).toFixed(2);
+              const finalCost = p1 - stampAmt;
+              const upriceFinal = sqftArea > 0 ? Math.round(finalCost / sqftArea) : 0;
+
+              paymentVal.innerHTML = `<span style="color:#38BDF8; font-weight:700; font-size:0.82rem;">🏛️ 发展商代缴从价印花税(AVD): -${formatMoney(stampAmt)} (${effectiveRate}%)</span> <span style="color:rgba(255,255,255,0.3); margin:0 0.4rem;">│</span> <strong style="color:#fb7185; font-weight:800; font-size:0.85rem;">扣税后实付: ${formatMoney(finalCost)} (${formatSqft(upriceFinal)})</strong>`;
+            }
+          }
+          if (rowBottom) rowBottom.style.display = 'flex';
+        } else {
+          // 没有代缴印花税的单位（如 9% 折扣、18% 折扣等）：完全保持原样不变
+          if (origPriceCont) {
+            origPriceCont.style.display = 'flex';
+            if (origPriceVal) origPriceVal.textContent = formatMoney(info.listPrice);
+          }
+
+          let rateStr = info.discountRate;
+          if (discountBadge) {
+            if (rateStr && rateStr !== '-' && rateStr !== '暂无') {
+              discountBadge.style.display = 'block';
+              discountBadge.textContent = String(rateStr).startsWith('-') ? rateStr : '-' + rateStr;
+            } else {
+              discountBadge.style.display = 'none';
+            }
+          }
+
+          if (discPriceCont) discPriceCont.style.display = 'flex';
+          if (discPriceLabel) discPriceLabel.textContent = '折实:';
+          if (discPriceVal) discPriceVal.textContent = formatMoney(info.discPrice || info.listPrice);
+
+          if (discFtPriceCont) discFtPriceCont.style.display = 'flex';
+          if (discFtLabel) discFtLabel.textContent = '折实呎:';
+          if (discFtVal) discFtVal.textContent = formatSqft(info.discSqft || info.sqftPrice);
+
+          if (paymentCont) {
+            if (info.payment && info.payment !== '-' && info.payment !== '暂无') {
+              paymentCont.style.display = 'flex';
+              if (paymentVal) paymentVal.textContent = info.payment;
+            } else {
+              paymentCont.style.display = 'none';
+            }
+          }
+          if (rowBottom) rowBottom.style.display = 'flex';
+        }
+      }
       else {
         // 【所有其他项目 / 标准项目】显示原价划线、折实总价、最高折扣 Badge、折实呎价及付款计划
         if (origPriceCont) {
