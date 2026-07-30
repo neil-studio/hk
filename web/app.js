@@ -1214,6 +1214,7 @@ document.addEventListener('DOMContentLoaded', () => {
     else if (status === '在售' || status === '已定价未售') {
       const curProj = info.projectName || window.currentGridProjectName || '';
       const isCullinanSky2 = (curProj === '天玺．天第2期' || curProj.includes('天玺．天第2期') || (curProj.includes('天玺') && curProj.includes('2')));
+      const isHenleyPark = (curProj.toLowerCase().includes('henley') || curProj.includes('Henley') || curProj.includes('HENLEY'));
 
       let rawListPrice = parseFloat(String(info.listPrice || '').replace(/[^0-9\.]/g, ''));
       if (isNaN(rawListPrice) || rawListPrice <= 0) {
