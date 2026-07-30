@@ -581,7 +581,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let modalLayoutPieInstance = null;
   let modalPriceDistInstance = null;
 
-  window.openAnalyticsModal = function(projectName, mode = 'exact') {
+  window.openAnalyticsModal = function(projectName, mode = 'exact', gran = 'monthly') {
     if (!projectName) return;
 
     let analyticsModal = document.getElementById('analyticsModal');
@@ -602,7 +602,13 @@ document.addEventListener('DOMContentLoaded', () => {
             <div id="analyticsModalStats" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:1rem; margin-bottom:1.5rem;"></div>
             
             <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:16px; padding:1.2rem; margin-bottom:1.5rem; box-shadow:0 2px 8px rgba(0,0,0,0.03);">
-              <h4 style="font-size:0.95rem; font-weight:700; color:#0f172a; margin:0 0 1rem 0;">📈 历史成交均价与套数走势图表</h4>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
+                <h4 style="font-size:0.95rem; font-weight:700; color:#0f172a; margin:0;">📈 历史成交均价与套数走势图表</h4>
+                <div id="modalGranularityContainer" style="display:inline-flex; align-items:center; background:#f1f5f9; padding:0.2rem; border-radius:10px; border:1px solid #cbd5e1;">
+                  <button id="modalGranMonthlyBtn" style="border:none; padding:0.3rem 0.85rem; border-radius:8px; font-size:0.78rem; font-weight:700; cursor:pointer; transition:all 0.2s;">📅 月度走势</button>
+                  <button id="modalGranWeeklyBtn" style="border:none; padding:0.3rem 0.85rem; border-radius:8px; font-size:0.78rem; font-weight:700; cursor:pointer; transition:all 0.2s;">📊 周度走势</button>
+                </div>
+              </div>
               <div style="height:300px; position:relative;">
                 <canvas id="modalTrendChartCanvas"></canvas>
               </div>
@@ -635,6 +641,21 @@ document.addEventListener('DOMContentLoaded', () => {
     analyticsModal.onclick = (e) => {
       if (e.target === analyticsModal) analyticsModal.classList.remove('open');
     };
+
+    // 绑定周度/月度走势切换按钮事件与高亮
+    const btnM = document.getElementById('modalGranMonthlyBtn');
+    const btnW = document.getElementById('modalGranWeeklyBtn');
+    if (btnM && btnW) {
+      if (gran === 'weekly') {
+        btnM.style.background = 'transparent'; btnM.style.color = '#64748b'; btnM.style.boxShadow = 'none';
+        btnW.style.background = '#ffffff'; btnW.style.color = '#06AABD'; btnW.style.boxShadow = '0 1px 4px rgba(0,0,0,0.1)';
+      } else {
+        btnM.style.background = '#ffffff'; btnM.style.color = '#06AABD'; btnM.style.boxShadow = '0 1px 4px rgba(0,0,0,0.1)';
+        btnW.style.background = 'transparent'; btnW.style.color = '#64748b'; btnW.style.boxShadow = 'none';
+      }
+      btnM.onclick = () => window.openAnalyticsModal(projectName, mode, 'monthly');
+      btnW.onclick = () => window.openAnalyticsModal(projectName, mode, 'weekly');
+    }
 
     const titleElem = document.getElementById('analyticsModalTitle');
     const subtitleElem = document.getElementById('analyticsModalSubtitle');
@@ -678,8 +699,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (communityKeys.length > 1) {
         subtitleElem.innerHTML = `
           <div style="display:inline-flex; align-items:center; gap:0.4rem; background:#e2e8f0; padding:0.2rem 0.4rem; border-radius:8px; margin-top:0.2rem;">
-            <button onclick="openAnalyticsModal('${projectName}', 'exact')" style="border:none; background:${mode !== 'community' ? '#ffffff' : 'transparent'}; color:${mode !== 'community' ? '#06AABD' : '#64748b'}; font-weight:${mode !== 'community' ? '700' : '500'}; padding:0.25rem 0.6rem; border-radius:6px; cursor:pointer; font-size:0.78rem; box-shadow:${mode !== 'community' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'};">📍 仅本期数 (${exactKey || projectName})</button>
-            <button onclick="openAnalyticsModal('${projectName}', 'community')" style="border:none; background:${mode === 'community' ? '#ffffff' : 'transparent'}; color:${mode === 'community' ? '#06AABD' : '#64748b'}; font-weight:${mode === 'community' ? '700' : '500'}; padding:0.25rem 0.6rem; border-radius:6px; cursor:pointer; font-size:0.78rem; box-shadow:${mode === 'community' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'};">🌐 包含社区全期数 (全${communityKeys.length}期)</button>
+            <button onclick="openAnalyticsModal('${projectName}', 'exact', '${gran}')" style="border:none; background:${mode !== 'community' ? '#ffffff' : 'transparent'}; color:${mode !== 'community' ? '#06AABD' : '#64748b'}; font-weight:${mode !== 'community' ? '700' : '500'}; padding:0.25rem 0.6rem; border-radius:6px; cursor:pointer; font-size:0.78rem; box-shadow:${mode !== 'community' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'};">📍 仅本期数 (${exactKey || projectName})</button>
+            <button onclick="openAnalyticsModal('${projectName}', 'community', '${gran}')" style="border:none; background:${mode === 'community' ? '#ffffff' : 'transparent'}; color:${mode === 'community' ? '#06AABD' : '#64748b'}; font-weight:${mode === 'community' ? '700' : '500'}; padding:0.25rem 0.6rem; border-radius:6px; cursor:pointer; font-size:0.78rem; box-shadow:${mode === 'community' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'};">🌐 包含社区全期数 (全${communityKeys.length}期)</button>
           </div>
         `;
       } else {
@@ -690,7 +711,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let totalVolume = 0;
     let minUprice = Infinity;
     let maxUprice = 0;
-    const monthlyCombined = {};
+    const trendCombined = {};
     const layoutCombined = {};
     const priceDistCombined = {};
 
@@ -698,20 +719,22 @@ document.addEventListener('DOMContentLoaded', () => {
       const projData = rh[key];
       if (!projData) return;
 
-      if (projData.monthly) {
-        Object.keys(projData.monthly).forEach(m => {
-          const mData = projData.monthly[m];
-          if (!monthlyCombined[m]) monthlyCombined[m] = { volume: 0, totalSqft: 0, countSqft: 0 };
-          monthlyCombined[m].volume += mData.volume || 0;
-          if (mData.avg_uprice > 0) {
-            monthlyCombined[m].totalSqft += mData.avg_uprice * (mData.volume || 1);
-            monthlyCombined[m].countSqft += (mData.volume || 1);
-          }
-          totalVolume += mData.volume || 0;
-          if (mData.min_uprice && mData.min_uprice < minUprice) minUprice = mData.min_uprice;
-          if (mData.max_uprice && mData.max_uprice > maxUprice) maxUprice = mData.max_uprice;
-        });
-      }
+      const timeMap = (gran === 'weekly' && projData.weekly && Object.keys(projData.weekly).length > 0)
+        ? projData.weekly
+        : (projData.monthly || {});
+
+      Object.keys(timeMap).forEach(tKey => {
+        const tData = timeMap[tKey];
+        if (!trendCombined[tKey]) trendCombined[tKey] = { volume: 0, totalSqft: 0, countSqft: 0 };
+        trendCombined[tKey].volume += tData.volume || 0;
+        if (tData.avg_uprice > 0) {
+          trendCombined[tKey].totalSqft += tData.avg_uprice * (tData.volume || 1);
+          trendCombined[tKey].countSqft += (tData.volume || 1);
+        }
+        totalVolume += tData.volume || 0;
+        if (tData.min_uprice && tData.min_uprice < minUprice) minUprice = tData.min_uprice;
+        if (tData.max_uprice && tData.max_uprice > maxUprice) maxUprice = tData.max_uprice;
+      });
 
       if (projData.layouts) {
         Object.keys(projData.layouts).forEach(l => {
@@ -727,11 +750,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // 计算总平均呎价
-    const months = Object.keys(monthlyCombined).sort();
+    const trendKeys = Object.keys(trendCombined).sort();
     let globalSqftSum = 0, globalSqftVol = 0;
-    months.forEach(m => {
-      globalSqftSum += monthlyCombined[m].totalSqft;
-      globalSqftVol += monthlyCombined[m].countSqft;
+    trendKeys.forEach(k => {
+      globalSqftSum += trendCombined[k].totalSqft;
+      globalSqftVol += trendCombined[k].countSqft;
     });
     const avgSqftPrice = globalSqftVol > 0 ? Math.round(globalSqftSum / globalSqftVol) : 0;
 
@@ -763,7 +786,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 绘制 Chart.js 图表
-    renderModalCharts(months, monthlyCombined, layoutCombined, priceDistCombined);
+    renderModalCharts(trendKeys, trendCombined, layoutCombined, priceDistCombined, gran);
 
     // 打开 Modal
     analyticsModal.classList.add('open');
@@ -902,11 +925,12 @@ document.addEventListener('DOMContentLoaded', () => {
     container.appendChild(row2);
   }
 
-  function renderModalCharts(months, monthlyCombined, layoutCombined, priceDistCombined) {
+  function renderModalCharts(trendKeys, trendCombined, layoutCombined, priceDistCombined, gran = 'monthly') {
     if (typeof Chart === 'undefined') return;
 
-    const avgPrices = months.map(m => monthlyCombined[m].countSqft ? Math.round(monthlyCombined[m].totalSqft / monthlyCombined[m].countSqft) : 0);
-    const volumes = months.map(m => monthlyCombined[m].volume);
+    const avgPrices = trendKeys.map(k => trendCombined[k].countSqft ? Math.round(trendCombined[k].totalSqft / trendCombined[k].countSqft) : 0);
+    const volumes = trendKeys.map(k => trendCombined[k].volume);
+    const timeLabelSuffix = gran === 'weekly' ? ' (周度)' : ' (月度)';
 
     const trendCtx = document.getElementById('modalTrendChartCanvas');
     if (trendCtx) {
@@ -921,7 +945,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (modalTrendChartInstance) modalTrendChartInstance.destroy();
       const modalDatasets = [
         {
-          label: '实用呎价 (港币/呎)',
+          label: `实用呎价 (港币/呎${timeLabelSuffix})`,
           data: avgPrices,
           borderColor: '#06AABD',
           backgroundColor: 'rgba(6, 170, 189, 0.08)',
@@ -936,7 +960,7 @@ document.addEventListener('DOMContentLoaded', () => {
           yAxisID: 'y'
         },
         {
-          label: '成交套数 (套)',
+          label: `成交套数 (套${timeLabelSuffix})`,
           data: volumes,
           type: 'bar',
           backgroundColor: 'rgba(225, 29, 72, 0.3)',
@@ -953,7 +977,7 @@ document.addEventListener('DOMContentLoaded', () => {
       modalTrendChartInstance = new Chart(trendCtx, {
         type: 'line',
         data: {
-          labels: months,
+          labels: trendKeys,
           datasets: modalDatasets
         },
         options: {
