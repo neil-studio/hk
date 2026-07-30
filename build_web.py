@@ -108,12 +108,27 @@ def fetch_hkp_status_map():
         print(f"提示: 获取 HKP 状态映射失败: {e}，将使用项目统计保底。")
     return status_map
 
-def load_real_history_analytics():
+def load_custom_districts():
+    custom_dist_file = os.path.join(BASE_DIR, "custom_districts.json")
+    if os.path.exists(custom_dist_file):
+        try:
+            with open(custom_dist_file, 'r', encoding='utf-8') as f:
+                d = json.load(f)
+                print(f"成功载入 {len(d)} 条用户自定义商圈规则。")
+                return d
+        except Exception as e:
+            print(f"读取 custom_districts.json 失败: {e}")
+    return {}
+
+def load_real_history_analytics(custom_districts=None):
     """从 SQLite 数据库 成交历史数据库.db 抽取 3.7万+ 条真实历史成交数据并按项目、年、月、周聚合"""
     db_path = os.path.join(BASE_DIR, "成交历史数据库.db")
     if not os.path.exists(db_path):
         print("提示: 未找到 成交历史数据库.db，无法生成真实成交分析。")
         return {}
+
+    if custom_districts is None:
+        custom_districts = load_custom_districts()
 
     try:
         import sqlite3
@@ -185,9 +200,13 @@ def load_real_history_analytics():
 
             for tkey in target_keys:
                 if tkey not in projects_analytics:
+                    user_cd = (custom_districts or {}).get(tkey) or (custom_districts or {}).get(clean_pname) or (custom_districts or {}).get(pname) or {}
+                    p_reg = user_cd.get('region') or reg
+                    p_dist = user_cd.get('district') or dist
+
                     projects_analytics[tkey] = {
-                        'region': reg,
-                        'district': dist,
+                        'region': p_reg,
+                        'district': p_dist,
                         'yearly': {},
                         'monthly': {},
                         'weekly': {},
@@ -394,7 +413,8 @@ def main():
     print("开始扫描价单目录并构建网页数据库...")
     ensure_dirs()
     hkp_status_map = fetch_hkp_status_map()
-    real_history = load_real_history_analytics()
+    custom_districts = load_custom_districts()
+    real_history = load_real_history_analytics(custom_districts)
     leaderboards = build_leaderboard_data()
     
     projects_list = []

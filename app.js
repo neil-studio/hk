@@ -1663,7 +1663,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const districtSet = new Set();
     availableProjects.forEach(pname => {
       const pObj = (realHistory[pname] || allProjects.find(p => p.name === pname) || {});
-      if (pObj.district) districtSet.add(pObj.district);
+      const meta = (window.APP_DATA?.projects_data || {})[pname] || {};
+      const dist = meta.district || pObj.district;
+      if (dist) districtSet.add(dist);
     });
     const districtsList = Array.from(districtSet).sort();
 
@@ -1691,7 +1693,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const filtered = availableProjects.filter(pname => {
         const pObj = (realHistory[pname] || allProjects.find(p => p.name === pname) || {});
-        const pDist = pObj.district || '';
+        const meta = (window.APP_DATA?.projects_data || {})[pname] || {};
+        const pDist = meta.district || pObj.district || '';
         if (curDist && !pDist.includes(curDist)) return false;
         if (curSearch && !pname.toLowerCase().includes(curSearch)) return false;
         return true;
@@ -1705,9 +1708,11 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         filtered.forEach(pname => {
           const pObj = (realHistory[pname] || allProjects.find(p => p.name === pname) || {});
+          const meta = (window.APP_DATA?.projects_data || {})[pname] || {};
+          const pDist = meta.district || pObj.district || '全港';
           const opt = document.createElement('option');
           opt.value = pname;
-          opt.textContent = `${pObj.district || '全港'} • ${pname}`;
+          opt.textContent = `${pDist} • ${pname}`;
           projectSelect.appendChild(opt);
         });
       }
@@ -1743,7 +1748,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const filtered = availableProjects.filter(pname => {
         const pObj = (realHistory[pname] || allProjects.find(p => p.name === pname) || {});
-        const pDist = pObj.district || '';
+        const meta = (window.APP_DATA?.projects_data || {})[pname] || {};
+        const pDist = meta.district || pObj.district || '';
         if (curDist && !pDist.includes(curDist)) return false;
         if (curSearch && !pname.toLowerCase().includes(curSearch)) return false;
         return true;
