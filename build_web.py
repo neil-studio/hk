@@ -497,24 +497,14 @@ def main():
                     current_tier = '10000+'; continue
                 if name_str == '项目名': continue
 
-                if is_10_col_mode:
-                    raw_tier = str(sheet.cell(r, 3).value or '').strip()
-                    c_layout = sheet.cell(r, 4).value
-                    c_total = sheet.cell(r, 5).value
-                    c_sqft = sheet.cell(r, 6).value
-                    c_rent = sheet.cell(r, 7).value
-                    c_roi = sheet.cell(r, 8).value
-                    c_reason = sheet.cell(r, 9).value
-                    c_mainland = sheet.cell(r, 10).value
-                else:
-                    raw_tier = str(sheet.cell(r, 5).value or '').strip()
-                    c_layout = sheet.cell(r, 6).value
-                    c_total = sheet.cell(r, 7).value
-                    c_sqft = sheet.cell(r, 8).value
-                    c_rent = sheet.cell(r, 9).value
-                    c_roi = sheet.cell(r, 10).value
-                    c_reason = sheet.cell(r, 11).value
-                    c_mainland = sheet.cell(r, 12).value
+                raw_tier = str(sheet.cell(r, 3).value or '').strip()
+                c_layout = sheet.cell(r, 4).value
+                c_total = sheet.cell(r, 5).value
+                c_sqft = sheet.cell(r, 6).value
+                c_rent = ''
+                c_roi = ''
+                c_reason = sheet.cell(r, 7).value
+                c_mainland = sheet.cell(r, 8).value
 
                 tier_key = current_tier
                 if '1000-2000' in raw_tier or '1000万-2000' in raw_tier or '500万' in raw_tier:
