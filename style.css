@@ -1901,8 +1901,8 @@ body {
   bottom: 16px; /* 稍微更贴近底边 */
   left: 50%;
   transform: translate(-50%, 150%); /* 默认滑入到屏幕外隐藏 */
-  width: 92%;
-  max-width: 780px; /* 弹窗稍微加长一点 */
+  width: 94%;
+  max-width: 940px; /* 扩展宽度以防 2 行文字被截断 */
   padding: 0.55rem 2.25rem 0.55rem 1.25rem; /* 高度缩小1/2，上下内边距极窄 */
   background: rgba(20, 27, 33, 0.95);
   border: 1.2px solid rgba(16, 185, 129, 0.5); /* 极光绿边框 */

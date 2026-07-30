@@ -1254,7 +1254,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (paymentCont) {
           paymentCont.style.display = 'flex';
           if (paymentVal) {
-            paymentVal.innerHTML = `<span style="color:#045d68; font-weight:600;">4%额外折扣(按折后价算): -${formatMoney(extraDisc)}</span> <span style="color:#cbd5e1; margin:0 0.3rem;">│</span> <strong style="color:#e11d48; font-weight:800;">180天全款折实: ${formatMoney(finalP)} (${formatSqft(upriceFinal)})</strong>`;
+            paymentVal.innerHTML = `<span style="color:#38BDF8; font-weight:700; font-size:0.82rem;">4%额外折扣(按折后价算): -${formatMoney(extraDisc)}</span> <span style="color:rgba(255,255,255,0.3); margin:0 0.4rem;">│</span> <strong style="color:#fb7185; font-weight:800; font-size:0.85rem;">180天全款折实: ${formatMoney(finalP)} (${formatSqft(upriceFinal)})</strong>`;
           }
         }
         if (rowBottom) rowBottom.style.display = 'flex';
