@@ -2990,8 +2990,8 @@ body {
   bottom: 16px;
   left: 50%;
   transform: translate(-50%, 160%);
-  width: 92%;
-  max-width: 840px;
+  width: 95%;
+  max-width: 980px;
   padding: 0.55rem 2.8rem 0.55rem 1.25rem;
   background: rgba(20, 27, 33, 0.96);
   border: 1.2px solid rgba(16, 185, 129, 0.6);
@@ -3159,7 +3159,7 @@ body {
   align-items: center;
   gap: 0.3rem;
   width: 100%;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .payment-scheme .meta-val {
@@ -3167,9 +3167,9 @@ body {
   font-weight: bold;
   font-size: 0.8rem;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 420px;
+  overflow: visible;
+  text-overflow: clip;
+  max-width: none;
 }
 
 /* ==========================================================================
