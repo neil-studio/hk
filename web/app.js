@@ -1212,8 +1212,16 @@ document.addEventListener('DOMContentLoaded', () => {
       if (rowBottom) rowBottom.style.display = 'flex';
     }
     else if (status === '在售' || status === '已定价未售') {
-      const isCullinanSky2 = (info.projectName === '天玺．天第2期' || info.projectName?.includes('天玺．天第2期'));
-      const rawListPrice = parseFloat(String(info.listPrice || '').replace(/[^0-9\.]/g, ''));
+      const curProj = info.projectName || window.currentGridProjectName || '';
+      const isCullinanSky2 = (curProj === '天玺．天第2期' || curProj.includes('天玺．天第2期') || (curProj.includes('天玺') && curProj.includes('2')));
+
+      let rawListPrice = parseFloat(String(info.listPrice || '').replace(/[^0-9\.]/g, ''));
+      if (isNaN(rawListPrice) || rawListPrice <= 0) {
+        rawListPrice = parseFloat(String(info.discPrice || '').replace(/[^0-9\.]/g, ''));
+      }
+      if (!isNaN(rawListPrice) && rawListPrice > 0 && rawListPrice < 10000) {
+        rawListPrice = rawListPrice * 10000;
+      }
 
       if (isCullinanSky2 && !isNaN(rawListPrice) && rawListPrice > 0) {
         // 【天玺．天第2期 专属 2 行折实价弹窗逻辑】仅对在售/已定价未售且有原价单位生效
@@ -1223,7 +1231,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const finalP = p1 - extraDisc; // 180天全款折实价
 
         const sqftArea = parseFloat(String(info.area || '0').replace(/[^0-9\.]/g, ''));
-        const upriceP1 = sqftArea > 0 ? Math.round(p1 / sqftArea) : (info.sqftPrice ? Math.round(info.sqftPrice * 0.9) : 0);
+        const rawSqft = parseFloat(String(info.sqftPrice || '').replace(/[^0-9\.]/g, ''));
+        const upriceP1 = sqftArea > 0 ? Math.round(p1 / sqftArea) : (rawSqft ? Math.round(rawSqft * 0.9) : 0);
         const upriceFinal = sqftArea > 0 ? Math.round(finalP / sqftArea) : (upriceP1 ? Math.round(upriceP1 * 0.96) : 0);
 
         if (origPriceCont) {
@@ -1344,6 +1353,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 打开 Excel 销控图纸 Modal 弹窗
   async function openGridModal(filename, projectName) {
+    window.currentGridProjectName = projectName;
     const gridModal = document.getElementById('gridModal');
     const modalTitle = document.getElementById('modalProjectTitle');
     const gridDisplayArea = document.getElementById('gridDisplayArea');
