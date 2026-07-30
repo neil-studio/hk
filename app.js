@@ -1322,51 +1322,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (rowBottom) rowBottom.style.display = 'flex';
       }
-      else if (isTheHenley && !isNaN(rawListPrice) && rawListPrice > 0) {
-        // 【THE HENLEY 1, 2, 3 期 专属折实价与从价印花税弹窗逻辑】
-        const p0 = rawListPrice;
-        const p1 = p0 * (1 - 0.035); // 基础折扣 3.5%
-
-        const sqftArea = parseFloat(String(info.area || '0').replace(/[^0-9\.]/g, ''));
-        const rawSqft = parseFloat(String(info.sqftPrice || '').replace(/[^0-9\.]/g, ''));
-        const upriceP1 = sqftArea > 0 ? Math.round(p1 / sqftArea) : (rawSqft ? Math.round(rawSqft * 0.965) : 0);
-
-        const pmText = String(info.payment || '');
-        const hasStampSubsidy = pmText.includes('代繳從價印花稅') || pmText.includes('代缴从价印花税') || pmText.includes('印花稅') || pmText.includes('印花税');
-
-        if (origPriceCont) {
-          origPriceCont.style.display = 'flex';
-          if (origPriceVal) origPriceVal.textContent = formatMoney(p0);
-        }
-        if (discountBadge) {
-          discountBadge.style.display = 'block';
-          discountBadge.textContent = '-3.5%';
-        }
-        if (discPriceCont) discPriceCont.style.display = 'flex';
-        if (discPriceLabel) discPriceLabel.textContent = '房款折实:';
-        if (discPriceVal) discPriceVal.textContent = formatMoney(p1);
-
-        if (discFtPriceCont) discFtPriceCont.style.display = 'flex';
-        if (discFtLabel) discFtLabel.textContent = '折实呎:';
-        if (discFtVal) discFtVal.textContent = formatSqft(upriceP1);
-
-        if (paymentCont) {
-          paymentCont.style.display = 'flex';
-          if (paymentVal) {
-            if (hasStampSubsidy) {
-              const stampAmt = calcIrdAvd(p1);
-              const effectiveRate = ((stampAmt / p1) * 100).toFixed(2);
-              const finalCost = p1 - stampAmt;
-              const upriceFinal = sqftArea > 0 ? Math.round(finalCost / sqftArea) : 0;
-
-              paymentVal.innerHTML = `<span style="color:#38BDF8; font-weight:700; font-size:0.82rem;">🏛️ 发展商代缴从价印花税(AVD): -${formatMoney(stampAmt)} (${effectiveRate}%)</span> <span style="color:rgba(255,255,255,0.3); margin:0 0.4rem;">│</span> <strong style="color:#fb7185; font-weight:800; font-size:0.85rem;">扣税后实付: ${formatMoney(finalCost)} (${formatSqft(upriceFinal)})</strong>`;
-            } else {
-              paymentVal.innerHTML = `<span style="color:#94a3b8; font-size:0.82rem;">💳 付款办法: 现金付款计划 (减3.5%)</span> <span style="color:rgba(255,255,255,0.2); margin:0 0.4rem;">│</span> <span style="color:#cbd5e1; font-size:0.8rem;">不含代缴印花税优惠</span>`;
-            }
-          }
-        }
-        if (rowBottom) rowBottom.style.display = 'flex';
-      }
       else {
         // 【所有其他项目 / 标准项目】显示原价划线、折实总价、最高折扣 Badge、折实呎价及付款计划
         if (origPriceCont) {
