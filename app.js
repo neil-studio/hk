@@ -1323,10 +1323,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (rowBottom) rowBottom.style.display = 'flex';
       }
       else if (isTheHenley && !isNaN(rawListPrice) && rawListPrice > 0) {
-        // 【THE HENLEY 仅针对含有印花税组合折扣的单位进行剥离计算】
+        // 【THE HENLEY 1期/3期：全量开启 3.5% 基础房款 + 发展商代缴从价印花税(AVD) 剥离展示】
         const pmText = String(info.payment || '');
         const discText = String(info.discountRate || '');
-        const hasStampSubsidy = pmText.includes('代繳從價印花稅') || pmText.includes('代缴从价印花税') || pmText.includes('印花稅') || pmText.includes('印花税') || discText.includes('7.12') || discText.includes('7.6');
+        const isNinePercent = discText.includes('9.0') || discText.includes('9%') || pmText.includes('9.0') || pmText.includes('9%');
+        const hasStampSubsidy = !isNinePercent;
 
         if (hasStampSubsidy) {
           const p0 = rawListPrice;
