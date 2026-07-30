@@ -2452,30 +2452,47 @@ document.addEventListener('DOMContentLoaded', () => {
       if (showRoiCol) {
         theadEl.innerHTML = `
           <tr>
-            <th style="width:140px;">项目名称 / 评级</th>
-            <th style="width:110px;">城区商圈</th>
-            <th style="width:120px;">分类 / 价位</th>
-            <th style="width:130px;">主推户型 / 呎价</th>
-            <th style="width:110px;">预估月租 / ROI</th>
-            <th>推荐理由与卖点</th>
-            <th style="width:280px;">对内地客户专属卖点</th>
-            <th style="width:130px; text-align:center;">快捷操作</th>
+            <th style="width:130px;">项目名称 / 评级</th>
+            <th style="width:90px;">城区商圈</th>
+            <th style="width:105px;">分类 / 价位</th>
+            <th style="width:115px;">主推户型 / 呎价</th>
+            <th style="width:95px;">预估月租 / ROI</th>
+            <th style="min-width:280px;">推荐理由与卖点</th>
+            <th style="min-width:300px;">对内地客户专属卖点</th>
+            <th style="width:115px; text-align:center;">快捷操作</th>
           </tr>
         `;
       } else {
         theadEl.innerHTML = `
           <tr>
-            <th style="width:140px;">项目名称 / 评级</th>
-            <th style="width:110px;">城区商圈</th>
-            <th style="width:120px;">分类 / 价位</th>
-            <th style="width:130px;">主推户型 / 呎价</th>
-            <th>推荐理由与卖点</th>
-            <th style="width:280px;">对内地客户专属卖点</th>
-            <th style="width:130px; text-align:center;">快捷操作</th>
+            <th style="width:135px;">项目名称 / 评级</th>
+            <th style="width:95px;">城区商圈</th>
+            <th style="width:110px;">分类 / 价位</th>
+            <th style="width:120px;">主推户型 / 呎价</th>
+            <th style="min-width:320px;">推荐理由与卖点</th>
+            <th style="min-width:340px;">对内地客户专属卖点</th>
+            <th style="width:115px; text-align:center;">快捷操作</th>
           </tr>
         `;
       }
     }
+
+    const formatReasonText = (reason) => {
+      if (!reason) return '';
+      const str = String(reason).trim();
+      const parts = str.split(/(?=\b\d+[\.、\t\s])/g).map(s => s.trim()).filter(Boolean);
+      if (parts.length > 1) {
+        return parts.map(p => `<div style="margin-bottom:0.4rem; line-height:1.55; color:#334155; font-size:0.82rem;">${p}</div>`).join('');
+      }
+      return `<div style="line-height:1.55; color:#334155; font-size:0.82rem; white-space:pre-line;">${str}</div>`;
+    };
+
+    const formatMainlandPointsText = (points) => {
+      if (!points) return '';
+      let str = String(points).trim();
+      str = str.replace(/(核心定位[：:]?)/g, '<span style="color:#045d68; font-weight:700;">$1</span>');
+      return `<div style="line-height:1.55; color:#334155; font-size:0.8rem; white-space:pre-line;">${str}</div>`;
+    };
 
     const tierLabels = {
       '1000-2000': '投资配置类 (1000-2000万)',
@@ -2609,20 +2626,19 @@ document.addEventListener('DOMContentLoaded', () => {
             <strong class="roi-val" style="font-size:1.05rem;">${item.roi}</strong>
           </td>` : ''}
           <td>
-            <div style="font-size:0.8rem; color:#475569; max-width:240px; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; text-overflow:ellipsis;">
-              ${item.reason}
+            <div style="font-size:0.82rem; color:#334155; line-height:1.55;">
+              ${formatReasonText(item.reason)}
             </div>
           </td>
           <td>
-            <div style="background:#eef5f9; padding:0.6rem 0.8rem; border-radius:10px; border:1px solid #d0e4f0;">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.3rem;">
-                <span style="font-weight:700; color:#045d68; font-size:0.78rem;">🇨🇳 内地高净值卖点</span>
-                <button class="btn-copy-points" onclick="copyMainlandPoints(this, '${encodeURIComponent(item.mainlandPoints)}')">📋 复制</button>
+            <div style="background:#f0f7fa; padding:0.75rem 0.9rem; border-radius:12px; border:1px solid #d0e4f0;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem; border-bottom:1px dashed #cbd5e1; padding-bottom:0.35rem;">
+                <span style="font-weight:700; color:#045d68; font-size:0.8rem; display:flex; align-items:center; gap:0.25rem;">🇨🇳 内地高净值卖点</span>
+                <button class="btn-copy-points" style="padding:0.2rem 0.6rem; font-size:0.75rem;" onclick="copyMainlandPoints(this, '${encodeURIComponent(item.mainlandPoints)}')">📋 复制</button>
               </div>
-              <div style="font-size:0.78rem; color:#334155; line-height:1.4; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; text-overflow:ellipsis;">
-                ${item.mainlandPoints}
+              <div style="font-size:0.8rem; color:#334155; line-height:1.55;">
+                ${formatMainlandPointsText(item.mainlandPoints)}
               </div>
-              <button class="btn-toggle-points" style="font-size:0.74rem; margin-top:0.3rem;" onclick="toggleTableDrawer('drawer_${idx}')">▼ 展开完整解析</button>
             </div>
           </td>
           <td style="text-align:center;">
