@@ -2477,14 +2477,29 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    const formatReasonText = (reason) => {
+    const formatReasonText = (reason, idx) => {
       if (!reason) return '';
       const str = String(reason).trim();
       const parts = str.split(/(?=\b\d+[\.、\t\s])/g).map(s => s.trim()).filter(Boolean);
+      let formattedInner = '';
       if (parts.length > 1) {
-        return parts.map(p => `<div style="margin-bottom:0.4rem; line-height:1.55; color:#334155; font-size:0.82rem;">${p}</div>`).join('');
+        formattedInner = parts.map(p => `<div style="margin-bottom:0.35rem; line-height:1.45;">${p}</div>`).join('');
+      } else {
+        formattedInner = `<div style="line-height:1.45; white-space:pre-line;">${str}</div>`;
       }
-      return `<div style="line-height:1.55; color:#334155; font-size:0.82rem; white-space:pre-line;">${str}</div>`;
+
+      const isLong = str.length > 60 || parts.length > 2;
+
+      return `
+        <div id="reason_text_${idx}" data-expanded="false" style="font-size:0.8rem; color:#334155; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; text-overflow:ellipsis; max-width:280px; transition:all 0.2s;">
+          ${formattedInner}
+        </div>
+        ${isLong ? `
+          <button onclick="toggleReasonExpand('reason_text_${idx}', this)" style="border:none; background:transparent; color:#06AABD; font-size:0.75rem; font-weight:700; cursor:pointer; padding:0.2rem 0; margin-top:0.25rem; display:inline-flex; align-items:center; gap:0.2rem;">
+            ▼ 展开完整卖点
+          </button>
+        ` : ''}
+      `;
     };
 
     const formatMainlandPointsText = (points) => {
@@ -2626,9 +2641,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <strong class="roi-val" style="font-size:1.05rem;">${item.roi}</strong>
           </td>` : ''}
           <td>
-            <div style="font-size:0.82rem; color:#334155; line-height:1.55;">
-              ${formatReasonText(item.reason)}
-            </div>
+            ${formatReasonText(item.reason, idx)}
           </td>
           <td>
             <div style="background:#eef5f9; padding:0.6rem 0.8rem; border-radius:10px; border:1px solid #d0e4f0;">
@@ -2673,6 +2686,24 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   }
+
+  // 全局推荐理由行内展开/折叠处理 (方案二)
+  window.toggleReasonExpand = function(elemId, btn) {
+    const el = document.getElementById(elemId);
+    if (!el) return;
+    const isExpanded = el.getAttribute('data-expanded') === 'true';
+    if (!isExpanded) {
+      el.style.webkitLineClamp = 'none';
+      el.style.display = 'block';
+      el.setAttribute('data-expanded', 'true');
+      if (btn) btn.innerHTML = '▲ 折叠卖点';
+    } else {
+      el.style.webkitLineClamp = '3';
+      el.style.display = '-webkit-box';
+      el.setAttribute('data-expanded', 'false');
+      if (btn) btn.innerHTML = '▼ 展开完整卖点';
+    }
+  };
 
   // 全局抽屉展开处理
   window.toggleTableDrawer = function(drawerId) {
