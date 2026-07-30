@@ -2631,14 +2631,15 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
           </td>
           <td>
-            <div style="background:#f0f7fa; padding:0.75rem 0.9rem; border-radius:12px; border:1px solid #d0e4f0;">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem; border-bottom:1px dashed #cbd5e1; padding-bottom:0.35rem;">
-                <span style="font-weight:700; color:#045d68; font-size:0.8rem; display:flex; align-items:center; gap:0.25rem;">🇨🇳 内地高净值卖点</span>
-                <button class="btn-copy-points" style="padding:0.2rem 0.6rem; font-size:0.75rem;" onclick="copyMainlandPoints(this, '${encodeURIComponent(item.mainlandPoints)}')">📋 复制</button>
+            <div style="background:#eef5f9; padding:0.6rem 0.8rem; border-radius:10px; border:1px solid #d0e4f0;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.3rem;">
+                <span style="font-weight:700; color:#045d68; font-size:0.78rem;">🇨🇳 内地高净值卖点</span>
+                <button class="btn-copy-points" onclick="copyMainlandPoints(this, '${encodeURIComponent(item.mainlandPoints)}')">📋 复制</button>
               </div>
-              <div style="font-size:0.8rem; color:#334155; line-height:1.55;">
-                ${formatMainlandPointsText(item.mainlandPoints)}
+              <div style="font-size:0.78rem; color:#334155; line-height:1.4; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; text-overflow:ellipsis;">
+                ${item.mainlandPoints}
               </div>
+              <button class="btn-toggle-points" style="font-size:0.74rem; margin-top:0.3rem;" onclick="toggleTableDrawer('drawer_${idx}')">▼ 展开完整解析</button>
             </div>
           </td>
           <td style="text-align:center;">
