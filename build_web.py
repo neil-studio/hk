@@ -602,12 +602,18 @@ def main():
                 drive_mapping = json.load(f)
             print(f"成功载入 {len(drive_mapping)} 条 Google Drive 显式映射规则。")
             # 为所有别名及不同写法补全 projects_data 映射
-            PARENT_DRIVE_ID = "15tRwSlG1VTOKuEyj-H131zpNK6v6MY04"
-            for k_alias, f_name in drive_mapping.items():
+            for k_alias, f_info in drive_mapping.items():
                 if k_alias not in projects_data:
                     projects_data[k_alias] = {}
-                projects_data[k_alias]['google_drive_folder'] = f_name
-                projects_data[k_alias]['marketing_url'] = f"https://drive.google.com/drive/search?q={urllib.parse.quote('type:folder parent:' + PARENT_DRIVE_ID + ' \"' + f_name + '\"')}"
+                if isinstance(f_info, dict):
+                    projects_data[k_alias]['google_drive_folder'] = f_info.get('folder', '')
+                    projects_data[k_alias]['marketing_url'] = f_info.get('url', '#')
+                elif isinstance(f_info, str):
+                    if f_info.startswith('http'):
+                        projects_data[k_alias]['marketing_url'] = f_info
+                    else:
+                        projects_data[k_alias]['google_drive_folder'] = f_info
+                        projects_data[k_alias]['marketing_url'] = f"https://drive.google.com/drive/search?q={urllib.parse.quote('type:folder parent:' + PARENT_DRIVE_ID + ' \"' + f_info + '\"')}"
         except Exception as e:
             print(f"读取 google_drive_mapping.json 失败: {e}")
 
@@ -872,7 +878,7 @@ def main():
         except:
             pass
 
-    current_folders = set(p['google_drive_folder'] for p in projects_list if 'google_drive_folder' in p)
+    current_folders = set(str(p['google_drive_folder']) for p in projects_list if 'google_drive_folder' in p and isinstance(p['google_drive_folder'], str))
     new_folders = current_folders - known_folders
 
     if new_folders and len(known_folders) > 0:
