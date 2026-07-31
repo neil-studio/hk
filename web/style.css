@@ -2751,18 +2751,21 @@ body {
 
 .featured-dense-table {
   width: 100%;
+  table-layout: fixed;
   border-collapse: collapse;
-  font-size: 0.84rem;
+  font-size: 0.81rem;
   text-align: left;
+  box-sizing: border-box;
 }
 
 .featured-dense-table th {
   background: #f8fafc;
   color: #475569;
   font-weight: 700;
-  padding: 0.9rem 1rem;
+  padding: 0.7rem 0.45rem;
   border-bottom: 2px solid #e2e8f0;
   white-space: nowrap;
+  box-sizing: border-box;
 }
 
 .featured-dense-table tr.proj-row {
@@ -2775,10 +2778,13 @@ body {
 }
 
 .featured-dense-table td {
-  padding: 0.9rem 1rem;
+  padding: 0.7rem 0.45rem;
   vertical-align: top;
-  line-height: 1.5;
+  line-height: 1.45;
   color: #334155;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  box-sizing: border-box;
 }
 
 .table-drawer-row {

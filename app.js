@@ -2644,26 +2644,26 @@ document.addEventListener('DOMContentLoaded', () => {
       if (showRoiCol) {
         theadEl.innerHTML = `
           <tr>
-            <th style="width:130px;">项目名称 / 评级</th>
-            <th style="width:90px;">城区商圈</th>
-            <th style="width:105px;">分类 / 价位</th>
-            <th style="width:115px;">主推户型 / 呎价</th>
-            <th style="width:95px;">预估月租 / ROI</th>
-            <th style="min-width:280px;">推荐理由与卖点</th>
-            <th style="min-width:300px;">对内地客户专属卖点</th>
-            <th style="width:115px; text-align:center;">快捷操作</th>
+            <th style="width:11%;">项目名称 / 评级</th>
+            <th style="width:8%;">城区商圈</th>
+            <th style="width:9%;">分类 / 价位</th>
+            <th style="width:10%;">主推户型 / 呎价</th>
+            <th style="width:8%;">预估月租 / ROI</th>
+            <th style="width:23%;">推荐理由与卖点</th>
+            <th style="width:23%;">对内地客户专属卖点</th>
+            <th style="width:8%; text-align:center;">快捷操作</th>
           </tr>
         `;
       } else {
         theadEl.innerHTML = `
           <tr>
-            <th style="width:135px;">项目名称 / 评级</th>
-            <th style="width:95px;">城区商圈</th>
-            <th style="width:110px;">分类 / 价位</th>
-            <th style="width:120px;">主推户型 / 呎价</th>
-            <th style="min-width:320px;">推荐理由与卖点</th>
-            <th style="min-width:340px;">对内地客户专属卖点</th>
-            <th style="width:115px; text-align:center;">快捷操作</th>
+            <th style="width:12%;">项目名称 / 评级</th>
+            <th style="width:8%;">城区商圈</th>
+            <th style="width:10%;">分类 / 价位</th>
+            <th style="width:11%;">主推户型 / 呎价</th>
+            <th style="width:25%;">推荐理由与卖点</th>
+            <th style="width:26%;">对内地客户专属卖点</th>
+            <th style="width:8%; text-align:center;">快捷操作</th>
           </tr>
         `;
       }
