@@ -1217,6 +1217,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const isCullinanSky2 = (curProj === '天玺．天第2期' || curProj.includes('天玺．天第2期') || (curProj.includes('天玺') && curProj.includes('2')));
       const isHenleyPark = (curProjLower.includes('henley park') || (curProjLower.includes('henley') && curProjLower.includes('park')));
       const isTheHenley = (curProjLower.includes('henley') && !curProjLower.includes('park'));
+      const isJiuYun = (curProjLower.includes('滶蕴') || curProjLower.includes('滶蘊') || curProjLower.includes('beacon peak'));
 
       let rawListPrice = parseFloat(String(info.listPrice || '').replace(/[^0-9\.]/g, ''));
       if (isNaN(rawListPrice) || rawListPrice <= 0) {
@@ -1241,7 +1242,43 @@ document.addEventListener('DOMContentLoaded', () => {
         return price * 0.065;
       };
 
-      if (isCullinanSky2 && !isNaN(rawListPrice) && rawListPrice > 0) {
+      if (isJiuYun && !isNaN(rawListPrice) && rawListPrice > 0) {
+        // 【滶蕴 专属 2 行折实价与现金回赠弹窗逻辑】基础5%折扣 + 120天提前成交现金回赠(6%)
+        const p0 = rawListPrice;
+        const p1 = p0 * 0.95; // 基础 5% 折扣
+        const rebateAmt = Math.round(p1 * 0.06); // 120天全款 6% 现金回赠
+        const pFinal = p1 - rebateAmt; // 扣回赠后净实付
+
+        const sqftArea = parseFloat(String(info.area || '0').replace(/[^0-9\.]/g, ''));
+        const rawSqft = parseFloat(String(info.sqftPrice || '').replace(/[^0-9\.]/g, ''));
+        const upriceP1 = sqftArea > 0 ? Math.round(p1 / sqftArea) : (rawSqft ? Math.round(rawSqft * 0.95) : 0);
+        const upriceFinal = sqftArea > 0 ? Math.round(pFinal / sqftArea) : 0;
+
+        if (origPriceCont) {
+          origPriceCont.style.display = 'flex';
+          if (origPriceVal) origPriceVal.textContent = formatMoney(p0);
+        }
+        if (discountBadge) {
+          discountBadge.style.display = 'block';
+          discountBadge.textContent = '-5%';
+        }
+        if (discPriceCont) discPriceCont.style.display = 'flex';
+        if (discPriceLabel) discPriceLabel.textContent = '房款折实:';
+        if (discPriceVal) discPriceVal.textContent = formatMoney(p1);
+
+        if (discFtPriceCont) discFtPriceCont.style.display = 'flex';
+        if (discFtLabel) discFtLabel.textContent = '折实呎:';
+        if (discFtVal) discFtVal.textContent = formatSqft(upriceP1);
+
+        if (paymentCont) {
+          paymentCont.style.display = 'flex';
+          if (paymentVal) {
+            paymentVal.innerHTML = `<span style="color:#FBBF24; font-weight:700; font-size:0.82rem;">🎁 120天提前成交现金回赠(6%): -${formatMoney(rebateAmt)}</span> <span style="color:rgba(255,255,255,0.3); margin:0 0.4rem;">│</span> <strong style="color:#fb7185; font-weight:800; font-size:0.85rem;">🎯 扣回赠后净实付: ${formatMoney(pFinal)} (${formatSqft(upriceFinal)})</strong>`;
+          }
+        }
+        if (rowBottom) rowBottom.style.display = 'flex';
+      }
+      else if (isCullinanSky2 && !isNaN(rawListPrice) && rawListPrice > 0) {
         // 【天玺．天第2期 专属 2 行折实价弹窗逻辑】仅对在售/已定价未售且有原价单位生效
         const p0 = rawListPrice;
         const p1 = p0 * 0.90; // 10% 折后价 (360日付款计划)
