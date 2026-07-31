@@ -614,6 +614,29 @@ def main():
                     else:
                         projects_data[k_alias]['google_drive_folder'] = f_info
                         projects_data[k_alias]['marketing_url'] = f"https://drive.google.com/drive/search?q={urllib.parse.quote('type:folder parent:' + PARENT_DRIVE_ID + ' \"' + f_info + '\"')}"
+
+            def get_drive_info(key_str):
+                if not key_str: return None
+                k = str(key_str).strip()
+                k_clean = re.sub(r'第\s*[0-9A-Za-z\-]+\s*期', '', k).strip()
+                k_clean_cn = re.sub(r'第\s*[一二三四五六七八九十]+\s*期', '', k).strip()
+                m_info = (drive_mapping.get(k) or 
+                          drive_mapping.get(k_clean) or 
+                          drive_mapping.get(k_clean_cn) or 
+                          drive_mapping.get(k.lower()) or 
+                          drive_mapping.get(k_clean.lower()) or 
+                          drive_mapping.get(k_clean_cn.lower()))
+                return m_info
+
+            for pk, pval in projects_data.items():
+                if isinstance(pval, dict):
+                    raw_name = pk.split('_', 1)[-1] if '_' in pk else pk
+                    m_info = get_drive_info(raw_name) or get_drive_info(pk)
+                    if isinstance(m_info, dict):
+                        if m_info.get('url'): pval['marketing_url'] = m_info['url']
+                        if m_info.get('folder'): pval['google_drive_folder'] = m_info['folder']
+                    elif isinstance(m_info, str) and m_info.startswith('http'):
+                        pval['marketing_url'] = m_info
         except Exception as e:
             print(f"读取 google_drive_mapping.json 失败: {e}")
 

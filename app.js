@@ -2712,8 +2712,13 @@ document.addEventListener('DOMContentLoaded', () => {
     Object.keys(featuredByPriceData).forEach(tier => {
       const projNames = featuredByPriceData[tier] || [];
       projNames.forEach(name => {
-        const proj = allProjects.find(p => p.name === name || p.name.includes(name) || name.includes(p.name) || (name.includes('波老道') && (p.name.includes('21 Borrett') || p.name.includes('应天')))) || {};
-        const meta = projectsDataMap[`${tier}_${name}`] || projectsDataMap[name] || {};
+        const normN = (s) => String(s || '').toLowerCase().replace(/．|\.|\s|　/g, '').replace('澐', '沄').replace(/第1期|第i期|1期|i期/g, 'i').replace(/第2期|第ii期|2期|ii期/g, 'ii').replace(/第3期|第iii期|3期|iii期/g, 'iii').replace(/第6a期/g, '6a').replace(/第6b期/g, '6b').trim();
+
+        let proj = allProjects.find(p => normN(p.name) === normN(name));
+        if (!proj) {
+          proj = allProjects.find(p => normN(p.name).includes(normN(name)) || normN(name).includes(normN(p.name)) || (name.includes('波老道') && (p.name.includes('21 Borrett') || p.name.includes('应天')))) || {};
+        }
+        const meta = projectsDataMap[`${tier}_${name}`] || projectsDataMap[name] || (proj.name ? projectsDataMap[proj.name] : {}) || {};
 
         const parentDriveId = '15tRwSlG1VTOKuEyj-H131zpNK6v6MY04';
         const introUrl = proj.intro_url || proj.centaline_url || meta.centaline_url || meta.intro_url || `https://www.ricacorp.com/zh-hk/property/search?q=${encodeURIComponent(name)}`;
@@ -2722,7 +2727,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const districtName = meta.district || proj.district || '核心区';
         const folderName = proj.google_drive_folder || meta.google_drive_folder || `${regionName}-${districtName}-${cleanName}`;
         const driveQ = `type:folder parent:${parentDriveId} "${folderName}"`;
-        const marketingUrl = proj.marketing_url || meta.marketing_url || `https://drive.google.com/drive/search?q=${encodeURIComponent(driveQ)}`;
+        const marketingUrl = proj.marketing_url || meta.marketing_url || (projectsDataMap[proj.name] ? projectsDataMap[proj.name].marketing_url : '') || `https://drive.google.com/drive/search?q=${encodeURIComponent(driveQ)}`;
 
         // 按商圈平均呎价与基准呎租倒算 ROI
         let calcRoiStr = meta.roi || proj.roi || '';
