@@ -640,6 +640,40 @@ def main():
         except Exception as e:
             print(f"读取 google_drive_mapping.json 失败: {e}")
 
+    def strip_phase_suffix(name):
+        s = str(name).strip()
+        s = re.sub(r'\(第.*?\)', '', s)
+        s = re.sub(r'第\s*[0-9A-Za-z\-]+期.*$', '', s)
+        s = re.sub(r'Phase\s*[0-9A-Za-z\-]+.*$', '', s, flags=re.IGNORECASE)
+        s = re.sub(r'第[I|V|X|A-Z0-9]+期', '', s)
+        s = re.sub(r'第[0-9A-Za-z]+$', '', s)
+        s = re.sub(r'[0-9]+[a-zA-Z]+$', '', s)
+        s = re.sub(r'\s+[0-9]+$', '', s)
+        s = re.sub(r'\s+I{1,3}$', '', s)
+        s = re.sub(r'\s+II$', '', s)
+        s = re.sub(r'\s+III$', '', s)
+        s = re.sub(r'\(.*?\)', '', s)
+        return s.strip()
+
+    # 载入 楼盘介绍映射表.xlsx
+    intro_mapping = {}
+    intro_excel = "/Users/nb/google/Antigravity/工作/运营/聚焦盘精选盘/楼盘介绍映射表.xlsx"
+    if os.path.exists(intro_excel):
+        try:
+            wb_intro = openpyxl.load_workbook(intro_excel, data_only=True)
+            ws_intro = wb_intro.active
+            for r in range(2, ws_intro.max_row + 1):
+                pname = str(ws_intro.cell(r, 1).value or '').strip()
+                url = str(ws_intro.cell(r, 2).value or '').strip()
+                if pname and url and url != 'None' and url.startswith('http'):
+                    intro_mapping[pname] = url
+                    clean_p = strip_phase_suffix(pname)
+                    if clean_p and clean_p not in intro_mapping:
+                        intro_mapping[clean_p] = url
+            print(f"成功从 Excel [楼盘介绍映射表.xlsx] 载入 {len(intro_mapping)} 条楼盘介绍链接。")
+        except Exception as e:
+            print(f"读取 楼盘介绍映射表.xlsx 失败: {e}")
+
     # 遍历 BASE_DIR 下的子文件夹
     for d in sorted(os.listdir(BASE_DIR)):
         dir_path = os.path.join(BASE_DIR, d)
@@ -843,7 +877,7 @@ def main():
             'selling_points': p_meta.get('selling_points', ''),
             'mainland_selling_points': p_meta.get('mainland_selling_points', ''),
             'centaline_url': p_meta.get('centaline_url', ''),
-            'intro_url': p_meta.get('intro_url', p_meta.get('centaline_url', '')),
+            'intro_url': intro_mapping.get(project_name) or intro_mapping.get(clean_pname) or p_meta.get('intro_url', ''),
             'price_tier': p_meta.get('price_tier', ''),
             'google_drive_folder': g_folder,
             'marketing_url': p_meta.get('marketing_url') or p_meta.get('drive_url') or g_url,

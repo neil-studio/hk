@@ -518,7 +518,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const stoppedHtml = stoppedUnits > 0 ? `<div class="stat-item" style="color:#ca8a04;"><span class="lbl">暂停销售:</span><span class="val" style="font-weight:700;">${stoppedUnits}</span></div>` : '';
 
-      const introUrl = p.intro_url || p.centaline_url || `https://hk.centanet.com/findproperty/zh-HK/list/buy?q=${encodeURIComponent(p.name)}`;
+      const hasIntro = p.intro_url && String(p.intro_url).trim().startsWith('http');
+      const introBtnHtml = hasIntro
+        ? `<a href="${p.intro_url.trim()}" target="_blank" rel="noopener noreferrer" class="btn-sub-action btn-intro-action">📖 楼盘介绍</a>`
+        : `<button class="btn-sub-action btn-intro-disabled" disabled title="暂无楼盘介绍">📖 楼盘介绍</button>`;
+      
       const marketingUrl = p.marketing_url || p.drive_url || `https://drive.google.com/drive/search?q=${encodeURIComponent(p.name)}`;
 
       card.innerHTML = `
@@ -552,7 +556,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="card-footer-stacked">
           <button class="btn-block-main btn-open-grid" data-filename="${p.filename}" data-name="${p.name}">🔍 销控网格图</button>
           <div class="card-footer-sub-row">
-            <a href="${introUrl}" target="_blank" rel="noopener noreferrer" class="btn-sub-action btn-intro-action">📖 楼盘介绍</a>
+            ${introBtnHtml}
             <a href="${marketingUrl}" target="_blank" rel="noopener noreferrer" class="btn-sub-action btn-marketing-action">📁 营销工具</a>
           </div>
         </div>
