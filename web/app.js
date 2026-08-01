@@ -523,7 +523,11 @@ document.addEventListener('DOMContentLoaded', () => {
         ? `<a href="${p.intro_url.trim()}" target="_blank" rel="noopener noreferrer" class="btn-sub-action btn-intro-action">📖 楼盘介绍</a>`
         : `<button class="btn-sub-action btn-intro-disabled" disabled title="暂无楼盘介绍">📖 楼盘介绍</button>`;
       
+      const hasMarketing = p.has_marketing_materials === true;
       const marketingUrl = p.marketing_url || p.drive_url || `https://drive.google.com/drive/search?q=${encodeURIComponent(p.name)}`;
+      const marketingBtnHtml = hasMarketing && marketingUrl && marketingUrl.trim().startsWith('http')
+        ? `<a href="${marketingUrl.trim()}" target="_blank" rel="noopener noreferrer" class="btn-sub-action btn-marketing-action">📁 营销工具</a>`
+        : `<button class="btn-sub-action btn-marketing-disabled" disabled title="暂无营销资料">📁 营销工具</button>`;
 
       card.innerHTML = `
         ${suspendedBanner}
@@ -557,7 +561,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <button class="btn-block-main btn-open-grid" data-filename="${p.filename}" data-name="${p.name}">🔍 销控网格图</button>
           <div class="card-footer-sub-row">
             ${introBtnHtml}
-            <a href="${marketingUrl}" target="_blank" rel="noopener noreferrer" class="btn-sub-action btn-marketing-action">📁 营销工具</a>
+            ${marketingBtnHtml}
           </div>
         </div>
       `;
@@ -2791,6 +2795,8 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
 
+        const hasMarketing = (proj.has_marketing_materials === true) || (meta.has_marketing_materials === true);
+
         featuredList.push({
           name: name,
           filename: proj.filename || '',
@@ -2809,7 +2815,8 @@ document.addEventListener('DOMContentLoaded', () => {
           mainlandPoints: meta.mainland_selling_points || proj.mainland_selling_points || '适合内地专才落户、子女读书教育配置。',
           introUrl: introUrl,
           hasIntro: hasIntro,
-          marketingUrl: marketingUrl
+          marketingUrl: marketingUrl,
+          hasMarketing: hasMarketing
         });
       });
     });
@@ -2865,6 +2872,10 @@ document.addEventListener('DOMContentLoaded', () => {
           ? `<a href="${item.introUrl}" target="_blank" rel="noopener noreferrer" class="btn-table-action" style="width:95px; justify-content:center; color:#059669; border-color:#6ee7b7; background:#f0fdf4; text-decoration:none;">📖 楼盘介绍</a>`
           : `<button class="btn-table-action" disabled title="暂无楼盘介绍" style="width:95px; justify-content:center; color:#94a3b8; border-color:#cbd5e1; background:#f1f5f9; cursor:not-allowed; opacity:0.65; pointer-events:none;">📖 楼盘介绍</button>`;
 
+        const marketingBtnHtml = item.hasMarketing && item.marketingUrl && item.marketingUrl.trim().startsWith('http')
+          ? `<a href="${item.marketingUrl.trim()}" target="_blank" rel="noopener noreferrer" class="btn-table-action" style="width:95px; justify-content:center; color:#d97706; border-color:#fde68a; background:#fffbeb; text-decoration:none;">📁 营销工具</a>`
+          : `<button class="btn-table-action" disabled title="暂无营销资料" style="width:95px; justify-content:center; color:#94a3b8; border-color:#cbd5e1; background:#f1f5f9; cursor:not-allowed; opacity:0.65; pointer-events:none;">📁 营销工具</button>`;
+
         const tr = document.createElement('tr');
         tr.className = 'proj-row';
         tr.innerHTML = `
@@ -2912,7 +2923,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <button onclick="openGridModalByName('${item.name}')" class="btn-table-action" style="width:95px; justify-content:center;">🏢 销控网格</button>
               <button onclick="openAnalyticsModal('${item.name}')" class="btn-table-action" style="width:95px; justify-content:center;">📈 成交走势</button>
               ${introBtnHtml}
-              <a href="${item.marketingUrl}" target="_blank" class="btn-table-action" style="width:95px; justify-content:center; color:#d97706; border-color:#fde68a; background:#fffbeb; text-decoration:none;">📁 营销工具</a>
+              ${marketingBtnHtml}
             </div>
           </td>
         `;

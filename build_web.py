@@ -674,6 +674,45 @@ def main():
         except Exception as e:
             print(f"读取 楼盘介绍映射表.xlsx 失败: {e}")
 
+    # 载入 营销素材网盘地址.xlsx 状态 (包含“是否有资料”标识)
+    marketing_materials_map = {}
+    marketing_excel = "/Users/nb/google/Antigravity/工作/运营/聚焦盘精选盘/营销素材网盘地址.xlsx"
+    if os.path.exists(marketing_excel):
+        try:
+            wb_mat = openpyxl.load_workbook(marketing_excel, data_only=True)
+            ws_mat = wb_mat.active
+            headers = [str(ws_mat.cell(1, c).value or '').strip() for c in range(1, ws_mat.max_column + 1)]
+            
+            folder_col = 2
+            url_col = 3
+            has_mat_col = None
+            for idx, h in enumerate(headers, 1):
+                if '文件夹' in h or '项目' in h: folder_col = idx
+                elif '地址' in h or '链接' in h or 'url' in h.lower(): url_col = idx
+                elif '是否有资料' in h or '有资料' in h or '资料' in h: has_mat_col = idx
+            
+            for r in range(2, ws_mat.max_row + 1):
+                folder_val = str(ws_mat.cell(r, folder_col).value or '').strip()
+                url_val = str(ws_mat.cell(r, url_col).value or '').strip()
+                has_mat_val = str(ws_mat.cell(r, has_mat_col).value or '').strip() if has_mat_col else ''
+                
+                if folder_val:
+                    pname = folder_val.split('-')[-1].strip()
+                    if has_mat_col:
+                        has_mat = (has_mat_val == '是')
+                    else:
+                        has_mat = bool(url_val and url_val.startswith('http'))
+                    
+                    info = {'url': url_val, 'has_materials': has_mat}
+                    marketing_materials_map[folder_val] = info
+                    marketing_materials_map[pname] = info
+                    clean_p = strip_phase_suffix(pname)
+                    if clean_p and clean_p not in marketing_materials_map:
+                        marketing_materials_map[clean_p] = info
+            print(f"成功从 Excel [营销素材网盘地址.xlsx] 解析 {len(marketing_materials_map)} 条营销资料状态。")
+        except Exception as e:
+            print(f"读取 营销素材网盘地址.xlsx 失败: {e}")
+
     # 遍历 BASE_DIR 下的子文件夹
     for d in sorted(os.listdir(BASE_DIR)):
         dir_path = os.path.join(BASE_DIR, d)
@@ -831,18 +870,22 @@ def main():
 
         PARENT_DRIVE_ID = "15tRwSlG1VTOKuEyj-H131zpNK6v6MY04"
         mapped_folder = drive_mapping.get(project_name) or drive_mapping.get(clean_pname)
-        if mapped_folder:
+        if isinstance(mapped_folder, dict):
+            g_folder = mapped_folder.get('folder', '')
+        elif isinstance(mapped_folder, str):
             g_folder = mapped_folder
         else:
             g_folder = f"{reg_val}-{dist_val}-{clean_pname}"
 
-        drive_q = f'type:folder parent:{PARENT_DRIVE_ID} "{g_folder}"'
+        g_folder_str = str(g_folder)
+        drive_q = f'type:folder parent:{PARENT_DRIVE_ID} "{g_folder_str}"'
         g_url = f"https://drive.google.com/drive/search?q={urllib.parse.quote(drive_q)}"
         
         dist_info = rental_benchmarks.get('districts', {}).get(district, rental_benchmarks.get('default_fallback', {'base_rent': 50, 'min_rent': 42, 'max_rent': 60}))
         base_rent = dist_info.get('base_rent', 50)
         min_rent = dist_info.get('min_rent', 42)
         max_rent = dist_info.get('max_rent', 60)
+        estimated_rent_desc = f"${min_rent} - ${max_rent}/呎"
         
         p_hist = real_history.get(project_name, {})
         m_dict = p_hist.get('monthly', {})
@@ -857,7 +900,9 @@ def main():
         else:
             roi_str = p_meta.get('roi') or "3.5%"
 
-        estimated_rent_desc = f"${min_rent} - ${max_rent}/呎"
+        mat_info = marketing_materials_map.get(g_folder_str) or marketing_materials_map.get(project_name) or marketing_materials_map.get(clean_pname) or {}
+        has_mat = mat_info.get('has_materials', False)
+        m_url = mat_info.get('url') or p_meta.get('marketing_url') or p_meta.get('drive_url') or g_url
 
         proj_info = {
             'name': project_name,
@@ -880,7 +925,8 @@ def main():
             'intro_url': intro_mapping.get(project_name) or intro_mapping.get(clean_pname) or p_meta.get('intro_url', ''),
             'price_tier': p_meta.get('price_tier', ''),
             'google_drive_folder': g_folder,
-            'marketing_url': p_meta.get('marketing_url') or p_meta.get('drive_url') or g_url,
+            'marketing_url': m_url,
+            'has_marketing_materials': has_mat,
             'main_layout': p_meta.get('main_layout', ''),
             'total_price_desc': p_meta.get('total_price', ''),
             'sqft_price_desc': p_meta.get('sqft_price', ''),
