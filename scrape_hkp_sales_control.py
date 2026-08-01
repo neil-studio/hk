@@ -13,17 +13,31 @@ import openpyxl
 from openpyxl.styles import Font, Alignment, Border, Side, PatternFill
 from openpyxl.utils import get_column_letter
 import glob
+from datetime import datetime, timezone, timedelta
 
 try:
     import fitz
 except ImportError:
     fitz = None
 
+def parse_hkt_date(date_str):
+    if not date_str or str(date_str).strip() in ['-', 'None', '']:
+        return '-'
+    s = str(date_str).strip()
+    if 'T' in s and ('Z' in s or '+' in s or '-' in s):
+        try:
+            dt_utc = datetime.fromisoformat(s.replace('Z', '+00:00'))
+            hkt = timezone(timedelta(hours=8))
+            return dt_utc.astimezone(hkt).strftime('%Y-%m-%d')
+        except Exception:
+            pass
+    return s[:10]
+
 # ==========================================
 # 1. 简繁转换辅助函数与映射
 # ==========================================
-# 输出文件基础目录定位到“价单”文件夹
-BASE_DIR = "/Users/nb/google/Antigravity/工作/运营/价单"
+# 输出文件基础目录定位到当前脚本所在的价单文件夹
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # 简繁转换对照文件仍引用“楼盘字典”下的原文件
 zh2hans_path = "/Users/nb/google/Antigravity/工作/运营/楼盘字典/zh2hans.json"
 
@@ -1291,12 +1305,15 @@ def main():
             if tx_res.status_code == 200:
                 tx_data = tx_res.json().get('result', [])
                 for tx in tx_data:
-                    tx_bname = normalize_bname(tx.get('building', {}).get('name'))
-                    tx_floor = str(tx.get('floor', '')).strip()
-                    tx_flat = str(tx.get('flat', '')).strip()
-                    tx_date_raw = tx.get('tx_date')
-                    if tx_date_raw:
-                        tx_lookup[(tx_bname, tx_floor, tx_flat)] = tx_date_raw[:10]
+                    b_info = tx.get('building', {})
+                    tx_bname = normalize_bname(b_info.get('name') if isinstance(b_info, dict) else str(b_info or ''))
+                    fl_obj = tx.get('floor_level') or {}
+                    fl_name = fl_obj.get('name') if isinstance(fl_obj, dict) else str(tx.get('floor') or fl_obj or '')
+                    tx_floor = str(fl_name).strip()
+                    tx_flat = str(tx.get('flat', '')).strip().upper()
+                    tx_date_raw = tx.get('tx_date') or tx.get('contract_date')
+                    if tx_date_raw and tx_flat:
+                        tx_lookup[(tx_bname, tx_floor, tx_flat)] = parse_hkt_date(tx_date_raw)
                 print(f"  成功载入已登记的一手成交纪录 {len(tx_lookup)} 条。")
         except Exception as e:
             print(f"  提示: 预载一手历史成交纪录异常 ({e})。将只使用销控接口默认日期。")
@@ -1464,20 +1481,26 @@ def main():
                         else:
                             room_layout = f"{room_type}房"
                 
-                # 2. 提取成交日期 (YYYY-MM-DD)，若销控接口返回 None，则使用历史登记记录作为补充
+                # 2. 提取成交日期 (YYYY-MM-DD) 及反向自动纠偏已售状态
                 sold_date_raw = u.get('sold_date') or u.get('tx_date')
                 sold_date = '-'
+                
+                norm_b = normalize_bname(bname)
+                norm_floor = str(floor).strip()
+                norm_flat = str(flat).strip().upper()
+                mapped_date = tx_lookup.get((norm_b, norm_floor, norm_flat))
+
                 if status_raw == 'sold':
                     if sold_date_raw:
-                        sold_date = sold_date_raw[:10]
-                    else:
-                        # 尝试从预载的成交记录中查找并映射
-                        norm_b = normalize_bname(bname)
-                        norm_floor = str(floor).strip()
-                        norm_flat = str(flat).strip()
-                        mapped_date = tx_lookup.get((norm_b, norm_floor, norm_flat))
-                        if mapped_date:
-                            sold_date = mapped_date
+                        sold_date = parse_hkt_date(sold_date_raw)
+                    elif mapped_date:
+                        sold_date = mapped_date
+                else:
+                    # 如果销控接口未标注为 sold，但成交库中已被登记了一手买卖成交记录，自动反向纠偏为已售！
+                    if mapped_date or (sold_date_raw and str(sold_date_raw).strip() not in ['-', 'None', '']):
+                        status_raw = 'sold'
+                        status_cn = STATUS_MAP.get('sold', '已售')
+                        sold_date = mapped_date or parse_hkt_date(sold_date_raw)
 
                 # 计算最高折扣折实价与付款办法
                 discount_percent_str = '-'
