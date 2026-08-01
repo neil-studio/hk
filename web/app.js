@@ -2768,7 +2768,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const meta = projectsDataMap[`${tier}_${name}`] || projectsDataMap[name] || (proj.name ? projectsDataMap[proj.name] : {}) || {};
 
         const parentDriveId = '15tRwSlG1VTOKuEyj-H131zpNK6v6MY04';
-        const introUrl = proj.intro_url || proj.centaline_url || meta.centaline_url || meta.intro_url || `https://www.ricacorp.com/zh-hk/property/search?q=${encodeURIComponent(name)}`;
+        const rawIntroUrl = proj.intro_url || meta.intro_url || '';
+        const hasIntro = rawIntroUrl && String(rawIntroUrl).trim().startsWith('http');
+        const introUrl = hasIntro ? rawIntroUrl.trim() : '';
+
         const cleanName = name.replace(/\(第.*?\)/g, '').replace(/第\s*[0-9A-Za-z\-]+期.*$/, '').replace(/第[0-9A-Za-z]+$/g, '').replace(/[0-9]+[a-zA-Z]+$/g, '').replace(/\s+[0-9]+$/g, '').replace(/\s+I{1,3}$/g, '').replace(/\s+II$/g, '').replace(/\s+III$/g, '').trim() || name;
         const regionName = meta.region || proj.region || '全港';
         const districtName = meta.district || proj.district || '核心区';
@@ -2805,6 +2808,7 @@ document.addEventListener('DOMContentLoaded', () => {
           points: meta.selling_points || proj.selling_points || '地段优越，交通便利，居住品质高。',
           mainlandPoints: meta.mainland_selling_points || proj.mainland_selling_points || '适合内地专才落户、子女读书教育配置。',
           introUrl: introUrl,
+          hasIntro: hasIntro,
           marketingUrl: marketingUrl
         });
       });
@@ -2857,6 +2861,10 @@ document.addEventListener('DOMContentLoaded', () => {
       tableBody.innerHTML = `<tr><td colspan="${colCount}" style="text-align:center; padding:3rem; color:#94a3b8;">未找到符合条件的精选盘源</td></tr>`;
     } else {
       filtered.forEach((item, idx) => {
+        const introBtnHtml = item.hasIntro
+          ? `<a href="${item.introUrl}" target="_blank" rel="noopener noreferrer" class="btn-table-action" style="width:95px; justify-content:center; color:#059669; border-color:#6ee7b7; background:#f0fdf4; text-decoration:none;">📖 楼盘介绍</a>`
+          : `<button class="btn-table-action" disabled title="暂无楼盘介绍" style="width:95px; justify-content:center; color:#94a3b8; border-color:#cbd5e1; background:#f1f5f9; cursor:not-allowed; opacity:0.65; pointer-events:none;">📖 楼盘介绍</button>`;
+
         const tr = document.createElement('tr');
         tr.className = 'proj-row';
         tr.innerHTML = `
@@ -2903,8 +2911,8 @@ document.addEventListener('DOMContentLoaded', () => {
             <div style="display:flex; flex-direction:column; gap:0.35rem; align-items:center;">
               <button onclick="openGridModalByName('${item.name}')" class="btn-table-action" style="width:95px; justify-content:center;">🏢 销控网格</button>
               <button onclick="openAnalyticsModal('${item.name}')" class="btn-table-action" style="width:95px; justify-content:center;">📈 成交走势</button>
-              <a href="${item.introUrl}" target="_blank" class="btn-table-action" style="width:95px; justify-content:center; color:#0284c7; border-color:#38bdf8; text-decoration:none;">📖 楼盘介绍</a>
-              <a href="${item.marketingUrl}" target="_blank" class="btn-table-action" style="width:95px; justify-content:center; color:#06AABD; border-color:#06AABD; text-decoration:none;">🔗 营销工具</a>
+              ${introBtnHtml}
+              <a href="${item.marketingUrl}" target="_blank" class="btn-table-action" style="width:95px; justify-content:center; color:#d97706; border-color:#fde68a; background:#fffbeb; text-decoration:none;">📁 营销工具</a>
             </div>
           </td>
         `;
