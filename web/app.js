@@ -518,6 +518,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const stoppedHtml = stoppedUnits > 0 ? `<div class="stat-item" style="color:#ca8a04;"><span class="lbl">暂停销售:</span><span class="val" style="font-weight:700;">${stoppedUnits}</span></div>` : '';
 
+      const introUrl = p.intro_url || p.centaline_url || `https://hk.centanet.com/findproperty/zh-HK/list/buy?q=${encodeURIComponent(p.name)}`;
+      const marketingUrl = p.marketing_url || p.drive_url || `https://drive.google.com/drive/search?q=${encodeURIComponent(p.name)}`;
+
       card.innerHTML = `
         ${suspendedBanner}
         <div class="card-header">
@@ -546,9 +549,12 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="stat-item"><span class="lbl">最新更新:</span><span class="val">${p.last_updated || '近期'}</span></div>
           </div>
         </div>
-        <div class="card-footer">
-          <button class="btn btn-primary btn-open-grid" data-filename="${p.filename}" data-name="${p.name}">🔍 销控网格图</button>
-          <a href="featured.html" class="btn btn-secondary">💎 查看评级</a>
+        <div class="card-footer-stacked">
+          <button class="btn-block-main btn-open-grid" data-filename="${p.filename}" data-name="${p.name}">🔍 销控网格图</button>
+          <div class="card-footer-sub-row">
+            <a href="${introUrl}" target="_blank" rel="noopener noreferrer" class="btn-sub-action btn-intro-action">📖 楼盘介绍</a>
+            <a href="${marketingUrl}" target="_blank" rel="noopener noreferrer" class="btn-sub-action btn-marketing-action">📁 营销工具</a>
+          </div>
         </div>
       `;
       grid.appendChild(card);

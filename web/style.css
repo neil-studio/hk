@@ -468,7 +468,88 @@ body {
   color: #059669;
 }
 
-/* 卡片操作底部 */
+/* 卡片操作底部 - 方案二（主从分层 2 行布局） */
+.card-footer-stacked {
+  padding: 1rem 1.25rem 1.25rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  border-top: 1px solid var(--border-color);
+  background: rgba(248, 250, 252, 0.5);
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.btn-block-main {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(14, 165, 233, 0.25);
+  transition: all 0.2s ease;
+  font-family: var(--font-main);
+}
+
+.btn-block-main:hover {
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(14, 165, 233, 0.35);
+}
+
+.card-footer-sub-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+
+.btn-sub-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.6rem 0.5rem;
+  border-radius: 10px;
+  font-size: 0.83rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  text-align: center;
+  font-family: var(--font-main);
+}
+
+.btn-intro-action {
+  background: #f0fdf4;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+}
+
+.btn-intro-action:hover {
+  background: #dcfce7;
+  color: #047857;
+  border-color: #6ee7b7;
+}
+
+.btn-marketing-action {
+  background: #fffbeb;
+  color: #d97706;
+  border: 1px solid #fde68a;
+}
+
+.btn-marketing-action:hover {
+  background: #fef3c7;
+  color: #b45309;
+  border-color: #fcd34d;
+}
+
 .card-footer {
   padding: 0 1.5rem 1.5rem 1.5rem;
   display: grid;
