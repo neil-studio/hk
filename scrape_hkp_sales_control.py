@@ -1306,10 +1306,11 @@ def main():
                 tx_data = tx_res.json().get('result', [])
                 for tx in tx_data:
                     b_info = tx.get('building', {})
-                    tx_bname = normalize_bname(b_info.get('name') if isinstance(b_info, dict) else str(b_info or ''))
-                    fl_obj = tx.get('floor_level') or {}
-                    fl_name = fl_obj.get('name') if isinstance(fl_obj, dict) else str(tx.get('floor') or fl_obj or '')
-                    tx_floor = str(fl_name).strip()
+                    tx_floor_num = str(tx.get('floor') or '').strip()
+                    if not tx_floor_num:
+                        fl_obj = tx.get('floor_level') or {}
+                        tx_floor_num = fl_obj.get('name') if isinstance(fl_obj, dict) else str(fl_obj or '')
+                    tx_floor = str(tx_floor_num).strip()
                     tx_flat = str(tx.get('flat', '')).strip().upper()
                     tx_date_raw = tx.get('tx_date') or tx.get('contract_date')
                     if tx_date_raw and tx_flat:
