@@ -16,6 +16,14 @@
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <!-- 引入 Chart.js 用于悬浮趋势弹窗 -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- 📊 Google Analytics 4 (GA4) 零延迟全量埋点 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HKPROPERTIES"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-HKPROPERTIES', { 'send_page_view': true });
+  </script>
   <!-- 🔒 专属访问密码保护门 (lm8888) - 零延迟优先锁定 -->
   <script>
     (function() {

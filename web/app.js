@@ -1,6 +1,21 @@
 // ==========================================================================
-// 香港一手新盘一站通 - 核心逻辑 (Vanilla JS + Chart.js)
+// 香港一手新盘一站通 - 核心逻辑 (Vanilla JS + Chart.js + GA4 埋点)
 // ==========================================================================
+
+// 📊 全局事件埋点分析函数
+window.trackUserAction = function(actionName, params = {}) {
+  try {
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', actionName, Object.assign({
+        'timestamp': new Date().toISOString(),
+        'page_url': window.location.href,
+        'page_path': window.location.pathname
+      }, params));
+    }
+  } catch(e) {
+    console.warn('Analytics track error:', e);
+  }
+};
 
 document.addEventListener('DOMContentLoaded', () => {
   // 1. 登录通行权限控制
