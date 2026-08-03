@@ -1,108 +1,59 @@
 [
   {
-    "id": "P000001284",
-    "name": "首岸第3期",
+    "id": "P000001282",
+    "name": "首岸第1期",
     "region": "九龙",
     "district": "红磡",
     "developer": "恒基兆业 / 希慎兴业 / 帝国集团"
   },
   {
-    "id": "E000019205",
-    "name": "傲华",
-    "region": "港岛",
-    "district": "筲箕湾",
-    "developer": "协成行"
-  },
-  {
-    "id": "E000018701",
-    "name": "Bal Residence",
+    "id": "E000019640",
+    "name": "Park College",
     "region": "九龙",
-    "district": "观塘南部",
-    "developer": "丽新 / 巿建局"
+    "district": "九龙塘",
+    "developer": "兴胜创建 / TPG"
   },
   {
-    "id": "P000001170",
-    "name": "必嘉坊．曦汇",
+    "id": "E000019564",
+    "name": "The Boundary",
+    "region": "九龙",
+    "district": "旺角",
+    "developer": "乐风集团"
+  },
+  {
+    "id": "P000001201",
+    "name": "滶晨 II",
+    "region": "港岛",
+    "district": "香港仔及鸭脷洲",
+    "developer": "新世界 / 帝国集团 / 资本策略 / 丽新 / 港铁"
+  },
+  {
+    "id": "P000001218",
+    "name": "维港．湾畔第1B期",
+    "region": "九龙",
+    "district": "启德",
+    "developer": "中国海外 / 恒基兆业 / 九龙仓 / 嘉华国际"
+  },
+  {
+    "id": "E000019166",
+    "name": "天泷",
+    "region": "九龙",
+    "district": "启德",
+    "developer": "恒基兆业 /  中国海外 / 华懋集团 / 帝国集团 / 新世界 / 会德丰"
+  },
+  {
+    "id": "P000001262",
+    "name": "天御第1期",
+    "region": "港岛",
+    "district": "半山区西部",
+    "developer": "恒基兆业 / 新世界"
+  },
+  {
+    "id": "P000001239",
+    "name": "The Haddon",
     "region": "九龙",
     "district": "红磡",
     "developer": "恒基兆业"
-  },
-  {
-    "id": "E000017674",
-    "name": "宏丰台10号",
-    "region": "港岛",
-    "district": "铜锣湾",
-    "developer": "OCEAN EAGLE"
-  },
-  {
-    "id": "P000001085",
-    "name": "维港汇 II",
-    "region": "九龙",
-    "district": "西南九龙",
-    "developer": "会德丰 / 信和置业 / 嘉华国际 / 世茂 / 爪哇集团"
-  },
-  {
-    "id": "P000001145",
-    "name": "Monaco Marine",
-    "region": "九龙",
-    "district": "启德",
-    "developer": "会德丰"
-  },
-  {
-    "id": "E000017024",
-    "name": "寿臣山15号",
-    "region": "港岛",
-    "district": "寿臣山及浅水湾",
-    "developer": "英皇国际 / 中渝置地 / 明发集团 / 尚家生活"
-  },
-  {
-    "id": "P000001144",
-    "name": "Monaco One",
-    "region": "九龙",
-    "district": "启德",
-    "developer": "会德丰"
-  },
-  {
-    "id": "E000018663",
-    "name": "Kennedy 38",
-    "region": "港岛",
-    "district": "坚尼地城及摩星岭",
-    "developer": "新鸿基 / 会德丰 / 恒基兆业"
-  },
-  {
-    "id": "P000001130",
-    "name": "The Henley III",
-    "region": "九龙",
-    "district": "启德",
-    "developer": "恒基兆业"
-  },
-  {
-    "id": "P000001132",
-    "name": "扬海",
-    "region": "港岛",
-    "district": "香港仔及鸭脷洲",
-    "developer": "嘉里建设 / 信和置业 / 港铁"
-  },
-  {
-    "id": "P000001055",
-    "name": "Central Peak II",
-    "region": "港岛",
-    "district": "半山区东部",
-    "developer": "新鸿基"
-  },
-  {
-    "id": "E000016944",
-    "name": "大学阁",
-    "region": "港岛",
-    "district": "半山区西部",
-    "developer": "华懋集团"
-  },
-  {
-    "id": "E000017965",
-    "name": "42 Tung St.",
-    "region": "港岛",
-    "district": "西营盘及上环",
-    "developer": "TDS"
   },
   {
     "id": "P000001294",
