@@ -53,15 +53,12 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentWorkbook = null;
   let activeBuildingSheet = null;
 
-  // 3. 抓取与加载元数据 (支持 window.APP_DATA 预载入 + fetch 双保底)
+  // 3. 抓取与加载元数据 (强效 Date.now() 防浏览器与 CDN 缓存旧数据)
   async function loadData() {
     try {
-      let data = window.APP_DATA;
-      if (!data) {
-        const resp = await fetch('data.json?v=' + Date.now());
-        if (!resp.ok) throw new Error('无法读取 data.json 元数据');
-        data = await resp.json();
-      }
+      const resp = await fetch('data.json?v=' + Date.now());
+      if (!resp.ok) throw new Error('无法读取 data.json 元数据');
+      const data = await resp.json();
 
       allProjects = data.projects || [];
       globalStats = data.global_stats || {};
