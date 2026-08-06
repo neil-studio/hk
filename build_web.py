@@ -120,8 +120,8 @@ def load_custom_districts():
             print(f"读取 custom_districts.json 失败: {e}")
     return {}
 
-def load_real_history_analytics(custom_districts=None):
-    """从 SQLite 数据库 成交历史数据库.db 抽取 3.7万+ 条真实历史成交数据并按项目、年、月、周聚合"""
+def load_real_history_analytics(custom_districts=None, valid_new_project_names=None):
+    """从 SQLite 数据库 成交历史数据库.db 抽取 3.7万+ 条真实历史成交数据并按项目、年、月、周聚合 (仅限一手新房白名单)"""
     db_path = os.path.join(BASE_DIR, "成交历史数据库.db")
     if not os.path.exists(db_path):
         print("提示: 未找到 成交历史数据库.db，无法生成真实成交分析。")
@@ -135,7 +135,7 @@ def load_real_history_analytics(custom_districts=None):
         from datetime import datetime
         conn = sqlite3.connect(db_path)
         c = conn.cursor()
-        c.execute('SELECT project_name, district, region, sold_date, price, disc_price, unit_price, disc_unit_price, layout, area FROM sold_history WHERE sold_date IS NOT NULL AND sold_date != ""')
+        c.execute('SELECT project_name, district, region, sold_date, price, disc_price, unit_price, disc_unit_price, building_name, area FROM sold_history WHERE sold_date IS NOT NULL AND sold_date != ""')
         rows = c.fetchall()
         conn.close()
 
@@ -170,10 +170,16 @@ def load_real_history_analytics(custom_districts=None):
 
         for row in rows:
             pname, dist, reg, sdate, price, dprice, uprice, duprice, layout, area = row
-            if not pname: continue
+            pname_str = str(pname).strip() if pname else ''
+            if not pname_str: continue
+
+            if valid_new_project_names and pname_str not in valid_new_project_names:
+                continue
 
             # 真实成交价与实用呎价 (含保底倒算)
             f_price = parse_num(dprice) or parse_num(price)
+            if 10 <= f_price < 100000:
+                f_price = f_price * 10000
             f_uprice = parse_num(duprice) or parse_num(uprice)
             f_area = parse_num(area)
 
@@ -278,8 +284,8 @@ def load_real_history_analytics(custom_districts=None):
         print(f"处理真实成交分析失败: {e}")
         return {}
 
-def build_leaderboard_data():
-    """从 SQLite 数据库 成交历史数据库.db 生成动态多维热销榜单数据"""
+def build_leaderboard_data(valid_new_project_names=None):
+    """从 SQLite 数据库 成交历史数据库.db 生成一手新房动态热销榜单数据 (保留独立期数、仅限一手新盘、剔除无价单位)"""
     db_path = os.path.join(BASE_DIR, "成交历史数据库.db")
     if not os.path.exists(db_path):
         return {}
@@ -295,51 +301,95 @@ def build_leaderboard_data():
 
     try:
         import sqlite3
-        from datetime import datetime
+        from datetime import datetime, timedelta
         conn = sqlite3.connect(db_path)
         c = conn.cursor()
 
-        price_sql = "CAST(CASE WHEN disc_price IS NOT NULL AND disc_price != '' AND disc_price != '暂无' AND disc_price != '-' THEN disc_price ELSE price END AS REAL)"
-        sqft_sql = "CAST(CASE WHEN disc_unit_price IS NOT NULL AND disc_unit_price != '' AND disc_unit_price != '暂无' AND disc_unit_price != '-' THEN disc_unit_price ELSE unit_price END AS REAL)"
+        def query_rankings_in_memory(where_sql, region_filter=None, price_min=None, price_max=None, limit=10):
+            c.execute(f'''
+                SELECT project_name, region, district, price, unit_price, disc_price, disc_unit_price, sold_date, area
+                FROM sold_history
+                WHERE sold_date IS NOT NULL AND sold_date != '' AND {where_sql}
+            ''')
+            rows = c.fetchall()
+            grouped = {}
+            seen_transactions = set()
 
-        def query_rankings(where_clause, limit=10):
-            q = f'''
-                SELECT project_name, region, district, COUNT(*) as volume, 
-                       AVG({price_sql}) as avg_price,
-                       AVG({sqft_sql}) as avg_sqft
-                FROM sold_history 
-                WHERE sold_date IS NOT NULL AND sold_date != '' AND {where_clause}
-                GROUP BY project_name
-                ORDER BY volume DESC
-                LIMIT {limit}
-            '''
-            c.execute(q)
+            for pname, reg, dist, price, uprice, dprice, duprice, sdate, area in rows:
+                pname_str = str(pname).strip() if pname else ''
+                if not pname_str: continue
+
+                # 核心拦截：仅保留一手新盘项目，严防二手盘混入榜单
+                if valid_new_project_names and pname_str not in valid_new_project_names:
+                    continue
+                
+                clean_name = re.sub(r'\(第.*?\)', '', pname_str).strip()
+                user_cd = custom_districts.get(pname_str) or custom_districts.get(clean_name) or {}
+                reg_val = user_cd.get('region') or reg or '九龙'
+                dist_val = user_cd.get('district') or dist or ''
+                
+                if region_filter and reg_val != region_filter:
+                    continue
+                    
+                final_p = 0
+                for pval in [dprice, price]:
+                    try:
+                        val = float(str(pval).replace(',', ''))
+                        if val >= 10:
+                            if val < 100000: val = val * 10000 # 智能纠正万元为元
+                            final_p = val
+                            break
+                    except: pass
+                    
+                if price_min is not None and final_p < price_min: continue
+                if price_max is not None and final_p > price_max: continue
+                
+                final_u = 0
+                for uval in [duprice, uprice]:
+                    try:
+                        val = float(str(uval).replace(',', ''))
+                        if val > 1000:
+                            final_u = val
+                            break
+                    except: pass
+                
+                # 智能防重合指纹比对 (同项目+同日期+同面积+同金额去重)
+                dedup_key = (pname_str, str(sdate).strip(), str(area).strip() if area else '', round(final_p / 10000) if final_p > 0 else 0)
+                if dedup_key in seen_transactions:
+                    continue
+                seen_transactions.add(dedup_key)
+                    
+                if pname_str not in grouped:
+                    grouped[pname_str] = {'region': reg_val, 'district': dist_val, 'count': 0, 'prices': [], 'sqfts': []}
+                    
+                grouped[pname_str]['count'] += 1
+                if final_p > 0: grouped[pname_str]['prices'].append(final_p)
+                if final_u > 0: grouped[pname_str]['sqfts'].append(final_u)
+
+            ranked = sorted(grouped.items(), key=lambda x: x[1]['count'], reverse=True)[:limit]
             res = []
-            for r in c.fetchall():
-                pname = r[0]
-                clean_name = re.sub(r'\(第.*?\)', '', pname).replace('4B', '').replace('4b', '').strip()
-                user_cd = custom_districts.get(pname) or custom_districts.get(clean_name) or {}
-                reg_val = user_cd.get('region') or r[1] or '九龙'
-                dist_val = user_cd.get('district') or r[2] or ''
+            for name, info in ranked:
+                avg_p = (sum(info['prices'])/len(info['prices'])/10000) if info['prices'] else 0
+                avg_u = (sum(info['sqfts'])/len(info['sqfts'])) if info['sqfts'] else 0
                 res.append({
-                    'project_name': pname,
-                    'region': reg_val,
-                    'district': dist_val,
-                    'volume': r[3],
-                    'avg_price_wan': round(r[4] / 10000, 1) if r[4] else 0,
-                    'avg_sqft': round(r[5]) if r[5] else 0
+                    'project_name': name,
+                    'region': info['region'],
+                    'district': info['district'],
+                    'volume': info['count'],
+                    'avg_price_wan': round(avg_p, 1),
+                    'avg_sqft': round(avg_u)
                 })
             return res
 
         def get_category_bundle(where_prefix):
             return {
-                'overall': query_rankings(f"{where_prefix}", 10),
-                'region_hk': query_rankings(f"{where_prefix} AND region = '港岛'", 10),
-                'region_kl': query_rankings(f"{where_prefix} AND region = '九龙'", 10),
-                'price_500_2000m': query_rankings(f"{where_prefix} AND {price_sql} BETWEEN 5000000 AND 20000000", 10),
-                'price_2000_5000m': query_rankings(f"{where_prefix} AND {price_sql} BETWEEN 20000000 AND 50000000", 10),
-                'price_5000_10000m': query_rankings(f"{where_prefix} AND {price_sql} BETWEEN 50000000 AND 100000000", 10),
-                'price_10000m_above': query_rankings(f"{where_prefix} AND {price_sql} >= 100000000", 10)
+                'overall': query_rankings_in_memory(f"{where_prefix}", limit=10),
+                'region_hk': query_rankings_in_memory(f"{where_prefix}", region_filter='港岛', limit=10),
+                'region_kl': query_rankings_in_memory(f"{where_prefix}", region_filter='九龙', limit=10),
+                'price_500_2000m': query_rankings_in_memory(f"{where_prefix}", price_min=5000000, price_max=20000000, limit=10),
+                'price_2000_5000m': query_rankings_in_memory(f"{where_prefix}", price_min=20000000, price_max=50000000, limit=10),
+                'price_5000_10000m': query_rankings_in_memory(f"{where_prefix}", price_min=50000000, price_max=100000000, limit=10),
+                'price_10000m_above': query_rankings_in_memory(f"{where_prefix}", price_min=100000000, limit=10)
             }
 
         # 1. 提取可用年份
@@ -365,7 +415,14 @@ def build_leaderboard_data():
             months_list.append({'val': m, 'label': m_label})
             monthly_map[m] = get_category_bundle(f"substr(sold_date, 1, 7) = '{m}'")
 
-        # 3. 提取可用周度
+        # 3. 提取可用周度 (规范 ISO 周自然周区间)
+        def get_week_start_end(year, week):
+            first_day = datetime(year, 1, 4)
+            first_monday = first_day - timedelta(days=first_day.weekday())
+            week_monday = first_monday + timedelta(weeks=week - 1)
+            week_sunday = week_monday + timedelta(days=6)
+            return week_monday.strftime('%Y-%m-%d'), week_sunday.strftime('%Y-%m-%d')
+
         c.execute("SELECT sold_date FROM sold_history WHERE sold_date >= '2026-01-01' AND sold_date IS NOT NULL AND sold_date != '' ORDER BY sold_date DESC")
         date_rows = c.fetchall()
         week_map_raw = {}
@@ -377,10 +434,8 @@ def build_leaderboard_data():
                 iso_yr, iso_wk, _ = dt_obj.isocalendar()
                 w_key = f"{iso_yr}-W{iso_wk:02d}"
                 if w_key not in week_map_raw:
-                    week_map_raw[w_key] = {'year': iso_yr, 'week_num': iso_wk, 'min_date': dstr[:10], 'max_date': dstr[:10]}
-                else:
-                    if dstr[:10] < week_map_raw[w_key]['min_date']: week_map_raw[w_key]['min_date'] = dstr[:10]
-                    if dstr[:10] > week_map_raw[w_key]['max_date']: week_map_raw[w_key]['max_date'] = dstr[:10]
+                    start_d, end_d = get_week_start_end(iso_yr, iso_wk)
+                    week_map_raw[w_key] = {'year': iso_yr, 'week_num': iso_wk, 'start_date': start_d, 'end_date': end_d}
             except:
                 continue
 
@@ -389,9 +444,11 @@ def build_leaderboard_data():
         weekly_map = {}
         for idx, w in enumerate(sorted_weeks):
             w_info = week_map_raw[w]
-            w_label = f"{w_info['year']}年第{w_info['week_num']}周 ({w_info['min_date'][5:].replace('-','/')}-{w_info['max_date'][5:].replace('-','/')})" + (" (最新)" if idx == 0 else "")
+            start_m_d = w_info['start_date'][5:].replace('-','/')
+            end_m_d = w_info['end_date'][5:].replace('-','/')
+            w_label = f"{w_info['year']}年第{w_info['week_num']}周 ({start_m_d}-{end_m_d})" + (" (最新)" if idx == 0 else "")
             weeks_list.append({'val': w, 'label': w_label})
-            weekly_map[w] = get_category_bundle(f"sold_date BETWEEN '{w_info['min_date']}' AND '{w_info['max_date']}'")
+            weekly_map[w] = get_category_bundle(f"sold_date BETWEEN '{w_info['start_date']}' AND '{w_info['end_date']}'")
 
         conn.close()
 
@@ -414,8 +471,30 @@ def main():
     ensure_dirs()
     hkp_status_map = fetch_hkp_status_map()
     custom_districts = load_custom_districts()
-    real_history = load_real_history_analytics(custom_districts)
-    leaderboards = build_leaderboard_data()
+    
+    # 提取所有磁盘项目名称集合 (100% 涵盖所有存有一手销控表的新盘项目，严防美联/置业二手盘混入)
+    valid_new_project_names = set()
+    for d in os.listdir(BASE_DIR):
+        dir_path = os.path.join(BASE_DIR, d)
+        if not os.path.isdir(dir_path) or d.startswith('.') or d in ['web', 'scratch']:
+            continue
+        parts = d.split('-')
+        if len(parts) >= 3:
+            pname = "-".join(parts[2:]).strip()
+            valid_new_project_names.add(pname)
+
+    config_path = os.path.join(BASE_DIR, "config_admin.json")
+    if os.path.exists(config_path):
+        try:
+            with open(config_path, 'r', encoding='utf-8') as f:
+                _cfg = json.load(f)
+                if 'projects_data' in _cfg and isinstance(_cfg['projects_data'], dict):
+                    for k in _cfg['projects_data'].keys():
+                        valid_new_project_names.add(k)
+        except: pass
+
+    real_history = load_real_history_analytics(custom_districts, valid_new_project_names)
+    leaderboards = build_leaderboard_data(valid_new_project_names)
     
     projects_list = []
     
@@ -963,13 +1042,15 @@ def main():
         'leaderboards': leaderboards
     }
     
-    json_path = os.path.join(WEB_DIR, "data.json")
-    with open(json_path, 'w', encoding='utf-8') as f:
-        json.dump(db_data, f, ensure_ascii=False, separators=(',', ':'))
+    # 同时写入 WEB_DIR 和 BASE_DIR 根目录，彻底解决 GitHub Pages 根目录部署更新同步问题
+    for target_dir in [WEB_DIR, BASE_DIR]:
+        j_path = os.path.join(target_dir, "data.json")
+        with open(j_path, 'w', encoding='utf-8') as f:
+            json.dump(db_data, f, ensure_ascii=False, separators=(',', ':'))
 
-    js_path = os.path.join(WEB_DIR, "data.js")
-    with open(js_path, 'w', encoding='utf-8') as f:
-        f.write("window.APP_DATA=" + json.dumps(db_data, ensure_ascii=False, separators=(',', ':')) + ";")
+        s_path = os.path.join(target_dir, "data.js")
+        with open(s_path, 'w', encoding='utf-8') as f:
+            f.write("window.APP_DATA=" + json.dumps(db_data, ensure_ascii=False, separators=(',', ':')) + ";")
         
     # 检查是否有新增项目需要建 Google Drive 文件夹提醒
     known_folders_cache_file = os.path.join(BASE_DIR, "known_folders.json")
@@ -996,7 +1077,7 @@ def main():
         json.dump(sorted(list(current_folders)), f, ensure_ascii=False, indent=2)
 
     print(f"\n构建成功! 共处理 {global_stats['total_projects']} 个项目，包含 {len(real_history)} 个项目的真实成交历史统计。")
-    print(f"数据索引已写入: {json_path} 及 {js_path}")
+    print(f"数据索引已同步写入根目录及 web 目录: data.json 及 data.js")
 
 if __name__ == "__main__":
     main()
