@@ -727,8 +727,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const subtitleElem = document.getElementById('analyticsModalSubtitle');
     if (titleElem) titleElem.textContent = `${projectName} - 历史成交走势分析`;
 
-    // 从 real_history_analytics 获取全量 3.7万+ 离线数据库
-    const rh = (window.APP_DATA && window.APP_DATA.real_history_analytics) ? window.APP_DATA.real_history_analytics : {};
+    // 从 real_history_analytics 获取全量 3.18万+ 离线数据库
+    const rh = (window.data_real_history && Object.keys(window.data_real_history).length > 0)
+      ? window.data_real_history
+      : ((window.APP_DATA && window.APP_DATA.real_history_analytics) ? window.APP_DATA.real_history_analytics : {});
     const normalize = (s) => String(s || '').replace(/[\s\.\．\・\-\_\(\)\（\）]/g, '').toLowerCase();
 
     const getProjectCoreTitle = (name) => {
