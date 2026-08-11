@@ -363,10 +363,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 点击榜单直接定位唤起盘源 Modal
   window.openProjectGrid = (projName) => {
-    const proj = allProjects.find(p => p.name === projName || projName.includes(p.name));
-    if (proj && proj.excel_file) {
+    const proj = allProjects.find(p => p.name === projName || (p.name && projName.includes(p.name)) || (p.name && p.name.includes(projName)));
+    if (proj && (proj.filename || proj.excel_file)) {
       if (typeof openGridModal === 'function') {
-        openGridModal(proj.excel_file, proj.name);
+        openGridModal(proj.filename || proj.excel_file, proj.name);
       } else {
         window.location.href = `sales.html?search=${encodeURIComponent(proj.name)}`;
       }
@@ -1558,7 +1558,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 打开 Excel 销控图纸 Modal 弹窗
   async function openGridModal(filename, projectName) {
-    window.currentGridProjectName = projectName;
+    let targetFilename = filename;
+    let targetProjectName = projectName || filename;
+
+    // 智能防错：如传入参数为项目名称而非文件名，或 proj.excel_file 未定义，自动在 allProjects 中匹配真实文件名
+    if (typeof allProjects !== 'undefined' && Array.isArray(allProjects) && allProjects.length > 0) {
+      const proj = allProjects.find(p => p.filename === filename || p.name === filename || (projectName && p.name === projectName) || (filename && p.name && filename.includes(p.name)));
+      if (proj) {
+        targetFilename = proj.filename || proj.excel_file || filename;
+        targetProjectName = proj.name;
+      }
+    }
+
+    if (!targetFilename || !targetFilename.endsWith('.xlsx')) {
+      if (typeof allProjects !== 'undefined' && Array.isArray(allProjects)) {
+        const fallbackProj = allProjects.find(p => p.name === targetFilename || p.name === targetProjectName);
+        if (fallbackProj && fallbackProj.filename) {
+          targetFilename = fallbackProj.filename;
+        }
+      }
+    }
+
+    window.currentGridProjectName = targetProjectName;
     const gridModal = document.getElementById('gridModal');
     const modalTitle = document.getElementById('modalProjectTitle');
     const gridDisplayArea = document.getElementById('gridDisplayArea');
@@ -1568,9 +1589,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!gridModal) return;
     gridModal.classList.add('open');
-    if (modalTitle) modalTitle.textContent = `${projectName} - 销控图纸`;
+    if (modalTitle) modalTitle.textContent = `${targetProjectName} - 销控图纸`;
     if (openAnalyticsFromGridBtn) {
-      openAnalyticsFromGridBtn.onclick = () => openAnalyticsModal(projectName);
+      openAnalyticsFromGridBtn.onclick = () => openAnalyticsModal(targetProjectName);
     }
     if (gridDisplayArea) gridDisplayArea.innerHTML = '<div style="padding:2rem; text-align:center; color:#06AABD;">正在解包读取 Excel 图纸文件...</div>';
 
@@ -1629,7 +1650,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     try {
-      const fileUrl = 'files/' + encodeURIComponent(filename);
+      const fileUrl = 'files/' + encodeURIComponent(targetFilename);
       const resp = await fetch(fileUrl);
       if (!resp.ok) throw new Error('无法调取 Excel 盘源库');
       const arrayBuffer = await resp.arrayBuffer();
@@ -2651,7 +2672,11 @@ document.addEventListener('DOMContentLoaded', () => {
         compareMatrixBody.querySelectorAll('.btn-grid-action').forEach(btn => {
           btn.addEventListener('click', (e) => {
             const pName = e.currentTarget.getAttribute('data-project');
-            openGridModal(pName);
+            if (typeof openGridModalByName === 'function') {
+              openGridModalByName(pName);
+            } else {
+              openGridModal(pName);
+            }
           });
         });
         compareMatrixBody.querySelectorAll('.btn-trend-action').forEach(btn => {
