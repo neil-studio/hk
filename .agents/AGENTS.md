@@ -119,5 +119,22 @@
 🚨 **提醒机制**：
 检测到符合上述任意情形的单位时，必须在更新汇报中自动列出具体的 **【项目名称】** 以及 **【具体单位（楼栋/楼层/房号）】**，主动提示用户。
 
+---
+
+## 八、 正式版 Git 发布与 Web 静态资源打包提交强制规范 (Git Release & Web Asset Staging Rule)
+
+> 🚨 **【正式版 Git 提交与 Web 静态资源打包提交铁律】**：
+> 1. **全量暂存禁止遗漏 (Full Asset Staging Mandatory)**：每次更新正式版代码、数据或物理 Excel 表格后，**绝对禁止只暂存单项文件**！必须显式暂存或全量暂存：
+>    - 原始盘源表格：`*.xlsx`
+>    - 核心网页数据库：`data.json`, `data.js`, `analytics_data.json`, `analytics_data.js`
+>    - 前端解包静态盘源：**`files/`** 与 **`web/files/`** 目录下的所有 `.xlsx` 编译文件
+>    - 前端脚本与样式：`app.js`, `web/app.js`, `index.html` 等
+> 2. **前端请求强防缓存 (Cache Busting)**：每次 `app.js` 调取静态 Excel 或 JSON 数据时，URL 必须自动附带 `?v=${Date.now()}` 时间戳参数，彻底绕过浏览器强缓存。
+> 3. **推送后线上 HTTP 实时爬虫校验 (Post-Push Live HTTP Audit SOP)**：
+>    每次 `git push` 发布完成后，**必须自动运行 Python 爬虫直接请求 GitHub Pages 的线上真实 HTTP 链接**（如 `https://neil-studio.github.io/hk/files/...`）：
+>    - 下载线上部署的 `.xlsx` 真实文件并解包校验目标行/单元格。
+>    - 验证 200 OK 且修改项（如价格/折扣）线上已 100% 生效，方可交付用户。
+
+
 
 
