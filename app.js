@@ -53,19 +53,35 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentWorkbook = null;
   let activeBuildingSheet = null;
 
-  // 3. 抓取与加载元数据 (强效 Date.now() 防浏览器与 CDN 缓存旧数据)
+  // 3. 高性能离线与极速缓存数据加载引擎 (sessionStorage 0ms 秒加载)
   async function loadData() {
     try {
-      const resp = await fetch('data.json?v=' + Date.now());
-      if (!resp.ok) throw new Error('无法读取 data.json 元数据');
-      const data = await resp.json();
+      let data = null;
+      const cacheKey = 'hk_app_data_v1';
+      const cached = sessionStorage.getItem(cacheKey);
+
+      if (cached) {
+        try {
+          data = JSON.parse(cached);
+        } catch(e) {}
+      }
+
+      if (!data) {
+        // 15分钟静态版本缓存控制，彻底解决 Date.now() 每次点击网络重新请求 2MB 的严重卡顿
+        const vKey = Math.floor(Date.now() / (1000 * 60 * 15));
+        const resp = await fetch('data.json?v=' + vKey);
+        if (!resp.ok) throw new Error('无法读取 data.json 元数据');
+        data = await resp.json();
+        try {
+          sessionStorage.setItem(cacheKey, JSON.stringify(data));
+        } catch(e) {}
+      }
 
       allProjects = data.projects || [];
       globalStats = data.global_stats || {};
       projectsDataMap = data.projects_data || {};
       featuredByPriceData = data.featured_by_price || {};
       focusProjectsList = data.focus_projects || [];
-      window.data_real_history = data.real_history_analytics || {};
 
       // 更新页头时间戳与统计看板
       updateGlobalBadges();
@@ -73,13 +89,13 @@ document.addEventListener('DOMContentLoaded', () => {
       // 依据 DOM 节点与路由分发渲染逻辑
       const path = (window.location && window.location.pathname) ? window.location.pathname : '';
       if (document.getElementById('promoFocusGrid')) {
-        initIndexPage();
+        loadAnalyticsData().then(() => initIndexPage());
       }
       if (document.getElementById('projectGrid')) {
         initSalesPage();
       }
       if (path.includes('analytics.html') || document.getElementById('trendChart')) {
-        initAnalyticsPage();
+        loadAnalyticsData().then(() => initAnalyticsPage());
       }
       if (path.includes('featured.html') || document.getElementById('featuredCardGrid')) {
         initFeaturedPage();
@@ -89,6 +105,22 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('加载项目元数据失败:', err);
     }
   }
+
+  // 4. 离线成交历史与排行榜数据懒加载 (2.1MB 独立 JSON，按需背景加载)
+  window.loadAnalyticsData = async function() {
+    if (window.data_real_history && window.data_leaderboards) return;
+    try {
+      const vKey = Math.floor(Date.now() / (1000 * 60 * 15));
+      const resp = await fetch('analytics_data.json?v=' + vKey);
+      if (resp.ok) {
+        const adata = await resp.json();
+        window.data_real_history = adata.real_history_analytics || {};
+        window.data_leaderboards = adata.leaderboards || {};
+      }
+    } catch(e) {
+      console.warn('读取 analytics_data.json 失败:', e);
+    }
+  };
 
   // 更新顶栏时间戳与全站仪表盘
   function updateGlobalBadges() {
@@ -612,8 +644,11 @@ document.addEventListener('DOMContentLoaded', () => {
   let modalLayoutPieInstance = null;
   let modalPriceDistInstance = null;
 
-  window.openAnalyticsModal = function(projectName, mode = 'exact', gran = 'monthly') {
+  window.openAnalyticsModal = async function(projectName, mode = 'exact', gran = 'monthly') {
     if (!projectName) return;
+    if (typeof window.loadAnalyticsData === 'function') {
+      await window.loadAnalyticsData();
+    }
 
     let analyticsModal = document.getElementById('analyticsModal');
     if (!analyticsModal) {

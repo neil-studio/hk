@@ -1181,17 +1181,27 @@ def main():
     else:
         global_stats['overall_sold_rate'] = 0.0
 
+    version_hash = datetime.now().strftime('%Y%m%d%H%M%S')
+    global_stats['version_hash'] = version_hash
+
+    # 1. 核心轻量版 data.json (仅包含页面检索渲染必需元数据，极速 ~140KB)
     db_data = {
+        'version_hash': version_hash,
         'global_stats': global_stats,
         'projects': projects_list,
         'focus_projects': focus_projects,
         'featured_by_price': featured_by_price,
         'projects_data': projects_data,
+    }
+    
+    # 2. 专项离线成交分析 analytics_data.json (懒加载 ~2.1MB)
+    analytics_data = {
+        'version_hash': version_hash,
         'real_history_analytics': real_history,
         'leaderboards': leaderboards
     }
-    
-    # 同时写入 WEB_DIR 和 BASE_DIR 根目录，彻底解决 GitHub Pages 根目录部署更新同步问题
+
+    # 同时写入 WEB_DIR 和 BASE_DIR 根目录
     for target_dir in [WEB_DIR, BASE_DIR]:
         j_path = os.path.join(target_dir, "data.json")
         with open(j_path, 'w', encoding='utf-8') as f:
@@ -1200,6 +1210,10 @@ def main():
         s_path = os.path.join(target_dir, "data.js")
         with open(s_path, 'w', encoding='utf-8') as f:
             f.write("window.APP_DATA=" + json.dumps(db_data, ensure_ascii=False, separators=(',', ':')) + ";")
+
+        aj_path = os.path.join(target_dir, "analytics_data.json")
+        with open(aj_path, 'w', encoding='utf-8') as f:
+            json.dump(analytics_data, f, ensure_ascii=False, separators=(',', ':'))
         
     # 检查是否有新增项目需要建 Google Drive 文件夹提醒
     known_folders_cache_file = os.path.join(BASE_DIR, "known_folders.json")
