@@ -627,9 +627,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 按项目名调取 销控 Modal
+  // 按项目名调取 销控 Modal (绝对精确匹配，严防跨期数截断)
   window.openGridModalByName = function(projectName) {
-    const proj = allProjects.find(p => p.name === projectName || p.name.includes(projectName.split(' ')[0]));
+    if (!projectName) return;
+    const targetNorm = String(projectName).trim().toLowerCase();
+    let proj = allProjects.find(p => p.name === projectName || String(p.name).trim().toLowerCase() === targetNorm);
+    if (!proj) {
+      proj = allProjects.find(p => String(p.name).replace(/\s+/g, '').toLowerCase() === targetNorm.replace(/\s+/g, ''));
+    }
     if (proj) {
       openGridModal(proj.filename, proj.name);
     } else {
@@ -1603,9 +1608,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let targetFilename = filename;
     let targetProjectName = projectName || filename;
 
-    // 智能防错：如传入参数为项目名称而非文件名，或 proj.excel_file 未定义，自动在 allProjects 中匹配真实文件名
+    // 智能防错：绝对精确匹配项目名称与文件名 (避免跨分期错配)
     if (typeof allProjects !== 'undefined' && Array.isArray(allProjects) && allProjects.length > 0) {
-      const proj = allProjects.find(p => p.filename === filename || p.name === filename || (projectName && p.name === projectName) || (filename && p.name && filename.includes(p.name)));
+      const proj = allProjects.find(p => p.filename === filename || p.name === filename || (projectName && p.name === projectName));
       if (proj) {
         targetFilename = proj.filename || proj.excel_file || filename;
         targetProjectName = proj.name;
