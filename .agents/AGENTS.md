@@ -1,10 +1,13 @@
 # 香港一手新盘销控数据抓取与规范执行标准 (Version 1.0 - 正式版)
 
+> 🚨 **【版本与线上地址映射强制规则】**：
+> - **唯一正式本地代码路径**：`/Users/nb/google/Antigravity/工作/运营/价单_正式版`
+> - **唯一正式 GitHub 仓库**：`neil-studio/hk` (`https://github.com/neil-studio/hk.git`)
+> - **唯一正式线上发布地址**：[https://neil-studio.github.io/hk/](https://neil-studio.github.io/hk/)
+> - ⚠️ **【严禁混淆警示】**：旧备用版地址 `https://hk-properties.pages.dev/` 及仓库 `neil-studio/hk-properties` **已全面停用**！严禁向其推送代码，严禁在回答中向用户提及该旧网址！
+>
 > 📌 **版本定位（正式版）**：
 > - **项目定义**：香港一手新盘一站通【正式版】
-> - **本地代码路径**：`/Users/nb/google/Antigravity/工作/运营/价单_测试版`
-> - **GitHub 仓库**：`neil-studio/hk` (`https://github.com/neil-studio/hk.git`)
-> - **线上发布地址**：[https://neil-studio.github.io/hk/](https://neil-studio.github.io/hk/)
 > - **包含功能**：全量一手销控查询 + 动态热销榜单（周/月/年） + 4.4万+历史成交走势 + 聚焦精选盘专页。
 
 ---
