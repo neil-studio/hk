@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function loadData() {
     try {
       let data = null;
-      const cacheKey = 'hk_app_data_v2';
+      const cacheKey = 'hk_app_data_v3';
       const cached = sessionStorage.getItem(cacheKey);
 
       if (cached) {
@@ -1717,7 +1717,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     try {
-      const fileUrl = 'files/' + encodeURIComponent(targetFilename);
+      const fileUrl = 'files/' + encodeURIComponent(targetFilename) + '?v=' + (window.dbVersionHash || Date.now());
       const resp = await fetch(fileUrl);
       if (!resp.ok) throw new Error('无法调取 Excel 盘源库');
       const arrayBuffer = await resp.arrayBuffer();
