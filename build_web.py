@@ -86,7 +86,7 @@ def parse_project_stats(file_path):
     return stats
 
 def fetch_hkp_status_map():
-    """从 HKP 接口拉取项目级销售状态 (sell_status & sell_status_detail) 映射"""
+    """从 HKP 接口拉取项目级销售状态 (sell_status & sell_status_detail) 及基础元数据"""
     status_map = {}
     try:
         import sys, requests, urllib3
@@ -99,13 +99,23 @@ def fetch_hkp_status_map():
         r = requests.get('https://data.hkp.com.hk/search/v2/new-properties?limit=1000', headers=headers, verify=False, timeout=10)
         if r.status_code == 200:
             for p in r.json().get('result', []):
-                pname = scraper.t2s(p.get('name'))
+                pname = scraper.t2s(p.get('name', ''))
                 st = p.get('sell_status', 'on_sale')
                 st_detail = p.get('sell_status_detail', {})
                 st_cn = st_detail.get('name') if isinstance(st_detail, dict) else '出售中'
+                reg_obj = p.get('region', {})
+                reg_name = reg_obj.get('name') if isinstance(reg_obj, dict) else '九龙'
+                reg_cn = scraper.t2s(reg_name) if reg_name else '九龙'
+                dist_name = scraper.t2s(p.get('district', ''))
+                tot_unit = p.get('total_unit', 0)
                 status_map[pname] = {
+                    'name': pname,
                     'sell_status': st,
-                    'sell_status_cn': st_cn
+                    'sell_status_cn': st_cn,
+                    'region': reg_cn,
+                    'district': dist_name,
+                    'total_unit': tot_unit,
+                    'developer': scraper.t2s(p.get('developer', {}).get('name', '')) if isinstance(p.get('developer'), dict) else ''
                 }
     except Exception as e:
         print(f"提示: 获取 HKP 状态映射失败: {e}，将使用项目统计保底。")
@@ -1094,6 +1104,68 @@ def main():
         global_stats['total_priced'] += stats['priced']
         global_stats['total_stopped'] += stats['stopped']
         global_stats['total_pending'] += stats['pending']
+
+    # 追加补全 HKP API 中已存在但尚无具体单元销控 Excel 的项目 (如花语海第1期、花语海第2期等)
+    existing_names = {p['name'] for p in projects_list}
+    for hkp_name, hkp_item in hkp_status_map.items():
+        if hkp_name not in existing_names:
+            p_meta = projects_data.get(hkp_name, {})
+            clean_pname = strip_phase_suffix(hkp_name)
+            reg_val = hkp_item.get('region') or p_meta.get('region') or '九龙'
+            dist_val = hkp_item.get('district') or p_meta.get('district') or '启德'
+            user_custom = custom_districts.get(hkp_name) or custom_districts.get(clean_pname)
+            if user_custom:
+                reg_val = user_custom.get('region') or reg_val
+                dist_val = user_custom.get('district') or dist_val
+
+            st = hkp_item.get('sell_status', 'coming_soon')
+            st_cn = hkp_item.get('sell_status_cn', '即將發售')
+
+            mat_info = marketing_materials_map.get(hkp_name) or marketing_materials_map.get(clean_pname) or {}
+            has_mat = mat_info.get('has_materials', False)
+            m_url = mat_info.get('url') or p_meta.get('marketing_url') or f"https://drive.google.com/drive/search?q={urllib.parse.quote(hkp_name)}"
+
+            no_excel_proj = {
+                'name': hkp_name,
+                'region': reg_val,
+                'district': dist_val,
+                'filename': '',
+                'file_size_kb': 0,
+                'has_excel': False,
+                'stats': {
+                    'total': hkp_item.get('total_unit', 0),
+                    'sold': 0,
+                    'sale': 0,
+                    'priced': 0,
+                    'stopped': 0,
+                    'pending': hkp_item.get('total_unit', 0),
+                    'sold_rate': 0.0
+                },
+                'last_updated': datetime.now().strftime('%Y-%m-%d'),
+                'sell_status': st,
+                'sell_status_cn': st_cn,
+                'is_suspended': (st == 'sales_suspended'),
+                'is_coming_soon': (st == 'coming_soon'),
+                'is_registration': (st == 'registration'),
+                'grade': p_meta.get('grade', 'B'),
+                'basic_info': p_meta.get('basic_info', ''),
+                'selling_points': p_meta.get('selling_points', ''),
+                'mainland_selling_points': p_meta.get('mainland_selling_points', ''),
+                'intro_url': intro_mapping.get(hkp_name) or intro_mapping.get(clean_pname) or '',
+                'price_tier': p_meta.get('price_tier', ''),
+                'marketing_url': m_url,
+                'has_marketing_materials': has_mat,
+                'main_layout': p_meta.get('main_layout', ''),
+                'total_price_desc': p_meta.get('total_price', '售價待定'),
+                'sqft_price_desc': p_meta.get('sqft_price', '呎價待定'),
+                'rent_range_desc': p_meta.get('rent_range') or '租金估算中',
+                'roi': p_meta.get('roi') or '3.5%',
+                'avg_uprice': 0,
+                'reason': p_meta.get('reason', '全新即將發售新盤'),
+                'is_focus': hkp_name in focus_projects
+            }
+            projects_list.append(no_excel_proj)
+            global_stats['total_projects'] += 1
 
     if global_stats['total_units'] > 0:
         global_stats['overall_sold_rate'] = round((global_stats['total_sold'] / global_stats['total_units']) * 100, 1)

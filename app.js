@@ -567,10 +567,41 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="stat-item sold-count"><span class="lbl">已售套数:</span><span class="val">${soldUnits}</span></div>
             ${stoppedHtml}
             <div class="stat-item"><span class="lbl">最新更新:</span><span class="val">${p.last_updated || '近期'}</span></div>
+      const hasExcel = p.filename && p.filename.endsWith('.xlsx');
+      const gridBtnHtml = hasExcel
+        ? `<button class="btn-block-main btn-open-grid" data-filename="${p.filename}" data-name="${p.name}">🔍 销控网格图</button>`
+        : `<button class="btn-block-main btn-open-grid" style="background:#f1f5f9; color:#475569; border:1px solid #cbd5e1;" data-filename="" data-name="${p.name}">🕒 销控筹备中 (${p.sell_status_cn || '即将发售'})</button>`;
+
+      card.innerHTML = `
+        ${suspendedBanner}
+        <div class="card-header">
+          <div class="card-meta">
+            <span class="badge badge-region">${p.region}</span>
+            <span class="badge badge-district">${p.district}</span>
+            ${statusBadge}
+          </div>
+          <h3 class="project-title">${p.name}</h3>
+        </div>
+        <div class="card-body">
+          <div class="sold-progress-area">
+            <div class="progress-info">
+              <span class="progress-label">去化率</span>
+              <span class="progress-val">${soldRate}%</span>
+            </div>
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" style="width: ${soldRate}%;"></div>
+            </div>
+          </div>
+          <div class="card-stats">
+            <div class="stat-item"><span class="lbl">规划总套数:</span><span class="val">${totalUnits}</span></div>
+            <div class="stat-item sale-count"><span class="lbl">在售套数:</span><span class="val">${onSaleUnits}</span></div>
+            <div class="stat-item sold-count"><span class="lbl">已售套数:</span><span class="val">${soldUnits}</span></div>
+            ${stoppedHtml}
+            <div class="stat-item"><span class="lbl">最新更新:</span><span class="val">${p.last_updated || '近期'}</span></div>
           </div>
         </div>
         <div class="card-footer-stacked">
-          <button class="btn-block-main btn-open-grid" data-filename="${p.filename}" data-name="${p.name}">🔍 销控网格图</button>
+          ${gridBtnHtml}
           <div class="card-footer-sub-row">
             ${introBtnHtml}
             ${marketingBtnHtml}
@@ -1593,6 +1624,26 @@ document.addEventListener('DOMContentLoaded', () => {
     if (openAnalyticsFromGridBtn) {
       openAnalyticsFromGridBtn.onclick = () => openAnalyticsModal(targetProjectName);
     }
+
+    if (!targetFilename || !targetFilename.endsWith('.xlsx')) {
+      if (buildingTabs) buildingTabs.innerHTML = '';
+      if (buildingStatsPanel) buildingStatsPanel.innerHTML = '';
+      if (gridDisplayArea) {
+        const targetProj = typeof allProjects !== 'undefined' ? allProjects.find(p => p.name === targetProjectName) : null;
+        const stCn = targetProj ? (targetProj.sell_status_cn || '即将发售') : '即將發售';
+        gridDisplayArea.innerHTML = `
+          <div style="text-align:center; padding: 4rem 1.5rem; color:#475569;">
+            <div style="font-size: 3.5rem; margin-bottom: 1rem;">🕒</div>
+            <h3 style="font-size: 1.25rem; font-weight: 700; color:#0f172a; margin-bottom: 0.6rem;">【${targetProjectName}】销控图纸筹备中</h3>
+            <p style="font-size: 0.9rem; color:#64748b; max-width: 480px; margin: 0 auto 1.5rem; line-height: 1.6;">
+              该新盘项目目前处于<b>「${stCn}」</b>阶段。<br/>开发商尚未正式公布具体单元价格列表与网格销控图纸。
+            </p>
+          </div>
+        `;
+      }
+      return;
+    }
+
     if (gridDisplayArea) gridDisplayArea.innerHTML = '<div style="padding:2rem; text-align:center; color:#06AABD;">正在解包读取 Excel 图纸文件...</div>';
 
     // 绑定关闭 Modal 按钮、遮罩点击与 ESC 按键事件，关闭时自动隐藏底部弹出卡片
