@@ -26,8 +26,8 @@ from openpyxl.utils import get_column_letter
 # ==========================================
 # 1. 基础配置
 # ==========================================
-BASE_DIR = "/Users/nb/google/Antigravity/工作/运营/价单"
-zh2hans_path = "/Users/nb/google/Antigravity/工作/运营/楼盘字典/zh2hans.json"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+zh2hans_path = os.path.join(os.path.dirname(BASE_DIR), "楼盘字典", "zh2hans.json")
 
 if os.path.exists(zh2hans_path):
     with open(zh2hans_path, 'r', encoding='utf-8') as f:
@@ -443,7 +443,11 @@ def _write_building_grid(wb, bname, units, font_data, font_header, font_title, a
                     parts = u['sold_date'].split('-')
                     yr = parts[0][-2:]
                     mo = parts[1]
-                    line4 = f"({yr}年-{mo}月)"
+                    dy = parts[2][:2] if len(parts) >= 3 else ""
+                    if dy:
+                        line4 = f"({yr}年-{mo}月-{dy}日)"
+                    else:
+                        line4 = f"({yr}年-{mo}月)"
                 except:
                     line4 = f"({u['sold_date']})"
             else:
@@ -638,7 +642,11 @@ def _write_villa_grid(wb, project_name, buildings_data, font_data, align_center,
                         parts = sold_date.split('-')
                         yr = parts[0][-2:]
                         mo = parts[1]
-                        line3 = f"({yr}年-{mo}月)"
+                        dy = parts[2][:2] if len(parts) >= 3 else ""
+                        if dy:
+                            line3 = f"({yr}年-{mo}月-{dy}日)"
+                        else:
+                            line3 = f"({yr}年-{mo}月)"
                     except:
                         line3 = f"({sold_date})"
                 else:

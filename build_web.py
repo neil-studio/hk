@@ -12,13 +12,15 @@ import openpyxl
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 WEB_DIR = os.path.join(BASE_DIR, "web")
 FILES_DIR = os.path.join(WEB_DIR, "files")
+ROOT_FILES_DIR = os.path.join(BASE_DIR, "files")
 
 def ensure_dirs():
     """确保网页输出目录和文件存储目录存在，并清空旧的 files 目录以防遗留售罄项目"""
     os.makedirs(WEB_DIR, exist_ok=True)
-    if os.path.exists(FILES_DIR):
-        shutil.rmtree(FILES_DIR)
-    os.makedirs(FILES_DIR, exist_ok=True)
+    for d in [FILES_DIR, ROOT_FILES_DIR]:
+        if os.path.exists(d):
+            shutil.rmtree(d)
+        os.makedirs(d, exist_ok=True)
 
 def parse_project_stats(file_path):
     """
@@ -836,7 +838,8 @@ def main():
         dest_excel_path = os.path.join(FILES_DIR, dest_filename)
         
         try:
-            shutil.copy2(src_excel_path, dest_excel_path)
+            for d in [FILES_DIR, ROOT_FILES_DIR]:
+                shutil.copy2(src_excel_path, os.path.join(d, dest_filename))
             file_size_kb = round(os.path.getsize(dest_excel_path) / 1024, 1)
         except Exception as e:
             continue
