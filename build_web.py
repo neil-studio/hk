@@ -99,7 +99,8 @@ def fetch_hkp_status_map():
         r = requests.get('https://data.hkp.com.hk/search/v2/new-properties?limit=1000', headers=headers, verify=False, timeout=10)
         if r.status_code == 200:
             for p in r.json().get('result', []):
-                pname = scraper.t2s(p.get('name', ''))
+                pname_raw = p.get('name', '')
+                pname = scraper.t2s(pname_raw) if pname_raw else ''
                 st = p.get('sell_status', 'on_sale')
                 st_detail = p.get('sell_status_detail', {})
                 st_cn = st_detail.get('name') if isinstance(st_detail, dict) else '出售中'
@@ -108,15 +109,22 @@ def fetch_hkp_status_map():
                 reg_cn = scraper.t2s(reg_name) if reg_name else '九龙'
                 dist_name = scraper.t2s(p.get('district', ''))
                 tot_unit = p.get('total_unit', 0)
-                status_map[pname] = {
+                tot_sold = p.get('total_sold', 0)
+                tot_sale = p.get('total_sale', 0)
+
+                item_info = {
                     'name': pname,
                     'sell_status': st,
                     'sell_status_cn': st_cn,
                     'region': reg_cn,
                     'district': dist_name,
                     'total_unit': tot_unit,
+                    'total_sold': tot_sold,
+                    'total_sale': tot_sale,
                     'developer': scraper.t2s(p.get('developer', {}).get('name', '')) if isinstance(p.get('developer'), dict) else ''
                 }
+                if pname: status_map[pname] = item_info
+                if pname_raw and pname_raw != pname: status_map[pname_raw] = item_info
     except Exception as e:
         print(f"提示: 获取 HKP 状态映射失败: {e}，将使用项目统计保底。")
     return status_map
@@ -1183,26 +1191,44 @@ def main():
             }
             projects_list.append(no_excel_proj)
 
-    # 🚨 真实成交数据补全精算管线（严格遵循：规划总套数 = 官网规划套数）
+    # 🚨 真实成交数据与官网实时动态数据双向补全管线（严格遵循：规划总套数 = 官网规划套数）
     for proj in projects_list:
         pname = proj['name']
         st = proj.get('stats', {})
+        has_ex = proj.get('has_excel', True)
         old_sold = st.get('sold', 0)
         official_total = st.get('total', 0)
         
+        # 1. 获取官网 HKP API 实时已售 (total_sold) 与在售 (total_sale, 包含10B单位)
+        hkp_info = hkp_status_map.get(pname, {})
+        hkp_sold = hkp_info.get('total_sold', 0)
+        hkp_sale = hkp_info.get('total_sale', 0)
+
+        # 2. 获取 3.18万+ SQLite 离线成交大库数据
         p_hist = real_history.get(pname, {})
         m_dict = p_hist.get('monthly', {})
         tx_sold = sum(v.get('volume', 0) for v in m_dict.values())
         
-        new_sold = max(old_sold, tx_sold)
+        if not has_ex:
+            # 无物理 Excel 表的项目：优先取官网 API 实时已售/在售
+            if hkp_sold > 0 or hkp_sale > 0 or official_total > 0:
+                st['sold'] = hkp_sold
+                rem_sale = max(hkp_sale, max(0, official_total - hkp_sold))
+                st['sale'] = rem_sale
+                st['priced'] = rem_sale
+                st['pending'] = max(0, official_total - hkp_sold - rem_sale)
+            else:
+                st['sold'] = max(old_sold, tx_sold)
+        else:
+            st['sold'] = max(old_sold, tx_sold)
+
         if official_total > 0:
-            new_rate = round((new_sold / official_total) * 100, 1)
+            new_rate = round((st['sold'] / official_total) * 100, 1)
             if new_rate > 100.0:
                 new_rate = 100.0
         else:
             new_rate = 0.0
             
-        st['sold'] = new_sold
         st['sold_rate'] = new_rate
         proj['stats'] = st
 
