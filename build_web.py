@@ -1214,6 +1214,10 @@ def main():
         aj_path = os.path.join(target_dir, "analytics_data.json")
         with open(aj_path, 'w', encoding='utf-8') as f:
             json.dump(analytics_data, f, ensure_ascii=False, separators=(',', ':'))
+
+        as_path = os.path.join(target_dir, "analytics_data.js")
+        with open(as_path, 'w', encoding='utf-8') as f:
+            f.write("window.data_real_history=" + json.dumps(real_history, ensure_ascii=False, separators=(',', ':')) + ";\nwindow.data_leaderboards=" + json.dumps(leaderboards, ensure_ascii=False, separators=(',', ':')) + ";")
         
     # 检查是否有新增项目需要建 Google Drive 文件夹提醒
     known_folders_cache_file = os.path.join(BASE_DIR, "known_folders.json")
