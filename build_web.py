@@ -123,8 +123,9 @@ def fetch_hkp_status_map():
                     'total_sale': tot_sale,
                     'developer': scraper.t2s(p.get('developer', {}).get('name', '')) if isinstance(p.get('developer'), dict) else ''
                 }
-                if pname: status_map[pname] = item_info
-                if pname_raw and pname_raw != pname: status_map[pname_raw] = item_info
+                # 仅保留简体中文规范名，避免生成繁简重复项目
+                if pname and pname not in status_map:
+                    status_map[pname] = item_info
     except Exception as e:
         print(f"提示: 获取 HKP 状态映射失败: {e}，将使用项目统计保底。")
     return status_map
@@ -1210,15 +1211,21 @@ def main():
         tx_sold = sum(v.get('volume', 0) for v in m_dict.values())
         
         if not has_ex:
-            # 无物理 Excel 表的项目：优先取官网 API 实时已售/在售
-            if hkp_sold > 0 or hkp_sale > 0 or official_total > 0:
-                st['sold'] = hkp_sold
-                rem_sale = max(hkp_sale, max(0, official_total - hkp_sold))
-                st['sale'] = rem_sale
-                st['priced'] = rem_sale
-                st['pending'] = max(0, official_total - hkp_sold - rem_sale)
+            # 无物理 Excel 表的项目：优先取官网 API 实时已售 (total_sold) 与在售 (total_sale)
+            real_sold = hkp_sold if hkp_sold > 0 else tx_sold
+            st['sold'] = real_sold
+            
+            # 精准在售判定：若 API 明确返回 total_sale > 0 则用 total_sale；对于尾盘剩 1 套 (如 Elize Park 10B) 则归为 1 套在售；未推盘则归 0 在售
+            if hkp_sale > 0:
+                real_sale = hkp_sale
+            elif official_total > 0 and real_sold > 0 and (official_total - real_sold == 1):
+                real_sale = 1
             else:
-                st['sold'] = max(old_sold, tx_sold)
+                real_sale = 0
+
+            st['sale'] = real_sale
+            st['priced'] = real_sale
+            st['pending'] = max(0, official_total - real_sold - real_sale)
         else:
             st['sold'] = max(old_sold, tx_sold)
 
