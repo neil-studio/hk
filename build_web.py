@@ -1105,18 +1105,27 @@ def main():
         global_stats['total_stopped'] += stats['stopped']
         global_stats['total_pending'] += stats['pending']
 
-    # 追加补全 HKP API 中已存在但尚无具体单元销控 Excel 的项目 (如花语海第1期、花语海第2期等)
+    # 追加补全 HKP API 中已存在但尚无具体单元销控 Excel 的项目 (如花语海第1期、花语海第2期等，仅限港岛与九龙)
     existing_names = {p['name'] for p in projects_list}
+    EXCLUDE_DISTRICTS = {"将军澳", "茶果岭、油塘及鲤鱼门", "长沙湾", "牛头角及九龙湾", "慈云山、钻石山及新蒲岗"}
     for hkp_name, hkp_item in hkp_status_map.items():
         if hkp_name not in existing_names:
             p_meta = projects_data.get(hkp_name, {})
             clean_pname = strip_phase_suffix(hkp_name)
-            reg_val = hkp_item.get('region') or p_meta.get('region') or '九龙'
-            dist_val = hkp_item.get('district') or p_meta.get('district') or '启德'
+            reg_val = hkp_item.get('region') or p_meta.get('region') or ''
+            dist_val = hkp_item.get('district') or p_meta.get('district') or ''
             user_custom = custom_districts.get(hkp_name) or custom_districts.get(clean_pname)
             if user_custom:
                 reg_val = user_custom.get('region') or reg_val
                 dist_val = user_custom.get('district') or dist_val
+
+            # 🚨 严格执行区域规范：仅限【港岛】和【九龙】，严禁新界或离岛加入！
+            if reg_val not in ("港岛", "九龙"):
+                continue
+
+            # 🚨 严格执行区域规范：排除九龙 5 个禁用商圈
+            if reg_val == "九龙" and dist_val in EXCLUDE_DISTRICTS:
+                continue
 
             st = hkp_item.get('sell_status', 'coming_soon')
             st_cn = hkp_item.get('sell_status_cn', '即將發售')

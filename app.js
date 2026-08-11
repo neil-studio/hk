@@ -541,32 +541,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ? `<a href="${marketingUrl.trim()}" target="_blank" rel="noopener noreferrer" class="btn-sub-action btn-marketing-action">📁 营销工具</a>`
         : `<button class="btn-sub-action btn-marketing-disabled" disabled title="暂无营销资料">📁 营销工具</button>`;
 
-      card.innerHTML = `
-        ${suspendedBanner}
-        <div class="card-header">
-          <div class="card-meta">
-            <span class="badge badge-region">${p.region}</span>
-            <span class="badge badge-district">${p.district}</span>
-            ${statusBadge}
-          </div>
-          <h3 class="project-title">${p.name}</h3>
-        </div>
-        <div class="card-body">
-          <div class="sold-progress-area">
-            <div class="progress-info">
-              <span class="progress-label">去化率</span>
-              <span class="progress-val">${soldRate}%</span>
-            </div>
-            <div class="progress-bar-bg">
-              <div class="progress-bar-fill" style="width: ${soldRate}%;"></div>
-            </div>
-          </div>
-          <div class="card-stats">
-            <div class="stat-item"><span class="lbl">规划总套数:</span><span class="val">${totalUnits}</span></div>
-            <div class="stat-item sale-count"><span class="lbl">在售套数:</span><span class="val">${onSaleUnits}</span></div>
-            <div class="stat-item sold-count"><span class="lbl">已售套数:</span><span class="val">${soldUnits}</span></div>
-            ${stoppedHtml}
-            <div class="stat-item"><span class="lbl">最新更新:</span><span class="val">${p.last_updated || '近期'}</span></div>
       const hasExcel = p.filename && p.filename.endsWith('.xlsx');
       const gridBtnHtml = hasExcel
         ? `<button class="btn-block-main btn-open-grid" data-filename="${p.filename}" data-name="${p.name}">🔍 销控网格图</button>`
