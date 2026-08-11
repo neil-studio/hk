@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function loadData() {
     try {
       let data = null;
-      const cacheKey = 'hk_app_data_v1';
+      const cacheKey = 'hk_app_data_v2';
       const cached = sessionStorage.getItem(cacheKey);
 
       if (cached) {
@@ -203,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById('lbDisplayContainer');
     if (!container) return;
 
-    const lbData = window.APP_DATA?.leaderboards || {};
+    const lbData = window.APP_DATA?.leaderboards || window.data_leaderboards || {};
     const optionsData = lbData.options || {};
 
     let currentTime = 'monthly'; // 'weekly', 'monthly', 'yearly'

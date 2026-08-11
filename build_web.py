@@ -1192,7 +1192,7 @@ def main():
     version_hash = datetime.now().strftime('%Y%m%d%H%M%S')
     global_stats['version_hash'] = version_hash
 
-    # 1. 核心轻量版 data.json (仅包含页面检索渲染必需元数据，极速 ~140KB)
+    # 1. 核心轻量版 data.json (包含主页渲染、销售检索及热销排行榜必需数据，极速 ~340KB)
     db_data = {
         'version_hash': version_hash,
         'global_stats': global_stats,
@@ -1200,9 +1200,10 @@ def main():
         'focus_projects': focus_projects,
         'featured_by_price': featured_by_price,
         'projects_data': projects_data,
+        'leaderboards': leaderboards
     }
     
-    # 2. 专项离线成交分析 analytics_data.json (懒加载 ~2.1MB)
+    # 2. 专项离线成交走势库 analytics_data.json (懒加载 ~1.2MB)
     analytics_data = {
         'version_hash': version_hash,
         'real_history_analytics': real_history,
