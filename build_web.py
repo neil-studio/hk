@@ -251,13 +251,28 @@ def load_real_history_analytics(custom_districts=None, valid_new_project_names=N
                         pa['weekly'][week]['total_uprice'] += f_uprice
                         pa['weekly'][week]['uprices'].append(f_uprice)
 
-                # 统计户型分布
-                l_str = str(layout) if layout else ''
-                if '开放式' in l_str or '开放' in l_str: pa['layouts']['开放式'] += 1
-                elif '1房' in l_str or '一房' in l_str: pa['layouts']['1房'] += 1
-                elif '2房' in l_str or '两房' in l_str or '二房' in l_str: pa['layouts']['2房'] += 1
-                elif '3房' in l_str or '三房' in l_str: pa['layouts']['3房'] += 1
-                else: pa['layouts']['4房+'] += 1
+                # 统计户型分布 (含基于实用面积的智能兜底解析，防 None 误判为4房+)
+                l_str = str(layout).strip() if layout else ''
+                if '开放式' in l_str or '开放' in l_str:
+                    pa['layouts']['开放式'] += 1
+                elif '1房' in l_str or '一房' in l_str:
+                    pa['layouts']['1房'] += 1
+                elif '2房' in l_str or '两房' in l_str or '二房' in l_str:
+                    pa['layouts']['2房'] += 1
+                elif '3房' in l_str or '三房' in l_str:
+                    pa['layouts']['3房'] += 1
+                elif '4房' in l_str or '四房' in l_str or '5房' in l_str or '6房' in l_str:
+                    pa['layouts']['4房+'] += 1
+                else:
+                    # 依据香港一手房实用面积标准倒算户型
+                    if f_area > 0:
+                        if f_area < 280: pa['layouts']['开放式'] += 1
+                        elif f_area < 400: pa['layouts']['1房'] += 1
+                        elif f_area < 600: pa['layouts']['2房'] += 1
+                        elif f_area < 900: pa['layouts']['3房'] += 1
+                        else: pa['layouts']['4房+'] += 1
+                    else:
+                        pa['layouts']['2房'] += 1
 
                 # 统计总价区间
                 if f_price < 5000000: pa['price_ranges']['500万下'] += 1
