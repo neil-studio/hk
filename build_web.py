@@ -1182,8 +1182,38 @@ def main():
                 'is_focus': hkp_name in focus_projects
             }
             projects_list.append(no_excel_proj)
-            global_stats['total_projects'] += 1
 
+    # 🚨 真实成交数据补全精算管线（严格遵循：规划总套数 = 官网规划套数）
+    for proj in projects_list:
+        pname = proj['name']
+        st = proj.get('stats', {})
+        old_sold = st.get('sold', 0)
+        official_total = st.get('total', 0)
+        
+        p_hist = real_history.get(pname, {})
+        m_dict = p_hist.get('monthly', {})
+        tx_sold = sum(v.get('volume', 0) for v in m_dict.values())
+        
+        new_sold = max(old_sold, tx_sold)
+        if official_total > 0:
+            new_rate = round((new_sold / official_total) * 100, 1)
+            if new_rate > 100.0:
+                new_rate = 100.0
+        else:
+            new_rate = 0.0
+            
+        st['sold'] = new_sold
+        st['sold_rate'] = new_rate
+        proj['stats'] = st
+
+    # 重新汇总全站全局统计看板
+    global_stats['total_projects'] = len(projects_list)
+    global_stats['total_units'] = sum(p['stats']['total'] for p in projects_list)
+    global_stats['total_sold'] = sum(p['stats']['sold'] for p in projects_list)
+    global_stats['total_sale'] = sum(p['stats']['sale'] for p in projects_list)
+    global_stats['total_priced'] = sum(p['stats']['priced'] for p in projects_list)
+    global_stats['total_stopped'] = sum(p['stats']['stopped'] for p in projects_list)
+    global_stats['total_pending'] = sum(p['stats']['pending'] for p in projects_list)
     if global_stats['total_units'] > 0:
         global_stats['overall_sold_rate'] = round((global_stats['total_sold'] / global_stats['total_units']) * 100, 1)
     else:
