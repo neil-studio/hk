@@ -925,6 +925,10 @@ def main():
         hkp_st_info = hkp_status_map.get(project_name, {})
         sell_status = hkp_st_info.get('sell_status', 'on_sale')
         sell_status_cn = hkp_st_info.get('sell_status_cn', '出售中')
+
+        # 🚨 严格过滤已售罄项目 (sold_out / 已售罄)
+        if sell_status == 'sold_out' or sell_status_cn == '已售罄':
+            continue
         
         custom_map = {
             # MONACO 全系合并
@@ -1129,6 +1133,10 @@ def main():
 
             st = hkp_item.get('sell_status', 'coming_soon')
             st_cn = hkp_item.get('sell_status_cn', '即將發售')
+
+            # 🚨 严格过滤已售罄项目 (sold_out / 已售罄)
+            if st == 'sold_out' or st_cn == '已售罄':
+                continue
 
             mat_info = marketing_materials_map.get(hkp_name) or marketing_materials_map.get(clean_pname) or {}
             has_mat = mat_info.get('has_materials', False)
