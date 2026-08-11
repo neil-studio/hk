@@ -4,6 +4,7 @@
 import os
 import re
 import json
+import glob
 import shutil
 import urllib.parse
 from datetime import datetime
@@ -122,6 +123,35 @@ def load_custom_districts():
             print(f"读取 custom_districts.json 失败: {e}")
     return {}
 
+def build_excel_unit_layout_map():
+    """扫描全量项目 Excel 销控明细表，构建 (项目名称, 楼栋, 楼层, 房号) -> 精确户型 映射字典"""
+    unit_map = {}
+    area_map = {}
+    excel_files = glob.glob(os.path.join(BASE_DIR, "*/*_销控明细表.xlsx"))
+    for fpath in excel_files:
+        folder = os.path.dirname(fpath)
+        folder_name = os.path.basename(folder)
+        pname = folder_name.split('-')[-1].strip() if '-' in folder_name else folder_name
+        try:
+            import openpyxl
+            wb = openpyxl.load_workbook(fpath, data_only=True)
+            if '销控汇总明细' in wb.sheetnames:
+                ws = wb['销控汇总明细']
+                for row in list(ws.iter_rows(values_only=True))[2:]:
+                    if not row or len(row) < 5: continue
+                    bname, floor, flat, layout, area = str(row[0] or '').strip(), str(row[1] or '').strip(), str(row[2] or '').strip(), str(row[3] or '').strip(), row[4]
+                    if pname and layout and layout not in ('None', '', '暂无', '-'):
+                        if bname and floor and flat:
+                            unit_map[(pname, bname, floor, flat)] = layout
+                        try:
+                            area_int = int(float(str(area)))
+                            if area_int > 0:
+                                area_map[(pname, area_int)] = layout
+                        except: pass
+        except Exception:
+            pass
+    return unit_map, area_map
+
 def load_real_history_analytics(custom_districts=None, valid_new_project_names=None):
     """从 SQLite 数据库 成交历史数据库.db 抽取 3.7万+ 条真实历史成交数据并按项目、年、月、周聚合 (仅限一手新房白名单)"""
     db_path = os.path.join(BASE_DIR, "成交历史数据库.db")
@@ -135,9 +165,12 @@ def load_real_history_analytics(custom_districts=None, valid_new_project_names=N
     try:
         import sqlite3
         from datetime import datetime
+        excel_unit_map, excel_area_map = build_excel_unit_layout_map()
+        print(f"成功构建 Excel 官方房源户型词典，包含 {len(excel_unit_map)} 套物理房源户型。")
+
         conn = sqlite3.connect(db_path)
         c = conn.cursor()
-        c.execute('SELECT project_name, district, region, sold_date, price, disc_price, unit_price, disc_unit_price, building_name, area FROM sold_history WHERE sold_date IS NOT NULL AND sold_date != ""')
+        c.execute('SELECT project_name, district, region, sold_date, price, disc_price, unit_price, disc_unit_price, building_name, area, floor, flat, layout FROM sold_history WHERE sold_date IS NOT NULL AND sold_date != ""')
         rows = c.fetchall()
         conn.close()
 
@@ -171,7 +204,7 @@ def load_real_history_analytics(custom_districts=None, valid_new_project_names=N
             return s.strip()
 
         for row in rows:
-            pname, dist, reg, sdate, price, dprice, uprice, duprice, layout, area = row
+            pname, dist, reg, sdate, price, dprice, uprice, duprice, bname, area, fl, ft, layout = row
             pname_str = str(pname).strip() if pname else ''
             if not pname_str: continue
 
@@ -251,8 +284,26 @@ def load_real_history_analytics(custom_districts=None, valid_new_project_names=N
                         pa['weekly'][week]['total_uprice'] += f_uprice
                         pa['weekly'][week]['uprices'].append(f_uprice)
 
-                # 统计户型分布 (含基于实用面积的智能兜底解析，防 None 误判为4房+)
-                l_str = str(layout).strip() if layout else ''
+                # 四级精准联动对号入座户型
+                target_layout = None
+                fl_str = str(fl).strip() if fl else ''
+                ft_str = str(ft).strip() if ft else ''
+                b_str = str(bname).strip() if bname else ''
+
+                # 1级：Excel 房号精确匹配
+                if b_str and fl_str and ft_str:
+                    target_layout = excel_unit_map.get((pname, b_str, fl_str, ft_str)) or excel_unit_map.get((clean_pname, b_str, fl_str, ft_str))
+
+                # 2级：Excel 同盘同面积匹配
+                if not target_layout and f_area > 0:
+                    area_key = int(round(f_area))
+                    target_layout = excel_area_map.get((pname, area_key)) or excel_area_map.get((clean_pname, area_key))
+
+                # 3级：网签原生户型文本
+                if not target_layout and layout and str(layout).strip() not in ('None', '', '-', 'null'):
+                    target_layout = str(layout).strip()
+
+                l_str = str(target_layout).strip() if target_layout else ''
                 if '开放式' in l_str or '开放' in l_str:
                     pa['layouts']['开放式'] += 1
                 elif '1房' in l_str or '一房' in l_str:
@@ -264,7 +315,7 @@ def load_real_history_analytics(custom_districts=None, valid_new_project_names=N
                 elif '4房' in l_str or '四房' in l_str or '5房' in l_str or '6房' in l_str:
                     pa['layouts']['4房+'] += 1
                 else:
-                    # 依据香港一手房实用面积标准倒算户型
+                    # 4级：未匹配保底
                     if f_area > 0:
                         if f_area < 280: pa['layouts']['开放式'] += 1
                         elif f_area < 400: pa['layouts']['1房'] += 1
