@@ -1075,6 +1075,7 @@ def save_transactions_to_db(global_units):
         PRIMARY KEY (project_name, building_name, floor, flat, sold_date)
     );
     """)
+    cursor.execute("CREATE UNIQUE INDEX IF NOT EXISTS idx_sold_history_unit_date ON sold_history (project_name, building_name, floor, flat, sold_date);")
     conn.commit()
     
     # 2. 批量构建写入数据（使用 executemany 极大提升性能）

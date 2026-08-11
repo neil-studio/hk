@@ -190,10 +190,9 @@ def load_real_history_analytics(custom_districts=None, valid_new_project_names=N
 
             pname = pname.strip()
             clean_pname = strip_phase(pname)
-
-            target_keys = set([pname, clean_pname])
+            target_keys = [pname]
             if '21 Borrett' in pname or '波老道' in pname or '应天' in pname:
-                target_keys.update(['21 Borrett Road', '波老道21号', '波老道21號', '应天'])
+                target_keys.append('21 Borrett Road')
 
             sdate_clean = str(sdate).strip()
             try:
