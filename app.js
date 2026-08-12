@@ -57,25 +57,11 @@ document.addEventListener('DOMContentLoaded', () => {
   async function loadData() {
     try {
       let data = null;
-      const cacheKey = 'hk_app_data_v3';
-      const cached = sessionStorage.getItem(cacheKey);
-
-      if (cached) {
-        try {
-          data = JSON.parse(cached);
-        } catch(e) {}
-      }
-
-      if (!data) {
-        // 15分钟静态版本缓存控制，彻底解决 Date.now() 每次点击网络重新请求 2MB 的严重卡顿
-        const vKey = Math.floor(Date.now() / (1000 * 60 * 15));
-        const resp = await fetch('data.json?v=' + vKey);
-        if (!resp.ok) throw new Error('无法读取 data.json 元数据');
-        data = await resp.json();
-        try {
-          sessionStorage.setItem(cacheKey, JSON.stringify(data));
-        } catch(e) {}
-      }
+      // 强制实时拉取最新 data.json，彻底清除 sessionStorage 旧数据防缓存
+      try { sessionStorage.removeItem('hk_app_data_v3'); } catch(e) {}
+      const resp = await fetch('data.json?v=' + Date.now(), { cache: 'no-cache' });
+      if (!resp.ok) throw new Error('无法读取 data.json 元数据');
+      data = await resp.json();
 
       allProjects = data.projects || [];
       globalStats = data.global_stats || {};

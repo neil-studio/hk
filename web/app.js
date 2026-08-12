@@ -53,19 +53,21 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentWorkbook = null;
   let activeBuildingSheet = null;
 
-  // 3. 抓取与加载元数据 (强效 Date.now() 防浏览器与 CDN 缓存旧数据)
+  // 3. 高性能离线与极速缓存数据加载引擎 (sessionStorage 0ms 秒加载)
   async function loadData() {
     try {
-      const resp = await fetch('data.json?v=' + Date.now());
+      let data = null;
+      // 强制实时拉取最新 data.json，彻底清除 sessionStorage 旧数据防缓存
+      try { sessionStorage.removeItem('hk_app_data_v3'); } catch(e) {}
+      const resp = await fetch('data.json?v=' + Date.now(), { cache: 'no-cache' });
       if (!resp.ok) throw new Error('无法读取 data.json 元数据');
-      const data = await resp.json();
+      data = await resp.json();
 
       allProjects = data.projects || [];
       globalStats = data.global_stats || {};
       projectsDataMap = data.projects_data || {};
       featuredByPriceData = data.featured_by_price || {};
       focusProjectsList = data.focus_projects || [];
-      window.data_real_history = data.real_history_analytics || {};
 
       // 更新页头时间戳与统计看板
       updateGlobalBadges();
@@ -73,13 +75,13 @@ document.addEventListener('DOMContentLoaded', () => {
       // 依据 DOM 节点与路由分发渲染逻辑
       const path = (window.location && window.location.pathname) ? window.location.pathname : '';
       if (document.getElementById('promoFocusGrid')) {
-        initIndexPage();
+        loadAnalyticsData().then(() => initIndexPage());
       }
       if (document.getElementById('projectGrid')) {
         initSalesPage();
       }
       if (path.includes('analytics.html') || document.getElementById('trendChart')) {
-        initAnalyticsPage();
+        loadAnalyticsData().then(() => initAnalyticsPage());
       }
       if (path.includes('featured.html') || document.getElementById('featuredCardGrid')) {
         initFeaturedPage();
@@ -89,6 +91,22 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('加载项目元数据失败:', err);
     }
   }
+
+  // 4. 离线成交历史与排行榜数据懒加载 (2.1MB 独立 JSON，按需背景加载)
+  window.loadAnalyticsData = async function() {
+    if (window.data_real_history && window.data_leaderboards) return;
+    try {
+      const vKey = Math.floor(Date.now() / (1000 * 60 * 15));
+      const resp = await fetch('analytics_data.json?v=' + vKey);
+      if (resp.ok) {
+        const adata = await resp.json();
+        window.data_real_history = adata.real_history_analytics || {};
+        window.data_leaderboards = adata.leaderboards || {};
+      }
+    } catch(e) {
+      console.warn('读取 analytics_data.json 失败:', e);
+    }
+  };
 
   // 更新顶栏时间戳与全站仪表盘
   function updateGlobalBadges() {
@@ -171,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById('lbDisplayContainer');
     if (!container) return;
 
-    const lbData = window.APP_DATA?.leaderboards || {};
+    const lbData = window.APP_DATA?.leaderboards || window.data_leaderboards || {};
     const optionsData = lbData.options || {};
 
     let currentTime = 'monthly'; // 'weekly', 'monthly', 'yearly'
@@ -541,6 +559,11 @@ document.addEventListener('DOMContentLoaded', () => {
         ? `<a href="${marketingUrl.trim()}" target="_blank" rel="noopener noreferrer" class="btn-sub-action btn-marketing-action">📁 营销工具</a>`
         : `<button class="btn-sub-action btn-marketing-disabled" disabled title="暂无营销资料">📁 营销工具</button>`;
 
+      const hasExcel = p.filename && p.filename.endsWith('.xlsx');
+      const gridBtnHtml = hasExcel
+        ? `<button class="btn-block-main btn-open-grid" data-filename="${p.filename}" data-name="${p.name}">🔍 销控网格图</button>`
+        : `<button class="btn-block-main btn-open-grid" style="background:#f1f5f9; color:#475569; border:1px solid #cbd5e1;" data-filename="" data-name="${p.name}">🕒 销控筹备中 (${p.sell_status_cn || '即将发售'})</button>`;
+
       card.innerHTML = `
         ${suspendedBanner}
         <div class="card-header">
@@ -570,7 +593,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         </div>
         <div class="card-footer-stacked">
-          <button class="btn-block-main btn-open-grid" data-filename="${p.filename}" data-name="${p.name}">🔍 销控网格图</button>
+          ${gridBtnHtml}
           <div class="card-footer-sub-row">
             ${introBtnHtml}
             ${marketingBtnHtml}
@@ -590,9 +613,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 按项目名调取 销控 Modal
+  // 按项目名调取 销控 Modal (绝对精确匹配，严防跨期数截断)
   window.openGridModalByName = function(projectName) {
-    const proj = allProjects.find(p => p.name === projectName || p.name.includes(projectName.split(' ')[0]));
+    if (!projectName) return;
+    const targetNorm = String(projectName).trim().toLowerCase();
+    let proj = allProjects.find(p => p.name === projectName || String(p.name).trim().toLowerCase() === targetNorm);
+    if (!proj) {
+      proj = allProjects.find(p => String(p.name).replace(/\s+/g, '').toLowerCase() === targetNorm.replace(/\s+/g, ''));
+    }
     if (proj) {
       openGridModal(proj.filename, proj.name);
     } else {
@@ -607,8 +635,11 @@ document.addEventListener('DOMContentLoaded', () => {
   let modalLayoutPieInstance = null;
   let modalPriceDistInstance = null;
 
-  window.openAnalyticsModal = function(projectName, mode = 'exact', gran = 'monthly') {
+  window.openAnalyticsModal = async function(projectName, mode = 'exact', gran = 'monthly') {
     if (!projectName) return;
+    if (typeof window.loadAnalyticsData === 'function') {
+      await window.loadAnalyticsData();
+    }
 
     let analyticsModal = document.getElementById('analyticsModal');
     if (!analyticsModal) {
@@ -687,8 +718,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const subtitleElem = document.getElementById('analyticsModalSubtitle');
     if (titleElem) titleElem.textContent = `${projectName} - 历史成交走势分析`;
 
-    // 从 real_history_analytics 获取全量 3.7万+ 离线数据库
-    const rh = (window.APP_DATA && window.APP_DATA.real_history_analytics) ? window.APP_DATA.real_history_analytics : {};
+    // 从 real_history_analytics 获取全量 3.18万+ 离线数据库
+    const rh = (window.data_real_history && Object.keys(window.data_real_history).length > 0)
+      ? window.data_real_history
+      : ((window.APP_DATA && window.APP_DATA.real_history_analytics) ? window.APP_DATA.real_history_analytics : {});
     const normalize = (s) => String(s || '').replace(/[\s\.\．\・\-\_\(\)\（\）]/g, '').toLowerCase();
 
     const getProjectCoreTitle = (name) => {
@@ -1561,9 +1594,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let targetFilename = filename;
     let targetProjectName = projectName || filename;
 
-    // 智能防错：如传入参数为项目名称而非文件名，或 proj.excel_file 未定义，自动在 allProjects 中匹配真实文件名
+    // 智能防错：绝对精确匹配项目名称与文件名 (避免跨分期错配)
     if (typeof allProjects !== 'undefined' && Array.isArray(allProjects) && allProjects.length > 0) {
-      const proj = allProjects.find(p => p.filename === filename || p.name === filename || (projectName && p.name === projectName) || (filename && p.name && filename.includes(p.name)));
+      const proj = allProjects.find(p => p.filename === filename || p.name === filename || (projectName && p.name === projectName));
       if (proj) {
         targetFilename = proj.filename || proj.excel_file || filename;
         targetProjectName = proj.name;
@@ -1593,6 +1626,26 @@ document.addEventListener('DOMContentLoaded', () => {
     if (openAnalyticsFromGridBtn) {
       openAnalyticsFromGridBtn.onclick = () => openAnalyticsModal(targetProjectName);
     }
+
+    if (!targetFilename || !targetFilename.endsWith('.xlsx')) {
+      if (buildingTabs) buildingTabs.innerHTML = '';
+      if (buildingStatsPanel) buildingStatsPanel.innerHTML = '';
+      if (gridDisplayArea) {
+        const targetProj = typeof allProjects !== 'undefined' ? allProjects.find(p => p.name === targetProjectName) : null;
+        const stCn = targetProj ? (targetProj.sell_status_cn || '即将发售') : '即將發售';
+        gridDisplayArea.innerHTML = `
+          <div style="text-align:center; padding: 4rem 1.5rem; color:#475569;">
+            <div style="font-size: 3.5rem; margin-bottom: 1rem;">🕒</div>
+            <h3 style="font-size: 1.25rem; font-weight: 700; color:#0f172a; margin-bottom: 0.6rem;">【${targetProjectName}】销控图纸筹备中</h3>
+            <p style="font-size: 0.9rem; color:#64748b; max-width: 480px; margin: 0 auto 1.5rem; line-height: 1.6;">
+              该新盘项目目前处于<b>「${stCn}」</b>阶段。<br/>开发商尚未正式公布具体单元价格列表与网格销控图纸。
+            </p>
+          </div>
+        `;
+      }
+      return;
+    }
+
     if (gridDisplayArea) gridDisplayArea.innerHTML = '<div style="padding:2rem; text-align:center; color:#06AABD;">正在解包读取 Excel 图纸文件...</div>';
 
     // 绑定关闭 Modal 按钮、遮罩点击与 ESC 按键事件，关闭时自动隐藏底部弹出卡片
@@ -1650,7 +1703,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     try {
-      const fileUrl = 'files/' + encodeURIComponent(targetFilename);
+      const fileUrl = 'files/' + encodeURIComponent(targetFilename) + '?v=' + (window.dbVersionHash || Date.now());
       const resp = await fetch(fileUrl);
       if (!resp.ok) throw new Error('无法调取 Excel 盘源库');
       const arrayBuffer = await resp.arrayBuffer();
