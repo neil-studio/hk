@@ -9,6 +9,7 @@ import shutil
 import urllib.parse
 from datetime import datetime
 import openpyxl
+import scrape_hkp_sales_control as scraper
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 WEB_DIR = os.path.join(BASE_DIR, "web")
@@ -94,7 +95,13 @@ def fetch_hkp_status_map():
         sys.path.append(BASE_DIR)
         import scrape_hkp_sales_control as scraper
         
-        token = scraper.fetch_user_token()
+        token = None
+        for _attempt in range(3):
+            try:
+                token = scraper.fetch_user_token()
+                if token: break
+            except Exception: pass
+        if not token: token = ''
         headers = {'Authorization': f'Bearer {token}'}
         r = requests.get('https://data.hkp.com.hk/search/v2/new-properties?limit=1000', headers=headers, verify=False, timeout=10)
         if r.status_code == 200:
@@ -1119,10 +1126,10 @@ def main():
         global_stats['total_pending'] += stats['pending']
 
     # 追加补全 HKP API 中已存在但尚无具体单元销控 Excel 的项目 (如花语海第1期、花语海第2期等，仅限港岛与九龙)
-    existing_names = {p['name'] for p in projects_list}
+    existing_names = {scraper.clean_name(p["name"]) for p in projects_list}
     EXCLUDE_DISTRICTS = {"将军澳", "茶果岭、油塘及鲤鱼门", "长沙湾", "牛头角及九龙湾", "慈云山、钻石山及新蒲岗"}
     for hkp_name, hkp_item in hkp_status_map.items():
-        if hkp_name not in existing_names:
+        if scraper.clean_name(hkp_name) not in existing_names:
             p_meta = projects_data.get(hkp_name, {})
             clean_pname = strip_phase_suffix(hkp_name)
             reg_val = hkp_item.get('region') or p_meta.get('region') or ''
