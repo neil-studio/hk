@@ -25,7 +25,7 @@ def ensure_dirs():
 
 def parse_project_stats(file_path):
     """
-    通过只读模式打开 Excel，读取'销控汇总明细'表，计算项目销控状态统计。
+    通过只读模式打开 Excel，读取'销控汇总明细'表，计算项目销控状态统计及最低在售价。
     """
     stats = {
         'total': 0,
@@ -34,7 +34,8 @@ def parse_project_stats(file_path):
         'priced': 0,
         'stopped': 0,
         'pending': 0,
-        'sold_rate': 0.0
+        'sold_rate': 0.0,
+        'min_price': None
     }
     
     if not os.path.exists(file_path):
@@ -45,12 +46,9 @@ def parse_project_stats(file_path):
         wb = openpyxl.load_workbook(file_path, read_only=True, data_only=True)
         if "销控汇总明细" in wb.sheetnames:
             ws = wb["销控汇总明细"]
-            # 找到状态列的索引 (第一行可能是标题，第二行是表头)
-            # 表头是：["楼栋", "楼层", "房号", "户型", "实用面积 (平方呎)", "销控状态", "成交日期", "总价 (港币)", "实用呎价 (港币/呎)", "是否招标"]
-            # 销控状态在第 6 列 (index 5)
-            
             row_count = 0
-            for row in ws.iter_rows(min_row=3, max_col=6, values_only=True):
+            min_p_val = float('inf')
+            for row in ws.iter_rows(min_row=3, values_only=True):
                 # 检查是否是空行 (第一列"楼栋"为空则视为结束)
                 if not row or row[0] is None:
                     break
@@ -62,23 +60,34 @@ def parse_project_stats(file_path):
                     
                     if status_str == '已售':
                         stats['sold'] += 1
-                    elif status_str == '在售':
+                    elif status_str in ('在售', 'sale'):
                         stats['sale'] += 1
-                    elif status_str == '已定价未售':
+                    elif status_str in ('已定价未售', 'priced'):
                         stats['priced'] += 1
-                    elif status_str == '暂停销售':
+                    elif status_str in ('暂停销售', 'stopped'):
                         stats['stopped'] += 1
-                    elif status_str == '待售':
+                    elif status_str in ('待售', 'pending'):
                         stats['pending'] += 1
                     else:
                         if '已售' in status_str:
                             stats['sold'] += 1
                         else:
                             stats['pending'] += 1
+
+                    if status_str in ('在售', '已定价未售', 'sale', 'priced'):
+                        disc_price = row[10] if len(row) >= 11 else (row[7] if len(row) >= 8 else None)
+                        if disc_price:
+                            try:
+                                p_num = float(str(disc_price).replace(',', '').replace('$', ''))
+                                if p_num > 0 and p_num < min_p_val:
+                                    min_p_val = p_num
+                            except: pass
             
             stats['total'] = row_count
             if stats['total'] > 0:
                 stats['sold_rate'] = round((stats['sold'] / stats['total']) * 100, 1)
+            if min_p_val != float('inf'):
+                stats['min_price'] = int(min_p_val)
         wb.close()
     except Exception as e:
         print(f"警告: 读取 Excel {file_path} 统计信息失败: {e}")
@@ -1074,6 +1083,13 @@ def main():
         has_mat = mat_info.get('has_materials', False)
         m_url = mat_info.get('url') or p_meta.get('marketing_url') or p_meta.get('drive_url') or g_url
 
+        tot_price_desc = p_meta.get('total_price', '')
+        min_p_val = stats.get('min_price')
+        if not tot_price_desc and min_p_val:
+            wan_val = round(min_p_val / 10000.0, 2)
+            wan_str = f"{wan_val:g}" if wan_val == int(wan_val) else f"{wan_val:.2f}"
+            tot_price_desc = f"${wan_str}万起"
+
         proj_info = {
             'name': project_name,
             'region': p_meta.get('region') or region,
@@ -1098,7 +1114,8 @@ def main():
             'marketing_url': m_url,
             'has_marketing_materials': has_mat,
             'main_layout': p_meta.get('main_layout', ''),
-            'total_price_desc': p_meta.get('total_price', ''),
+            'total_price_desc': tot_price_desc,
+            'min_price': min_p_val,
             'sqft_price_desc': p_meta.get('sqft_price', ''),
             'rent_range_desc': p_meta.get('rent_range') or estimated_rent_desc,
             'roi': roi_str if avg_uprice > 0 else (p_meta.get('roi') or roi_str),
