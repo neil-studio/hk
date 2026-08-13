@@ -1,47 +1,5 @@
 [
   {
-    "id": "P000001254",
-    "name": "Deep Water South 第6B期",
-    "region": "港岛",
-    "district": "香港仔及鸭脷洲",
-    "developer": "会德丰 / 港铁"
-  },
-  {
-    "id": "E000019662",
-    "name": "悦麓",
-    "region": "九龙",
-    "district": "红磡",
-    "developer": "TKS LTD."
-  },
-  {
-    "id": "P000001263",
-    "name": "天御第2期",
-    "region": "港岛",
-    "district": "半山区西部",
-    "developer": "恒基兆业 / 新世界"
-  },
-  {
-    "id": "E000019634",
-    "name": "雅盈峰",
-    "region": "港岛",
-    "district": "西营盘及上环",
-    "developer": "盈大 / 资本策略"
-  },
-  {
-    "id": "E000019591",
-    "name": "嘉居．天后",
-    "region": "港岛",
-    "district": "北角",
-    "developer": "嘉华国际"
-  },
-  {
-    "id": "E000019205",
-    "name": "傲华",
-    "region": "港岛",
-    "district": "筲箕湾",
-    "developer": "协成行"
-  },
-  {
     "id": "P000001242",
     "name": "花语海第1期",
     "region": "九龙",

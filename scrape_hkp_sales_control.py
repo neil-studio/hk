@@ -1446,6 +1446,7 @@ def main():
                 unit_id = u.get('unit_id')
                 floor = u.get('floor')
                 flat = u.get('flat') or u.get('flat_name') or '-'
+                net_area = u.get('net_area', 0) or 0
                 status_raw = u.get('status', 'pending')
                 is_tender = u.get('is_tender') is True or str(u.get('is_tender')).lower() in ['true', '1']
                 
