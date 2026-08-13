@@ -1446,10 +1446,18 @@ def main():
                 unit_id = u.get('unit_id')
                 floor = u.get('floor')
                 flat = u.get('flat') or u.get('flat_name') or '-'
-                net_area = u.get('net_area', 0) or 0
                 status_raw = u.get('status', 'pending')
-                status_cn = STATUS_MAP.get(status_raw, '待售')
                 is_tender = u.get('is_tender') is True or str(u.get('is_tender')).lower() in ['true', '1']
+                
+                # 🚨 规则固化：待售单位保持 pending 待售；在售招标单位纠正为 sale 在售
+                if status_raw == 'pending':
+                    status_raw = 'pending'
+                    status_cn = '待售'
+                elif is_tender and status_raw != 'sold' and status_raw != 'stopped':
+                    status_raw = 'sale'
+                    status_cn = '在售'
+                else:
+                    status_cn = STATUS_MAP.get(status_raw, '待售')
                 
                 # 获取总价
                 price = u.get('price')
@@ -1840,15 +1848,27 @@ def _write_building_grid(wb, bname, units, font_data, font_header, font_title, a
                 continue
 
             status_raw = u.get('status_raw', 'pending')
-            color_cfg = COLORS.get(status_raw, COLORS['pending'])
+            is_tender = u.get('is_tender') is True or str(u.get('is_tender')).lower() in ['true', '1']
+            
+            # 🚨 规范固化：待售单位保持 pending (白底/-)，在售招标单位强制为 sale (绿底/招标单位)
+            if status_raw == 'pending':
+                effective_status = 'pending'
+            elif is_tender and status_raw != 'sold' and status_raw != 'stopped':
+                effective_status = 'sale'
+            else:
+                effective_status = status_raw
+
+            color_cfg = COLORS.get(effective_status, COLORS['pending'])
             bg = color_cfg['bg']
             fg = color_cfg['fg']
-            is_bold = status_raw in ('sale', 'stopped')
+            is_bold = effective_status in ('sale', 'stopped')
 
             # 4行文字内容
             line1 = f"{flat} | {u['net_area']}呎 ({u['room_layout']})"
-            is_tender = u.get('is_tender') is True or str(u.get('is_tender')).lower() in ['true', '1']
-            if is_tender and status_raw != 'sold':
+            if effective_status == 'pending':
+                line2 = "-"
+                line3 = "-"
+            elif is_tender and status_raw != 'sold':
                 line2 = "招标单位"
                 line3 = "-"
             else:
@@ -1872,7 +1892,7 @@ def _write_building_grid(wb, bname, units, font_data, font_header, font_title, a
                 except:
                     line4 = f"({u['sold_date']})"
             else:
-                status_display = STATUS_MAP.get(status_raw, '待售')
+                status_display = STATUS_MAP.get(effective_status, '待售')
                 line4 = f"({status_display})"
 
             c.value = f"{line1}\n{line2}\n{line3}\n{line4}"
