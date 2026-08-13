@@ -1234,7 +1234,12 @@ def main():
             st['priced'] = real_sale
             st['pending'] = max(0, official_total - real_sold - real_sale)
         else:
-            st['sold'] = max(old_sold, tx_sold)
+            calc_sold = max(old_sold, tx_sold)
+            non_sold = st.get('sale', 0) + st.get('stopped', 0) + st.get('pending', 0)
+            if official_total > 0 and (calc_sold + non_sold > official_total):
+                st['sold'] = max(0, official_total - non_sold)
+            else:
+                st['sold'] = calc_sold
 
         if official_total > 0:
             new_rate = round((st['sold'] / official_total) * 100, 1)
