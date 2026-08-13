@@ -1787,8 +1787,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
-      // 提取楼栋 Sheets
+      // 提取楼栋 Sheets 并智能排序 (优先展示'独立屋销控表' / '洋房销控表'，分层大厦按自然数字排序)
       const sheetNames = workbook.SheetNames.filter(name => name !== '销控汇总明细');
+      sheetNames.sort((a, b) => {
+        const isHouseA = a.includes('独立屋') || a.includes('洋房');
+        const isHouseB = b.includes('独立屋') || b.includes('洋房');
+        if (isHouseA && !isHouseB) return -1;
+        if (!isHouseA && isHouseB) return 1;
+        return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+      });
+
       if (sheetNames.length === 0) {
         gridDisplayArea.innerHTML = '<div style="padding:2rem; text-align:center; color:#64748b;">该项目暂无可视化楼栋网格图表。</div>';
         return;
