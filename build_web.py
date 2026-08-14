@@ -812,78 +812,70 @@ def main():
         except Exception as e:
             print(f"读取 google_drive_mapping.json 失败: {e}")
 
-    def strip_phase_suffix(name):
-        s = str(name).strip()
-        s = re.sub(r'\(第.*?\)', '', s)
-        s = re.sub(r'第\s*[0-9A-Za-z\-]+期.*$', '', s)
-        s = re.sub(r'Phase\s*[0-9A-Za-z\-]+.*$', '', s, flags=re.IGNORECASE)
-        s = re.sub(r'第[I|V|X|A-Z0-9]+期', '', s)
-        s = re.sub(r'第[0-9A-Za-z]+$', '', s)
-        s = re.sub(r'[0-9]+[a-zA-Z]+$', '', s)
-        s = re.sub(r'\s+[0-9]+$', '', s)
-        s = re.sub(r'\s+I{1,3}$', '', s)
-        s = re.sub(r'\s+II$', '', s)
-        s = re.sub(r'\s+III$', '', s)
-        s = re.sub(r'\(.*?\)', '', s)
-        return s.strip()
+    def normalize_strict_phase(name):
+        """严格按分期规范化：保留所有分期与期数信息，仅消除多余空格、统一全半角点与英文字符大小写"""
+        if not name:
+            return ''
+        s = str(name).strip().lower()
+        s = s.replace(' ', '').replace('　', '')
+        s = s.replace('．', '.').replace('•', '.').replace('·', '.')
+        return s
 
-    # 载入 楼盘介绍映射表.xlsx
+    # 统一从 楼盘资料.xlsx (工作表: 一手新盘) 载入 楼盘介绍 与 营销工具网盘地址 (严格按期数分立对应)
     intro_mapping = {}
-    intro_excel = "/Users/nb/google/Antigravity/工作/运营/聚焦盘精选盘/楼盘介绍映射表.xlsx"
-    if os.path.exists(intro_excel):
-        try:
-            wb_intro = openpyxl.load_workbook(intro_excel, data_only=True)
-            ws_intro = wb_intro.active
-            for r in range(2, ws_intro.max_row + 1):
-                pname = str(ws_intro.cell(r, 1).value or '').strip()
-                url = str(ws_intro.cell(r, 2).value or '').strip()
-                if pname and url and url != 'None' and url.startswith('http'):
-                    intro_mapping[pname] = url
-                    clean_p = strip_phase_suffix(pname)
-                    if clean_p and clean_p not in intro_mapping:
-                        intro_mapping[clean_p] = url
-            print(f"成功从 Excel [楼盘介绍映射表.xlsx] 载入 {len(intro_mapping)} 条楼盘介绍链接。")
-        except Exception as e:
-            print(f"读取 楼盘介绍映射表.xlsx 失败: {e}")
-
-    # 载入 营销素材网盘地址.xlsx 状态 (包含“是否有资料”标识)
     marketing_materials_map = {}
-    marketing_excel = "/Users/nb/google/Antigravity/工作/运营/聚焦盘精选盘/营销素材网盘地址.xlsx"
-    if os.path.exists(marketing_excel):
+    project_info_excel = "/Users/nb/google/Antigravity/工作/运营/聚焦盘精选盘/楼盘资料.xlsx"
+    if os.path.exists(project_info_excel):
         try:
-            wb_mat = openpyxl.load_workbook(marketing_excel, data_only=True)
-            ws_mat = wb_mat.active
-            headers = [str(ws_mat.cell(1, c).value or '').strip() for c in range(1, ws_mat.max_column + 1)]
-            
-            folder_col = 2
-            url_col = 3
-            has_mat_col = None
-            for idx, h in enumerate(headers, 1):
-                if '文件夹' in h or '项目' in h: folder_col = idx
-                elif '地址' in h or '链接' in h or 'url' in h.lower(): url_col = idx
-                elif '是否有资料' in h or '有资料' in h or '资料' in h: has_mat_col = idx
-            
-            for r in range(2, ws_mat.max_row + 1):
-                folder_val = str(ws_mat.cell(r, folder_col).value or '').strip()
-                url_val = str(ws_mat.cell(r, url_col).value or '').strip()
-                has_mat_val = str(ws_mat.cell(r, has_mat_col).value or '').strip() if has_mat_col else ''
+            wb_info = openpyxl.load_workbook(project_info_excel, data_only=True)
+            if '一手新盘' in wb_info.sheetnames:
+                ws_info = wb_info['一手新盘']
+                headers = [str(ws_info.cell(1, c).value or '').strip() for c in range(1, ws_info.max_column + 1)]
                 
-                if folder_val:
-                    pname = folder_val.split('-')[-1].strip()
-                    if has_mat_col:
-                        has_mat = (has_mat_val == '是')
-                    else:
-                        has_mat = bool(url_val and url_val.startswith('http'))
+                col_reg = headers.index('区域') + 1 if '区域' in headers else 1
+                col_dist = headers.index('商圈/地区') + 1 if '商圈/地区' in headers else 2
+                col_pname = headers.index('项目名称') + 1 if '项目名称' in headers else 3
+                col_intro = headers.index('楼盘介绍') + 1 if '楼盘介绍' in headers else 6
+                col_mkt_url = headers.index('营销工具地址') + 1 if '营销工具地址' in headers else 8
+                col_mkt_has = headers.index('营销工具是否有资料') + 1 if '营销工具是否有资料' in headers else 9
+                
+                for r in range(2, ws_info.max_row + 1):
+                    reg = str(ws_info.cell(r, col_reg).value or '').strip()
+                    dist = str(ws_info.cell(r, col_dist).value or '').strip()
+                    pname = str(ws_info.cell(r, col_pname).value or '').strip()
+                    if not pname:
+                        continue
                     
-                    info = {'url': url_val, 'has_materials': has_mat}
-                    marketing_materials_map[folder_val] = info
+                    intro_val = str(ws_info.cell(r, col_intro).value or '').strip()
+                    mkt_url_val = str(ws_info.cell(r, col_mkt_url).value or '').strip()
+                    mkt_has_val = str(ws_info.cell(r, col_mkt_has).value or '').strip()
+                    
+                    full_folder = f"{reg}-{dist}-{pname}" if reg and dist else pname
+                    norm_p = normalize_strict_phase(pname)
+                    norm_f = normalize_strict_phase(full_folder)
+                    
+                    # 1. 楼盘介绍映射 (严格按期数分立)
+                    if intro_val and intro_val != 'None' and intro_val.startswith('http'):
+                        intro_mapping[norm_f] = intro_val
+                        intro_mapping[norm_p] = intro_val
+                        intro_mapping[pname] = intro_val
+                        intro_mapping[full_folder] = intro_val
+                    
+                    # 2. 营销工具映射 (严格按期数分立)
+                    has_mat = (mkt_has_val == '是')
+                    info = {'url': mkt_url_val, 'has_materials': has_mat}
+                    marketing_materials_map[norm_f] = info
+                    marketing_materials_map[norm_p] = info
                     marketing_materials_map[pname] = info
-                    clean_p = strip_phase_suffix(pname)
-                    if clean_p and clean_p not in marketing_materials_map:
-                        marketing_materials_map[clean_p] = info
-            print(f"成功从 Excel [营销素材网盘地址.xlsx] 解析 {len(marketing_materials_map)} 条营销资料状态。")
+                    marketing_materials_map[full_folder] = info
+                
+                print(f"成功从 Excel [楼盘资料.xlsx -> 一手新盘] 载入 {len(intro_mapping)} 条楼盘介绍链接与 {len(marketing_materials_map)} 条营销工具信息。")
+            else:
+                print("未在 楼盘资料.xlsx 中找到 [一手新盘] 工作表！")
         except Exception as e:
-            print(f"读取 营销素材网盘地址.xlsx 失败: {e}")
+            print(f"读取 楼盘资料.xlsx 失败: {e}")
+    else:
+        print(f"楼盘资料.xlsx 文件不存在: {project_info_excel}")
 
     # 遍历 BASE_DIR 下的子文件夹
     for d in sorted(os.listdir(BASE_DIR)):
@@ -1077,9 +1069,12 @@ def main():
         else:
             roi_str = p_meta.get('roi') or "3.5%"
 
-        mat_info = marketing_materials_map.get(g_folder_str) or marketing_materials_map.get(project_name) or marketing_materials_map.get(clean_pname) or {}
+        norm_d = normalize_strict_phase(d)
+        norm_pname = normalize_strict_phase(project_name)
+        mat_info = marketing_materials_map.get(norm_d) or marketing_materials_map.get(norm_pname) or {}
         has_mat = mat_info.get('has_materials', False)
         m_url = mat_info.get('url') or p_meta.get('marketing_url') or p_meta.get('drive_url') or g_url
+        p_intro_url = intro_mapping.get(norm_d) or intro_mapping.get(norm_pname) or p_meta.get('intro_url', '')
 
         proj_info = {
             'name': project_name,
@@ -1099,7 +1094,7 @@ def main():
             'selling_points': p_meta.get('selling_points', ''),
             'mainland_selling_points': p_meta.get('mainland_selling_points', ''),
             'centaline_url': p_meta.get('centaline_url', ''),
-            'intro_url': intro_mapping.get(project_name) or intro_mapping.get(clean_pname) or p_meta.get('intro_url', ''),
+            'intro_url': p_intro_url,
             'price_tier': p_meta.get('price_tier', ''),
             'google_drive_folder': g_folder,
             'marketing_url': m_url,
