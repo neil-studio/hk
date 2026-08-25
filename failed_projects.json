@@ -1,5 +1,40 @@
 [
   {
+    "id": "P000001240",
+    "name": "海德园第1期",
+    "region": "港岛",
+    "district": "柴湾",
+    "developer": "太古地产"
+  },
+  {
+    "id": "P000001199",
+    "name": "海盈山第4B期",
+    "region": "港岛",
+    "district": "香港仔及鸭脷洲",
+    "developer": "嘉里建设 / 信和置业 / 太古地产 / 港铁"
+  },
+  {
+    "id": "P000001068",
+    "name": "应天",
+    "region": "港岛",
+    "district": "半山区西部",
+    "developer": "长江实业"
+  },
+  {
+    "id": "E000019697",
+    "name": "滶蕴",
+    "region": "九龙",
+    "district": "石硖尾",
+    "developer": "新世界"
+  },
+  {
+    "id": "E000019756",
+    "name": "泓璟",
+    "region": "九龙",
+    "district": "何文田",
+    "developer": "辉宇国际"
+  },
+  {
     "id": "P000001242",
     "name": "花语海第1期",
     "region": "九龙",
