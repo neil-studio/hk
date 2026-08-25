@@ -1298,6 +1298,7 @@ def main():
 
         # 6.2.1 预载全局历史成交记录以作日期备用补充
         tx_lookup = {}
+        tx_data = []
         try:
             tx_url = "https://data.hkp.com.hk/search/v2/transactions"
             tx_params = {'phase_ids': pid, 'limit': 2000}
@@ -1307,6 +1308,7 @@ def main():
                 tx_data = tx_res.json().get('result', [])
                 for tx in tx_data:
                     b_info = tx.get('building', {})
+                    tx_bname = t2s(b_info.get('name', '')).strip()
                     tx_floor_num = str(tx.get('floor') or '').strip()
                     if not tx_floor_num:
                         fl_obj = tx.get('floor_level') or {}
