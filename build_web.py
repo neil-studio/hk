@@ -854,20 +854,28 @@ def main():
                     norm_p = normalize_strict_phase(pname)
                     norm_f = normalize_strict_phase(full_folder)
                     
-                    # 1. 楼盘介绍映射 (严格按期数分立)
-                    if intro_val and intro_val != 'None' and intro_val.startswith('http'):
-                        intro_mapping[norm_f] = intro_val
-                        intro_mapping[norm_p] = intro_val
-                        intro_mapping[pname] = intro_val
-                        intro_mapping[full_folder] = intro_val
+                    # 1. 楼盘介绍映射 (严格按期数分立，唯一以 楼盘资料.xlsx 为准)
+                    intro_clean_val = intro_val if (intro_val and intro_val != 'None' and intro_val.startswith('http')) else ''
+                    intro_mapping[norm_f] = intro_clean_val
+                    intro_mapping[norm_p] = intro_clean_val
+                    intro_mapping[pname] = intro_clean_val
+                    intro_mapping[full_folder] = intro_clean_val
                     
                     # 2. 营销工具映射 (严格按期数分立)
                     has_mat = (mkt_has_val == '是')
-                    info = {'url': mkt_url_val, 'has_materials': has_mat}
+                    info = {'url': mkt_url_val if (mkt_url_val and mkt_url_val.startswith('http')) else '', 'has_materials': has_mat}
                     marketing_materials_map[norm_f] = info
                     marketing_materials_map[norm_p] = info
                     marketing_materials_map[pname] = info
                     marketing_materials_map[full_folder] = info
+
+                    # 特殊兼容：海瑅湾 映射至 海瑅湾 I 与 海瑅湾 II
+                    if pname == '海瑅湾':
+                        for sub_p in ['海瑅湾 I', '海瑅湾 II', '海瑅湾 1', '海瑅湾 2', '海瑅湾I', '海瑅湾II']:
+                            intro_mapping[normalize_strict_phase(sub_p)] = intro_clean_val
+                            intro_mapping[sub_p] = intro_clean_val
+                            marketing_materials_map[normalize_strict_phase(sub_p)] = info
+                            marketing_materials_map[sub_p] = info
                 
                 print(f"成功从 Excel [楼盘资料.xlsx -> 一手新盘] 载入 {len(intro_mapping)} 条楼盘介绍链接与 {len(marketing_materials_map)} 条营销工具信息。")
             else:
@@ -1075,7 +1083,11 @@ def main():
         mat_info = marketing_materials_map.get(norm_d) or marketing_materials_map.get(norm_pname) or {}
         has_mat = mat_info.get('has_materials', False)
         m_url = mat_info.get('url') or p_meta.get('marketing_url') or p_meta.get('drive_url') or g_url
-        p_intro_url = intro_mapping.get(norm_d) or intro_mapping.get(norm_pname) or p_meta.get('intro_url', '')
+        p_intro_url = intro_mapping.get(norm_d)
+        if p_intro_url is None:
+            p_intro_url = intro_mapping.get(norm_pname, '')
+        if p_intro_url is None:
+            p_intro_url = ''
 
         proj_info = {
             'name': project_name,
