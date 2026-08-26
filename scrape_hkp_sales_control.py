@@ -1255,9 +1255,10 @@ def main():
         print(f"港岛/九龙一手新盘数量: {len(filtered_projects)}")
 
     EXCLUDE_DISTRICTS = {"将军澳", "茶果岭、油塘及鲤鱼门", "长沙湾", "牛头角及九龙湾", "慈云山、钻石山及新蒲岗"}
+    INCLUDE_PROJECT_WHITELIST = {"海瑅湾 I", "海瑅湾 II", "海瑅湾 1", "海瑅湾 2", "海瑅湾I", "海瑅湾II"}
     filtered_projects = [
         p for p in filtered_projects
-        if not (p.get('region') == '九龙' and p.get('district') in EXCLUDE_DISTRICTS)
+        if not (p.get('region') == '九龙' and p.get('district') in EXCLUDE_DISTRICTS and p.get('name') not in INCLUDE_PROJECT_WHITELIST and p.get('raw_name') not in INCLUDE_PROJECT_WHITELIST)
     ]
     print(f"过滤后执行抓取的港岛/九龙一手新盘数量: {len(filtered_projects)}")
 

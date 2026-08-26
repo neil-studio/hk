@@ -895,7 +895,8 @@ def main():
         project_name = "-".join(parts[2:]).strip()
         
         EXCLUDE_DISTRICTS = {"将军澳", "茶果岭、油塘及鲤鱼门", "长沙湾", "牛头角及九龙湾", "慈云山、钻石山及新蒲岗"}
-        if region == "九龙" and district in EXCLUDE_DISTRICTS:
+        INCLUDE_PROJECT_WHITELIST = {"海瑅湾 I", "海瑅湾 II", "海瑅湾 1", "海瑅湾 2", "海瑅湾I", "海瑅湾II"}
+        if region == "九龙" and district in EXCLUDE_DISTRICTS and project_name not in INCLUDE_PROJECT_WHITELIST:
             continue
         
         excel_filename = f"{project_name}_销控明细表.xlsx"
@@ -1123,6 +1124,7 @@ def main():
     # 追加补全 HKP API 中已存在但尚无具体单元销控 Excel 的项目 (如花语海第1期、花语海第2期等，仅限港岛与九龙)
     existing_names = {scraper.clean_name(p["name"]) for p in projects_list}
     EXCLUDE_DISTRICTS = {"将军澳", "茶果岭、油塘及鲤鱼门", "长沙湾", "牛头角及九龙湾", "慈云山、钻石山及新蒲岗"}
+    INCLUDE_PROJECT_WHITELIST = {"海瑅湾 I", "海瑅湾 II", "海瑅湾 1", "海瑅湾 2", "海瑅湾I", "海瑅湾II"}
     for hkp_name, hkp_item in hkp_status_map.items():
         if scraper.clean_name(hkp_name) not in existing_names:
             p_meta = projects_data.get(hkp_name, {})
@@ -1138,8 +1140,8 @@ def main():
             if reg_val not in ("港岛", "九龙"):
                 continue
 
-            # 🚨 严格执行区域规范：排除九龙 5 个禁用商圈
-            if reg_val == "九龙" and dist_val in EXCLUDE_DISTRICTS:
+            # 🚨 严格执行区域规范：排除九龙 5 个禁用商圈 (除非在特定白名单中)
+            if reg_val == "九龙" and dist_val in EXCLUDE_DISTRICTS and hkp_name not in INCLUDE_PROJECT_WHITELIST:
                 continue
 
             st = hkp_item.get('sell_status', 'coming_soon')
