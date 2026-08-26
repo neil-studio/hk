@@ -1261,7 +1261,7 @@ def main():
         proj['stats'] = st
 
     # 按照用户指定优先显示规则置顶特定项目在前几位
-    PINNED_PROJECT_PREFIXES = ['海瑅湾', '海德园', '首岸', '壹沐', '必嘉坊', 'the haddon', '首汇']
+    PINNED_PROJECT_PREFIXES = ['叡璟', '海瑅湾', '海德园', '首岸', '壹沐', '必嘉坊', 'the haddon', '首汇']
     def get_pinned_index(p):
         name_lower = (p.get('name') or '').lower()
         for idx, prefix in enumerate(PINNED_PROJECT_PREFIXES):

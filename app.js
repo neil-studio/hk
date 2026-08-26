@@ -502,7 +502,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // 默认优先排位规则：置顶指定项目在前几位
-    const PINNED_PREFIXES = ['海瑅湾', '海德园', '首岸', '壹沐', '必嘉坊', 'the haddon', '首汇'];
+    const PINNED_PREFIXES = ['叡璟', '海瑅湾', '海德园', '首岸', '壹沐', '必嘉坊', 'the haddon', '首汇'];
     function getPinnedIndex(p) {
       const name = (p.name || '').toLowerCase();
       for (let i = 0; i < PINNED_PREFIXES.length; i++) {
