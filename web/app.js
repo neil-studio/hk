@@ -501,11 +501,24 @@ document.addEventListener('DOMContentLoaded', () => {
       return matchRegion && matchDistrict && matchSearch;
     });
 
+    // 默认优先排位规则：置顶指定项目在前几位
+    const PINNED_PREFIXES = ['海瑅湾', '海德园', '首岸', '壹沐', '必嘉坊', 'the haddon', '首汇'];
+    function getPinnedIndex(p) {
+      const name = (p.name || '').toLowerCase();
+      for (let i = 0; i < PINNED_PREFIXES.length; i++) {
+        if (name.includes(PINNED_PREFIXES[i].toLowerCase())) return i;
+      }
+      return 999;
+    }
+
     // 排序
     if (activeSort === 'rate-desc') filtered.sort((a, b) => (b.stats?.sold_rate || 0) - (a.stats?.sold_rate || 0));
-    if (activeSort === 'rate-asc') filtered.sort((a, b) => (a.stats?.sold_rate || 0) - (b.stats?.sold_rate || 0));
-    if (activeSort === 'units-desc') filtered.sort((a, b) => (b.stats?.total || 0) - (a.stats?.total || 0));
-    if (activeSort === 'sale-desc') filtered.sort((a, b) => (b.stats?.sale || 0) - (a.stats?.sale || 0));
+    else if (activeSort === 'rate-asc') filtered.sort((a, b) => (a.stats?.sold_rate || 0) - (b.stats?.sold_rate || 0));
+    else if (activeSort === 'units-desc') filtered.sort((a, b) => (b.stats?.total || 0) - (a.stats?.total || 0));
+    else if (activeSort === 'sale-desc') filtered.sort((a, b) => (b.stats?.sale || 0) - (a.stats?.sale || 0));
+    else {
+      filtered.sort((a, b) => getPinnedIndex(a) - getPinnedIndex(b));
+    }
 
     grid.innerHTML = '';
     if (filtered.length === 0) {

@@ -1248,6 +1248,17 @@ def main():
         st['sold_rate'] = new_rate
         proj['stats'] = st
 
+    # 按照用户指定优先显示规则置顶特定项目在前几位
+    PINNED_PROJECT_PREFIXES = ['海瑅湾', '海德园', '首岸', '壹沐', '必嘉坊', 'the haddon', '首汇']
+    def get_pinned_index(p):
+        name_lower = (p.get('name') or '').lower()
+        for idx, prefix in enumerate(PINNED_PROJECT_PREFIXES):
+            if prefix.lower() in name_lower:
+                return idx
+        return 999
+
+    projects_list.sort(key=lambda p: get_pinned_index(p))
+
     # 重新汇总全站全局统计看板
     global_stats['total_projects'] = len(projects_list)
     global_stats['total_units'] = sum(p['stats']['total'] for p in projects_list)
