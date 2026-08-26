@@ -178,12 +178,118 @@ def build_excel_unit_layout_map():
             pass
     return unit_map, area_map
 
+def sync_excel_sold_history_to_db(db_path):
+    """自动扫描盘源 Excel 中的已售记录并增量补充至 SQLite 成交历史数据库.db"""
+    try:
+        import sqlite3
+        import glob
+        import openpyxl
+        from datetime import datetime
+
+        conn = sqlite3.connect(db_path)
+        c = conn.cursor()
+        c.execute("""
+        CREATE TABLE IF NOT EXISTS sold_history (
+            region TEXT,
+            district TEXT,
+            project_name TEXT,
+            building_name TEXT,
+            floor TEXT,
+            flat TEXT,
+            layout TEXT,
+            area TEXT,
+            sold_date TEXT,
+            price TEXT,
+            unit_price TEXT,
+            discount TEXT,
+            disc_price TEXT,
+            disc_unit_price TEXT,
+            payment TEXT,
+            is_tender TEXT,
+            captured_at TEXT,
+            PRIMARY KEY (project_name, building_name, floor, flat, sold_date)
+        );
+        """)
+        c.execute("CREATE UNIQUE INDEX IF NOT EXISTS idx_sold_history_unit_date ON sold_history (project_name, building_name, floor, flat, sold_date);")
+        conn.commit()
+
+        files_dir = os.path.join(BASE_DIR, 'files')
+        xlsx_files = sorted(glob.glob(os.path.join(files_dir, '*.xlsx')))
+        if not xlsx_files:
+            xlsx_files = sorted(glob.glob(os.path.join(WEB_DIR, 'files', '*.xlsx')))
+
+        now_str = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        batch_records = []
+
+        for fpath in xlsx_files:
+            fname = os.path.basename(fpath)
+            parts = fname.replace('.xlsx', '').split('-')
+            region = parts[0] if len(parts) >= 1 else ''
+            district = parts[1] if len(parts) >= 2 else ''
+            project_name = '-'.join(parts[2:]) if len(parts) >= 3 else fname.replace('.xlsx', '')
+
+            try:
+                wb = openpyxl.load_workbook(fpath, read_only=True)
+                ws = wb['销控汇总明细'] if '销控汇总明细' in wb.sheetnames else wb.active
+                rows = list(ws.iter_rows(values_only=True))
+
+                header_idx = -1
+                for i, r in enumerate(rows[:5]):
+                    if r and '楼栋' in [str(cell) for cell in r if cell]:
+                        header_idx = i
+                        break
+                if header_idx == -1:
+                    continue
+
+                for r in rows[header_idx+1:]:
+                    if not r or len(r) < 7: continue
+                    bname, floor, flat, layout, area, status, sold_date = r[0], r[1], r[2], r[3], r[4], r[5], r[6]
+                    price = r[7] if len(r) > 7 else ''
+                    uprice = r[8] if len(r) > 8 else ''
+                    discount = r[9] if len(r) > 9 else ''
+                    disc_price = r[10] if len(r) > 10 else ''
+                    disc_uprice = r[11] if len(r) > 11 else ''
+                    payment = r[12] if len(r) > 12 else ''
+                    is_tender = r[13] if len(r) > 13 else '否'
+
+                    if str(status).strip() == '已售' and sold_date and str(sold_date).strip() not in ('-', '', 'None', 'null'):
+                        batch_records.append((
+                            region, district, project_name, str(bname).strip() if bname else '',
+                            str(floor).strip() if floor else '', str(flat).strip() if flat else '',
+                            str(layout).strip() if layout else '', str(area).strip() if area else '',
+                            str(sold_date).strip()[:10],
+                            str(price).strip() if price else '', str(uprice).strip() if uprice else '',
+                            str(discount).strip() if discount else '', str(disc_price).strip() if disc_price else '',
+                            str(disc_uprice).strip() if disc_uprice else '', str(payment).strip() if payment else '',
+                            str(is_tender).strip() if is_tender else '否',
+                            now_str
+                        ))
+            except Exception:
+                continue
+
+        if batch_records:
+            c.executemany("""
+            INSERT OR IGNORE INTO sold_history (
+                region, district, project_name, building_name, floor, flat,
+                layout, area, sold_date, price, unit_price, discount,
+                disc_price, disc_unit_price, payment, is_tender, captured_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+            """, batch_records)
+            conn.commit()
+
+        conn.close()
+    except Exception as e:
+        print(f"提示: 自动同步 Excel 成交记录时异常: {e}")
+
 def load_real_history_analytics(custom_districts=None, valid_new_project_names=None):
     """从 SQLite 数据库 成交历史数据库.db 抽取 3.7万+ 条真实历史成交数据并按项目、年、月、周聚合 (仅限一手新房白名单)"""
     db_path = os.path.join(BASE_DIR, "成交历史数据库.db")
     if not os.path.exists(db_path):
         print("提示: 未找到 成交历史数据库.db，无法生成真实成交分析。")
         return {}
+
+    # 自动增量补充本地 Excel 中最新的已售成交记录至 SQLite 数据库
+    sync_excel_sold_history_to_db(db_path)
 
     if custom_districts is None:
         custom_districts = load_custom_districts()
