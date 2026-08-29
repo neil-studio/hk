@@ -11,3 +11,6 @@ venv/
 !.dev.vars.example
 .env*
 !.env.example
+
+scratch/
+
