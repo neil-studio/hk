@@ -1,17 +1,24 @@
 [
   {
-    "id": "E000019697",
-    "name": "滶蕴",
+    "id": "E000019138",
+    "name": "隆敍",
     "region": "九龙",
-    "district": "石硖尾",
-    "developer": "新世界"
+    "district": "何文田",
+    "developer": "志德投资"
   },
   {
-    "id": "P000001226",
-    "name": "海瑅湾 I",
-    "region": "九龙",
-    "district": "将军澳",
-    "developer": "信和置业 / 嘉里建设 / 嘉华国际 / 招商置地 / 港铁"
+    "id": "P000001129",
+    "name": "晋环",
+    "region": "港岛",
+    "district": "香港仔及鸭脷洲",
+    "developer": "路劲地产 /  平安不动产 / 港铁"
+  },
+  {
+    "id": "E000019145",
+    "name": "弦岸",
+    "region": "港岛",
+    "district": "香港仔及鸭脷洲",
+    "developer": "庄士集团"
   },
   {
     "id": "P000001299",
