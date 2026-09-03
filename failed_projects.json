@@ -1,24 +1,10 @@
 [
   {
-    "id": "E000019138",
-    "name": "隆敍",
+    "id": "E000017747",
+    "name": "VAU Residence",
     "region": "九龙",
     "district": "何文田",
-    "developer": "志德投资"
-  },
-  {
-    "id": "P000001129",
-    "name": "晋环",
-    "region": "港岛",
-    "district": "香港仔及鸭脷洲",
-    "developer": "路劲地产 /  平安不动产 / 港铁"
-  },
-  {
-    "id": "E000019145",
-    "name": "弦岸",
-    "region": "港岛",
-    "district": "香港仔及鸭脷洲",
-    "developer": "庄士集团"
+    "developer": "万科香港"
   },
   {
     "id": "P000001299",
