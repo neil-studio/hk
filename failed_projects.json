@@ -1,24 +1,17 @@
 [
   {
-    "id": "E000019756",
-    "name": "泓璟",
+    "id": "P000001122",
+    "name": "Monaco 第1期",
     "region": "九龙",
-    "district": "何文田",
-    "developer": "辉宇国际"
-  },
-  {
-    "id": "P000001258",
-    "name": "The Monet 第2期",
-    "region": "九龙",
-    "district": "九龙塘",
+    "district": "启德",
     "developer": "会德丰"
   },
   {
-    "id": "P000001086",
-    "name": "维港汇 III",
+    "id": "P000001295",
+    "name": "叡璟II",
     "region": "九龙",
     "district": "西南九龙",
-    "developer": "会德丰 / 信和置业 / 嘉华国际 / 世茂 / 爪哇集团"
+    "developer": "华润置地"
   },
   {
     "id": "P000001299",
