@@ -1411,6 +1411,113 @@ def main():
         'leaderboards': leaderboards
     }
 
+    # 3. 生成对外折实价同步 API (units_lm999.json)
+    def export_units_pricing_api(p_list, f_dir, b_dir, w_dir, password="lm999"):
+        def split_project_phase(full_name):
+            patterns = [
+                r'^(.*?)(?:第([0-9A-Za-z\-]+)期)$',
+                r'^(.*?)(?:Phase\s*([0-9A-Za-z\-]+))$',
+                r'^(.*?)\s+(I{1,3}|IV|V|VI|VII|VIII|IX|X)$',
+                r'^(.*?)\s+([0-9]+)$',
+                r'^(.*?)[．·]([天海峰峯岸湾].*)$',
+                r'^(.*?)\((.*?)\)$'
+            ]
+            name = full_name.strip()
+            for pat in patterns:
+                m = re.match(pat, name, re.I)
+                if m:
+                    pname = m.group(1).strip()
+                    phase = m.group(2).strip()
+                    if phase.isdigit():
+                        phase = f'第{phase}期'
+                    elif re.match(r'^[0-9A-Za-z\-]+$', phase) and not phase.startswith('第'):
+                        phase = f'第{phase}期'
+                    return pname, phase
+            return name, '-'
+
+        def parse_price(val):
+            if val is None:
+                return None
+            s = str(val).strip().replace(',', '').replace('$', '').replace('¥', '')
+            if not s or s in ('-', '暂无', '招标单位', '待定', 'None'):
+                return None
+            if '万' in s:
+                try:
+                    return int(float(s.replace('万', '')) * 10000)
+                except:
+                    return None
+            try:
+                return int(float(s))
+            except:
+                return None
+
+        def normalize_status(val):
+            if not val: return '待售'
+            s = str(val).strip()
+            if s in ('在售', 'sale'): return '在售'
+            if s in ('已定价未售', 'priced'): return '已定价未售'
+            if s in ('已售', 'sold') or '已售' in s: return '已售'
+            if s in ('暂停销售', 'stopped'): return '暂停销售'
+            return '待售'
+
+        units = []
+        for p in p_list:
+            fname = p.get('filename')
+            if not fname or not str(fname).endswith('.xlsx'):
+                continue
+            fpath = os.path.join(f_dir, fname)
+            if not os.path.exists(fpath):
+                continue
+            pname, phase = split_project_phase(p.get('name', ''))
+            try:
+                wb = openpyxl.load_workbook(fpath, read_only=True, data_only=True)
+                if '销控汇总明细' not in wb.sheetnames:
+                    wb.close()
+                    continue
+                ws = wb['销控汇总明细']
+                for r in ws.iter_rows(min_row=3, values_only=True):
+                    if not r or r[0] is None:
+                        break
+                    tower = str(r[0]).strip()
+                    floor = str(r[1]).strip() if len(r) >= 2 and r[1] is not None else '-'
+                    flat = str(r[2]).strip() if len(r) >= 3 and r[2] is not None else '-'
+                    status = normalize_status(r[5] if len(r) >= 6 else None)
+                    
+                    raw_disc = r[10] if len(r) >= 11 else None
+                    raw_orig = r[7] if len(r) >= 8 else None
+                    price = parse_price(raw_disc) or parse_price(raw_orig)
+                    
+                    units.append({
+                        'project': pname,
+                        'phase': phase,
+                        'tower': tower,
+                        'floor': floor,
+                        'flat': flat,
+                        'status': status,
+                        'discounted_price': price
+                    })
+                wb.close()
+            except Exception:
+                pass
+
+        api_payload = {
+            'updated_at': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            'total_units': len(units),
+            'units': units
+        }
+
+        api_filename = f"units_{password}.json"
+        for t_dir in [w_dir, b_dir]:
+            a_dir = os.path.join(t_dir, "api")
+            os.makedirs(a_dir, exist_ok=True)
+            a_path = os.path.join(a_dir, api_filename)
+            with open(a_path, 'w', encoding='utf-8') as f:
+                json.dump(api_payload, f, ensure_ascii=False, separators=(',', ':'))
+
+        print(f"✅ 对外折实价 API 生成成功: api/{api_filename} (共 {len(units)} 个单位)")
+
+    export_units_pricing_api(projects_list, FILES_DIR, BASE_DIR, WEB_DIR, password="lm999")
+
     # 同时写入 WEB_DIR 和 BASE_DIR 根目录
     for target_dir in [WEB_DIR, BASE_DIR]:
         j_path = os.path.join(target_dir, "data.json")
