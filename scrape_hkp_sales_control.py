@@ -1249,7 +1249,8 @@ def main():
                     'name': t2s(p.get('name')),
                     'region': region_cn,
                     'district': t2s(p.get('district')),
-                    'developer': t2s(p.get('developer', {}).get('name', ''))
+                    'developer': t2s(p.get('developer', {}).get('name', '')),
+                    'sell_status': p.get('sell_status')
                 })
 
         print(f"港岛/九龙一手新盘数量: {len(filtered_projects)}")
@@ -1445,6 +1446,7 @@ def main():
             print(f"      获取到单位数: {len(units)}")
             
             parsed_units = []
+            proj_sell_status = proj.get('sell_status') or detail_data.get('sell_status')
             for u in units:
                 unit_id = u.get('unit_id')
                 floor = u.get('floor')
@@ -1453,8 +1455,12 @@ def main():
                 status_raw = u.get('status', 'pending')
                 is_tender = u.get('is_tender') is True or str(u.get('is_tender')).lower() in ['true', '1']
                 
+                # 🚨 规则固化：即将发售 (coming_soon) 项目在未正式推售且官方一手成交库无登记时，
+                # 拦截底层接口测试占位脏数据 (如 The Monet 第3期 历史模拟数据)
+                is_unlaunched_test_data = (proj_sell_status == 'coming_soon' and not tx_lookup)
+                
                 # 🚨 规则固化：待售单位保持 pending 待售；在售招标单位纠正为 sale 在售
-                if status_raw == 'pending':
+                if is_unlaunched_test_data or status_raw == 'pending':
                     status_raw = 'pending'
                     status_cn = '待售'
                 elif is_tender and status_raw != 'sold' and status_raw != 'stopped':
@@ -1464,7 +1470,7 @@ def main():
                     status_cn = STATUS_MAP.get(status_raw, '待售')
                 
                 # 获取总价
-                price = u.get('price')
+                price = None if is_unlaunched_test_data else u.get('price')
                 if price is not None:
                     try:
                         price = float(price)
@@ -1472,7 +1478,7 @@ def main():
                         price = None
                 
                 # 计算呎价
-                unit_price_net = u.get('unit_price_net')
+                unit_price_net = None if is_unlaunched_test_data else u.get('unit_price_net')
                 if unit_price_net is not None:
                     try:
                         price_per_sq_ft = int(float(unit_price_net))
@@ -1496,7 +1502,7 @@ def main():
                             room_layout = f"{room_type}房"
                 
                 # 2. 提取成交日期 (YYYY-MM-DD) 及反向自动纠偏已售状态
-                sold_date_raw = u.get('sold_date') or u.get('tx_date')
+                sold_date_raw = None if is_unlaunched_test_data else (u.get('sold_date') or u.get('tx_date'))
                 sold_date = '-'
                 
                 norm_b = normalize_bname(bname)
@@ -1511,7 +1517,7 @@ def main():
                         sold_date = mapped_date
                 else:
                     # 如果销控接口未标注为 sold，但成交库中已被登记了一手买卖成交记录，自动反向纠偏为已售！
-                    if mapped_date or (sold_date_raw and str(sold_date_raw).strip() not in ['-', 'None', '']):
+                    if not is_unlaunched_test_data and (mapped_date or (sold_date_raw and str(sold_date_raw).strip() not in ['-', 'None', ''])):
                         status_raw = 'sold'
                         status_cn = STATUS_MAP.get('sold', '已售')
                         sold_date = mapped_date or parse_hkt_date(sold_date_raw)
