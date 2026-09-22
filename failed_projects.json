@@ -1,21 +1,5 @@
 [
   {
-    "id": "E000017133",
-    "name": "Prince Central",
-    "region": "九龙",
-    "district": "何文田",
-    "developer": "新鸿基",
-    "sell_status": "on_sale"
-  },
-  {
-    "id": "E000016357",
-    "name": "君誉峰",
-    "region": "港岛",
-    "district": "北角",
-    "developer": "恒基兆业",
-    "sell_status": "on_sale"
-  },
-  {
     "id": "P000001299",
     "name": "33清水湾第1期",
     "region": "九龙",
