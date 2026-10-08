@@ -1072,13 +1072,13 @@ def save_transactions_to_db(global_units):
         payment TEXT,            -- 付款办法
         is_tender TEXT,          -- 是否招标 ('是'/'否')
         captured_at TEXT,        -- 捕获登记时间 (YYYY-MM-DD HH:MM:SS)
-        PRIMARY KEY (project_name, building_name, floor, flat, sold_date)
+        PRIMARY KEY (project_name, building_name, floor, flat)
     );
     """)
-    cursor.execute("CREATE UNIQUE INDEX IF NOT EXISTS idx_sold_history_unit_date ON sold_history (project_name, building_name, floor, flat, sold_date);")
+    cursor.execute("CREATE UNIQUE INDEX IF NOT EXISTS idx_sold_history_unit ON sold_history (project_name, building_name, floor, flat);")
     conn.commit()
     
-    # 2. 批量构建写入数据（使用 executemany 极大提升性能）
+    # 2. 批量构建写入数据（使用 executemany 极大提升性能，同物理房源覆盖更新为最新登记记录）
     now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     records = []
     
@@ -1106,7 +1106,7 @@ def save_transactions_to_db(global_units):
             
     if records:
         cursor.executemany("""
-        INSERT OR IGNORE INTO sold_history (
+        INSERT OR REPLACE INTO sold_history (
             region, district, project_name, building_name, floor, flat,
             layout, area, sold_date, price, unit_price, discount,
             disc_price, disc_unit_price, payment, is_tender, captured_at

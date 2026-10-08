@@ -207,10 +207,10 @@ def sync_excel_sold_history_to_db(db_path):
             payment TEXT,
             is_tender TEXT,
             captured_at TEXT,
-            PRIMARY KEY (project_name, building_name, floor, flat, sold_date)
+            PRIMARY KEY (project_name, building_name, floor, flat)
         );
         """)
-        c.execute("CREATE UNIQUE INDEX IF NOT EXISTS idx_sold_history_unit_date ON sold_history (project_name, building_name, floor, flat, sold_date);")
+        c.execute("CREATE UNIQUE INDEX IF NOT EXISTS idx_sold_history_unit ON sold_history (project_name, building_name, floor, flat);")
         conn.commit()
 
         files_dir = os.path.join(BASE_DIR, 'files')
@@ -269,7 +269,7 @@ def sync_excel_sold_history_to_db(db_path):
 
         if batch_records:
             c.executemany("""
-            INSERT OR IGNORE INTO sold_history (
+            INSERT OR REPLACE INTO sold_history (
                 region, district, project_name, building_name, floor, flat,
                 layout, area, sold_date, price, unit_price, discount,
                 disc_price, disc_unit_price, payment, is_tender, captured_at
@@ -335,6 +335,7 @@ def load_real_history_analytics(custom_districts=None, valid_new_project_names=N
             s = re.sub(r'\(.*?\)', '', s)
             return s.strip()
 
+        seen_analytics_units = set()
         for row in rows:
             pname, dist, reg, sdate, price, dprice, uprice, duprice, bname, area, fl, ft, layout = row
             pname_str = str(pname).strip() if pname else ''
@@ -342,6 +343,11 @@ def load_real_history_analytics(custom_districts=None, valid_new_project_names=N
 
             if valid_new_project_names and pname_str not in valid_new_project_names:
                 continue
+
+            unit_key = (pname_str, str(bname).strip(), str(fl).strip(), str(ft).strip())
+            if unit_key in seen_analytics_units:
+                continue
+            seen_analytics_units.add(unit_key)
 
             # 真实成交价与实用呎价 (含保底倒算)
             f_price = parse_num(dprice) or parse_num(price)
@@ -506,7 +512,7 @@ def build_leaderboard_data(valid_new_project_names=None):
 
         def query_rankings_in_memory(where_sql, region_filter=None, price_min=None, price_max=None, limit=10):
             c.execute(f'''
-                SELECT project_name, region, district, price, unit_price, disc_price, disc_unit_price, sold_date, area
+                SELECT project_name, region, district, price, unit_price, disc_price, disc_unit_price, sold_date, area, building_name, floor, flat
                 FROM sold_history
                 WHERE sold_date IS NOT NULL AND sold_date != '' AND {where_sql}
             ''')
@@ -514,7 +520,7 @@ def build_leaderboard_data(valid_new_project_names=None):
             grouped = {}
             seen_transactions = set()
 
-            for pname, reg, dist, price, uprice, dprice, duprice, sdate, area in rows:
+            for pname, reg, dist, price, uprice, dprice, duprice, sdate, area, bname, fl, ft in rows:
                 pname_str = str(pname).strip() if pname else ''
                 if not pname_str: continue
 
@@ -552,11 +558,11 @@ def build_leaderboard_data(valid_new_project_names=None):
                             break
                     except: pass
                 
-                # 智能防重合指纹比对 (同项目+同日期+同面积+同金额去重)
-                dedup_key = (pname_str, str(sdate).strip(), str(area).strip() if area else '', round(final_p / 10000) if final_p > 0 else 0)
-                if dedup_key in seen_transactions:
+                # 物理房源唯一指纹去重 (同项目+同楼栋+同楼层+同房号，双重保险防重复计入)
+                unit_key = (pname_str, str(bname).strip(), str(fl).strip(), str(ft).strip())
+                if unit_key in seen_transactions:
                     continue
-                seen_transactions.add(dedup_key)
+                seen_transactions.add(unit_key)
                     
                 if pname_str not in grouped:
                     grouped[pname_str] = {'region': reg_val, 'district': dist_val, 'count': 0, 'prices': [], 'sqfts': []}
