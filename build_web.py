@@ -1016,7 +1016,7 @@ def main():
         
         EXCLUDE_DISTRICTS = {"将军澳", "茶果岭、油塘及鲤鱼门", "长沙湾", "牛头角及九龙湾", "慈云山、钻石山及新蒲岗", "牛池湾"}
         INCLUDE_PROJECT_WHITELIST = {"海瑅湾 I", "海瑅湾 II", "海瑅湾 1", "海瑅湾 2", "海瑅湾I", "海瑅湾II"}
-        EXCLUDE_PROJECTS = {"33清水湾第1期", "33清水湾"}
+        EXCLUDE_PROJECTS = {"33清水湾第1期", "33清水湾", "皇第"}
         if project_name in EXCLUDE_PROJECTS:
             continue
         if region == "九龙" and district in EXCLUDE_DISTRICTS and project_name not in INCLUDE_PROJECT_WHITELIST:
@@ -1252,7 +1252,7 @@ def main():
     existing_names = {scraper.clean_name(p["name"]) for p in projects_list}
     EXCLUDE_DISTRICTS = {"将军澳", "茶果岭、油塘及鲤鱼门", "长沙湾", "牛头角及九龙湾", "慈云山、钻石山及新蒲岗", "牛池湾"}
     INCLUDE_PROJECT_WHITELIST = {"海瑅湾 I", "海瑅湾 II", "海瑅湾 1", "海瑅湾 2", "海瑅湾I", "海瑅湾II"}
-    EXCLUDE_PROJECTS = {"33清水湾第1期", "33清水湾"}
+    EXCLUDE_PROJECTS = {"33清水湾第1期", "33清水湾", "皇第"}
     for hkp_name, hkp_item in hkp_status_map.items():
         if hkp_name in EXCLUDE_PROJECTS or scraper.clean_name(hkp_name) in {scraper.clean_name(x) for x in EXCLUDE_PROJECTS}:
             continue
