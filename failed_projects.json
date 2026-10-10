@@ -1,123 +1,19 @@
 [
   {
-    "id": "P000001228",
-    "name": "朗贤峰第IIA期",
-    "region": "九龙",
-    "district": "何文田",
-    "developer": "鹰君集团 / 港铁",
-    "sell_status": "sales_suspended"
-  },
-  {
-    "id": "E000019050",
-    "name": "沄璟",
+    "id": "P000001214",
+    "name": "天玺．海第1期",
     "region": "九龙",
     "district": "启德",
-    "developer": "华润置地 / 保利置业",
-    "sell_status": "on_sale"
-  },
-  {
-    "id": "P000001236",
-    "name": "柏蔚森 I",
-    "region": "九龙",
-    "district": "启德",
-    "developer": "新世界 / 远东发展",
-    "sell_status": "on_sale"
-  },
-  {
-    "id": "P000001077",
-    "name": "海璇 II",
-    "region": "港岛",
-    "district": "北角",
     "developer": "新鸿基",
     "sell_status": "on_sale"
   },
   {
-    "id": "P000001133",
-    "name": "Blue Coast",
-    "region": "港岛",
-    "district": "香港仔及鸭脷洲",
-    "developer": "长江实业 / 港铁",
-    "sell_status": "on_sale"
-  },
-  {
-    "id": "E000019264",
-    "name": "Solace",
-    "region": "港岛",
-    "district": "赤柱",
-    "developer": "东立地产",
-    "sell_status": "on_sale"
-  },
-  {
-    "id": "E000019024",
-    "name": "One Stanley",
-    "region": "港岛",
-    "district": "赤柱",
-    "developer": "建灏地产",
-    "sell_status": "on_sale"
-  },
-  {
-    "id": "E000019268",
-    "name": "Victoria Coast",
-    "region": "港岛",
-    "district": "薄扶林",
-    "developer": "华懋集团",
-    "sell_status": "on_sale"
-  },
-  {
-    "id": "E000019250",
-    "name": "Mount Pokfulam",
-    "region": "港岛",
-    "district": "半山区西部",
-    "developer": "宏安地产 / 锦华地产",
-    "sell_status": "on_sale"
-  },
-  {
-    "id": "P000001170",
-    "name": "必嘉坊．曦汇",
+    "id": "E000019770",
+    "name": "逸里1号",
     "region": "九龙",
-    "district": "红磡",
+    "district": "旺角",
     "developer": "恒基兆业",
-    "sell_status": "on_sale"
-  },
-  {
-    "id": "P000001145",
-    "name": "Monaco Marine",
-    "region": "九龙",
-    "district": "启德",
-    "developer": "会德丰",
-    "sell_status": "on_sale"
-  },
-  {
-    "id": "E000017024",
-    "name": "寿臣山15号",
-    "region": "港岛",
-    "district": "寿臣山及浅水湾",
-    "developer": "英皇国际 / 中渝置地 / 明发集团 / 尚家生活",
-    "sell_status": "on_sale"
-  },
-  {
-    "id": "E000017120",
-    "name": "缇外",
-    "region": "九龙",
-    "district": "石硖尾",
-    "developer": "嘉里建设",
-    "sell_status": "on_sale"
-  },
-  {
-    "id": "P000001144",
-    "name": "Monaco One",
-    "region": "九龙",
-    "district": "启德",
-    "developer": "会德丰",
-    "sell_status": "on_sale"
-  },
-  {
-    "id": "E000018663",
-    "name": "Kennedy 38",
-    "region": "港岛",
-    "district": "坚尼地城及摩星岭",
-    "developer": "新鸿基 / 会德丰 / 恒基兆业",
-    "sell_status": "on_sale"
+    "sell_status": "coming_soon"
   },
   {
     "id": "P000001242",
@@ -134,14 +30,6 @@
     "district": "启德",
     "developer": "长江实业",
     "sell_status": "coming_soon"
-  },
-  {
-    "id": "P000001078",
-    "name": "海璇 II (第2B-3期)",
-    "region": "港岛",
-    "district": "北角",
-    "developer": "新鸿基",
-    "sell_status": "on_sale"
   },
   {
     "id": "P000000178",
