@@ -1016,7 +1016,7 @@ def main():
         
         EXCLUDE_DISTRICTS = {"将军澳", "茶果岭、油塘及鲤鱼门", "长沙湾", "牛头角及九龙湾", "慈云山、钻石山及新蒲岗", "牛池湾"}
         INCLUDE_PROJECT_WHITELIST = {"海瑅湾 I", "海瑅湾 II", "海瑅湾 1", "海瑅湾 2", "海瑅湾I", "海瑅湾II"}
-        EXCLUDE_PROJECTS = {"33清水湾第1期", "33清水湾", "皇第"}
+        EXCLUDE_PROJECTS = {"33清水湾第1期", "33清水湾", "皇第", "利奥坊．壹隅", "利奥坊壹隅"}
         if project_name in EXCLUDE_PROJECTS:
             continue
         if region == "九龙" and district in EXCLUDE_DISTRICTS and project_name not in INCLUDE_PROJECT_WHITELIST:
@@ -1038,7 +1038,7 @@ def main():
         
         stats = parse_project_stats(src_excel_path)
         
-        if stats['total'] > 0 and stats['sold'] == stats['total']:
+        if stats['total'] == 0 or stats['sold'] == stats['total']:
             continue
         
         dest_filename = f"{region}-{district}-{project_name}.xlsx"
@@ -1252,7 +1252,7 @@ def main():
     existing_names = {scraper.clean_name(p["name"]) for p in projects_list}
     EXCLUDE_DISTRICTS = {"将军澳", "茶果岭、油塘及鲤鱼门", "长沙湾", "牛头角及九龙湾", "慈云山、钻石山及新蒲岗", "牛池湾"}
     INCLUDE_PROJECT_WHITELIST = {"海瑅湾 I", "海瑅湾 II", "海瑅湾 1", "海瑅湾 2", "海瑅湾I", "海瑅湾II"}
-    EXCLUDE_PROJECTS = {"33清水湾第1期", "33清水湾", "皇第"}
+    EXCLUDE_PROJECTS = {"33清水湾第1期", "33清水湾", "皇第", "利奥坊．壹隅", "利奥坊壹隅"}
     for hkp_name, hkp_item in hkp_status_map.items():
         if hkp_name in EXCLUDE_PROJECTS or scraper.clean_name(hkp_name) in {scraper.clean_name(x) for x in EXCLUDE_PROJECTS}:
             continue
