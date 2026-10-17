@@ -1,43 +1,11 @@
 [
   {
-    "id": "P000001261",
-    "name": "壹沐第2期",
+    "id": "E000019768",
+    "name": "瑅海",
     "region": "九龙",
-    "district": "马头角",
-    "developer": "恒基兆业",
-    "sell_status": "on_sale"
-  },
-  {
-    "id": "E000019317",
-    "name": "峻誉．渣甸山",
-    "region": "港岛",
-    "district": "渣甸山及黄泥涌峡",
-    "developer": "中信泰富",
-    "sell_status": "on_sale"
-  },
-  {
-    "id": "E000019675",
-    "name": "PORTO",
-    "region": "港岛",
-    "district": "香港仔及鸭脷洲",
-    "developer": "宏安地产",
-    "sell_status": "on_sale"
-  },
-  {
-    "id": "P000001257",
-    "name": "The Monet 第1期",
-    "region": "九龙",
-    "district": "九龙塘",
-    "developer": "会德丰",
+    "district": "红磡",
+    "developer": "信和置业 / 招商置地 / 巿建局",
     "sell_status": "coming_soon"
-  },
-  {
-    "id": "P000001253",
-    "name": "Deep Water South 第6A期",
-    "region": "港岛",
-    "district": "香港仔及鸭脷洲",
-    "developer": "会德丰 / 港铁",
-    "sell_status": "on_sale"
   },
   {
     "id": "E000019770",
