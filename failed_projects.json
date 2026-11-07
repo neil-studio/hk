@@ -1,35 +1,35 @@
 [
   {
-    "id": "E000019756",
-    "name": "泓璟",
-    "region": "九龙",
-    "district": "何文田",
-    "developer": "辉宇国际",
-    "sell_status": "on_sale"
-  },
-  {
-    "id": "P000001284",
-    "name": "首岸第3期",
-    "region": "九龙",
-    "district": "红磡",
-    "developer": "恒基兆业 / 希慎兴业 / 帝国集团",
-    "sell_status": "on_sale"
-  },
-  {
-    "id": "E000019463",
-    "name": "璟南",
+    "id": "E000019250",
+    "name": "Mount Pokfulam",
     "region": "港岛",
-    "district": "香港仔及鸭脷洲",
-    "developer": "大昌地产",
+    "district": "半山区西部",
+    "developer": "宏安地产 / 锦华地产",
     "sell_status": "on_sale"
   },
   {
-    "id": "E000017747",
-    "name": "VAU Residence",
-    "region": "九龙",
-    "district": "何文田",
-    "developer": "万科香港",
+    "id": "P000001055",
+    "name": "Central Peak II",
+    "region": "港岛",
+    "district": "半山区东部",
+    "developer": "新鸿基",
     "sell_status": "on_sale"
+  },
+  {
+    "id": "E000016945",
+    "name": "15 Western Street",
+    "region": "港岛",
+    "district": "西营盘及上环",
+    "developer": "万科香港",
+    "sell_status": "sales_suspended"
+  },
+  {
+    "id": "E000015470",
+    "name": "海天径 1号, 舂磡角道 44, 46, 48, 50号",
+    "region": "港岛",
+    "district": "赤柱",
+    "developer": "信德集团",
+    "sell_status": "sales_suspended"
   },
   {
     "id": "P000001242",

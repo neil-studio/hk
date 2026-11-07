@@ -1225,14 +1225,27 @@ def main():
             return
     else:
         print("\n[Step 1] 正在请求项目列表 API...")
-        try:
-            api_headers['User-Agent'] = random.choice(USER_AGENTS)
-            r = requests.get("https://data.hkp.com.hk/search/v2/new-properties", params={'limit': 1000}, headers=api_headers, timeout=15)
-            r.raise_for_status()
-            projects_data = r.json()
-        except Exception as e:
-            print(f"错误: 无法请求项目列表 API: {e}", file=sys.stderr)
-            return
+        list_url = "https://data.hkp.com.hk/search/v2/new-properties"
+        max_list_retries = 3
+        projects_data = None
+        for attempt in range(max_list_retries):
+            try:
+                if attempt > 0:
+                    time.sleep(attempt * 2)
+                    token = fetch_user_token()
+                    api_headers['Authorization'] = f"Bearer {token}"
+                api_headers['User-Agent'] = random.choice(USER_AGENTS)
+                r = requests.get(list_url, params={'limit': 1000}, headers=api_headers, timeout=15)
+                r.raise_for_status()
+                projects_data = r.json()
+                if projects_data and projects_data.get('result'):
+                    break
+            except Exception as e:
+                print(f"  [重试 {attempt+1}/{max_list_retries}] 请求项目列表 API 失败: {e}", file=sys.stderr)
+
+        if not projects_data or not projects_data.get('result'):
+            print(f"❌ 严重错误: 无法请求项目列表 API (已重试 {max_list_retries} 次)，根据熔断铁律立即终止全流程！", file=sys.stderr)
+            sys.exit(1)
 
         all_projects = projects_data.get('result', [])
         print(f"API 返回项目总数: {len(all_projects)}")
@@ -1430,21 +1443,31 @@ def main():
         project_buildings_data = {}
 
         # 6.2.3 循环拉取每个楼栋的销控数据
+        building_fetch_failed = False
         for bid, bname in buildings_map.items():
             print(f"    -> 楼栋: {bname} (ID: {bid})")
 
-            try:
-                api_headers['User-Agent'] = random.choice(USER_AGENTS)
-                units_res = requests.get(f"https://data.hkp.com.hk/info/v1/new-property/transactions/buildings/{bid}", headers=api_headers, timeout=10)
-                if units_res.status_code != 200:
-                    print(f"      警告: 无法拉取该楼栋的单位明细。")
-                    continue
-                units_data = units_res.json()
-            except Exception as e:
-                print(f"      警告: 请求楼栋单位明细异常 ({e})。")
-                continue
+            units = None
+            for b_attempt in range(3):
+                try:
+                    if b_attempt > 0:
+                        time.sleep(1)
+                    api_headers['User-Agent'] = random.choice(USER_AGENTS)
+                    units_res = requests.get(f"https://data.hkp.com.hk/info/v1/new-property/transactions/buildings/{bid}", headers=api_headers, timeout=12)
+                    if units_res.status_code == 200:
+                        units_data = units_res.json()
+                        units = units_data.get('data', [])
+                        break
+                    else:
+                        print(f"      [重试 {b_attempt+1}/3] 楼栋接口状态码异常: {units_res.status_code}")
+                except Exception as e:
+                    print(f"      [重试 {b_attempt+1}/3] 楼栋接口网络异常: {e}")
 
-            units = units_data.get('data', [])
+            if units is None:
+                print(f"      ❌ 警告: 楼栋 [{bname}] (ID: {bid}) 单位明细拉取失败 (已重试3次)！")
+                building_fetch_failed = True
+                break
+
             print(f"      获取到单位数: {len(units)}")
             
             parsed_units = []
@@ -1664,8 +1687,15 @@ def main():
             os.makedirs(project_dir, exist_ok=True)
             
             excel_filename = get_safe_filename(project_dir, pname)
-            write_project_excel(excel_filename, pname, project_buildings_data)
-            print(f"  [完成] 写入项目销控表: {excel_filename}")
+            if not building_fetch_failed:
+                write_project_excel(excel_filename, pname, project_buildings_data)
+                print(f"  [完成] 写入项目销控表: {excel_filename}")
+            else:
+                print(f"  [安全熔断] 项目 [{pname}] 部分楼栋拉取失败，放弃覆盖残缺数据，安全回退沿用历史数据！")
+                if load_existing_project_data(pname, pid, region, district, proj['developer'], existing_folders, global_units):
+                    restored_projects.append(pname)
+                else:
+                    totally_failed_projects.append(pname)
         else:
             print("  [提示] 抓取的新数据为空，尝试沿用历史数据。")
             if load_existing_project_data(pname, pid, region, district, proj['developer'], existing_folders, global_units):
