@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>香港二手房源合作情报大盘</title>
+
+  <!-- 🔒 专属访问密码保护门 (lm8888) - 零延迟优先锁定 -->
+  <script>
+    (function() {
+      var k = 'hk_site_auth_token';
+      var isUnlocked = sessionStorage.getItem(k) === 'unlocked_lm8888' || localStorage.getItem(k) === 'unlocked_lm8888';
+      if (isUnlocked) {
+        document.documentElement.classList.add('unlocked-auth');
+      } else {
+        document.documentElement.classList.add('site-locked');
+      }
+    })();
+  </script>
+
+  <style>
+    :root {
+      --primary: #185adb;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --border: #e2e8f0;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --midland: #f59e0b;
+      --centaline: #ef4444;
+      --landscape: #8b5cf6;
+      --own: #16a34a;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; }
+    body { background-color: var(--bg); color: var(--text-main); font-size: 13px; line-height: 1.5; padding: 16px 20px; }
+
+    /* 🔒 密码保护门覆盖层 */
+    html.site-locked body { overflow: hidden; }
+    html.site-locked #appContent { display: none !important; }
+    .site-auth-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.95); z-index: 99999; display: flex; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(8px); }
+    html.unlocked-auth .site-auth-overlay { display: none !important; }
+    .site-auth-card { background: #fff; border-radius: 12px; padding: 32px 28px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3); }
+    .auth-icon { font-size: 40px; margin-bottom: 12px; }
+    .auth-title { font-size: 18px; font-weight: 800; color: #0f172a; margin-bottom: 6px; }
+    .auth-subtitle { font-size: 12.5px; color: #64748b; margin-bottom: 20px; }
+    .auth-input-group { display: flex; gap: 8px; }
+    .auth-input { flex: 1; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 6px; font-size: 14px; outline: none; }
+    .auth-input:focus { border-color: var(--primary); }
+    .auth-btn { background: var(--primary); color: #fff; border: none; padding: 10px 16px; border-radius: 6px; font-weight: 700; cursor: pointer; }
+    .auth-error-msg { color: #dc2626; font-size: 12px; margin-top: 10px; min-height: 18px; font-weight: 600; }
+
+    /* 顶部控制面板 */
+    .header-panel { background: var(--card-bg); border-radius: 8px; padding: 14px 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); margin-bottom: 12px; border: 1px solid var(--border); }
+    .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .header-title { font-size: 18px; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 8px; }
+    .stats-bar { display: flex; gap: 14px; font-size: 12px; color: var(--text-muted); }
+
+    /* 筛选控制栏 */
+    .filter-grid { display: grid; grid-template-columns: 2fr repeat(4, 1fr) auto; gap: 8px; background: #f8fafc; padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border); }
+    .filter-item { display: flex; flex-direction: column; gap: 2px; }
+    .filter-item label { font-size: 10.5px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; }
+    .filter-item input, .filter-item select { padding: 5px 8px; border-radius: 5px; border: 1px solid var(--border); background: #fff; font-size: 12px; outline: none; }
+    .filter-item input:focus, .filter-item select:focus { border-color: var(--primary); }
+
+    /* 快捷来源按钮 */
+    .source-btn { padding: 3px 10px; border-radius: 20px; font-size: 11.5px; font-weight: 600; cursor: pointer; border: 1px solid transparent; background: #fff; transition: all 0.2s; }
+    .source-btn.active { box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+    .source-all.active { background: #0f172a; color: #fff; border-color: #0f172a; }
+    .source-own { color: #15803d; border-color: rgba(22, 163, 74, 0.4); background: #f0fdf4; }
+    .source-own.active { background: #16a34a; color: #fff; }
+    .source-midland { color: #d97706; border-color: rgba(245, 158, 11, 0.3); background: #fffbeb; }
+    .source-midland.active { background: #d97706; color: #fff; }
+    .source-centaline { color: #dc2626; border-color: rgba(239, 68, 68, 0.3); background: #fef2f2; }
+    .source-centaline.active { background: #dc2626; color: #fff; }
+    .source-landscape { color: #7c3aed; border-color: rgba(139, 92, 246, 0.3); background: #f5f3ff; }
+    .source-landscape.active { background: #7c3aed; color: #fff; }
+
+    /* 房源列表容器 */
+    .listings-container { display: flex; flex-direction: column; gap: 10px; }
+
+    /* 结构化双区条目 (方案 B) */
+    .card-scheme-b { background: var(--card-bg); border-radius: 8px; border: 1px solid var(--border); padding: 10px 14px; display: flex; align-items: center; gap: 14px; transition: all 0.15s; }
+    .card-scheme-b:hover { border-color: #93c5fd; box-shadow: 0 4px 12px rgba(0,0,0,0.04); background: #fafcff; }
+
+    /* 缩略图 */
+    .thumb-box { position: relative; width: 72px; height: 56px; border-radius: 6px; overflow: hidden; background: #e2e8f0; cursor: pointer; border: 1px solid #cbd5e1; flex-shrink: 0; }
+    .thumb-box img { width: 100%; height: 100%; object-fit: cover; }
+    .thumb-badge { position: absolute; bottom: 2px; right: 2px; background: rgba(0,0,0,0.72); color: #fff; font-size: 8.5px; padding: 1px 4px; border-radius: 3px; font-weight: 600; }
+
+    /* 左区：核心房产资产区 */
+    .b-core-zone { flex: 0 0 500px; display: flex; flex-direction: column; gap: 6px; }
+    .b-core-row1 { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+    .b-district-tag { font-size: 11px; font-weight: 700; color: #0284c7; background: #e0f2fe; padding: 1px 6px; border-radius: 3px; }
+    .b-prop-name { font-size: 15px; font-weight: 800; color: #0f172a; cursor: pointer; }
+    .b-prop-name:hover { color: var(--primary); text-decoration: underline; }
+    .b-price-hero { font-size: 16.5px; font-weight: 900; color: #dc2626; margin-left: 2px; }
+    .b-rent-sub { font-size: 11.5px; color: #b45309; background: #fef3c7; border: 1px solid #fde68a; padding: 1px 5px; border-radius: 3px; font-weight: 600; }
+
+    /* 第2行：户型 -> 面积 -> 单价 */
+    .b-core-row2 { display: flex; align-items: center; gap: 8px; }
+    .b-pill-layout { font-size: 12px; font-weight: 700; color: #1e293b; background: #f1f5f9; padding: 2px 7px; border-radius: 4px; border: 1px solid #e2e8f0; }
+    .b-pill-area { font-size: 12.5px; font-weight: 800; color: #0f172a; background: #f8fafc; padding: 2px 7px; border-radius: 4px; border: 1px solid #e2e8f0; }
+    .b-pill-psf { font-size: 12px; font-weight: 600; color: #475569; background: #f8fafc; padding: 2px 7px; border-radius: 4px; border: 1px solid #e2e8f0; }
+
+    /* 竖向美学分割线 */
+    .b-divider { width: 1px; height: 42px; background: #e2e8f0; flex-shrink: 0; }
+
+    /* 右区：业务与对接细节区 (上下两列) */
+    .b-detail-zone { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; padding-left: 2px; }
+    .b-detail-row1 { display: flex; align-items: center; gap: 8px; font-size: 11.5px; flex-wrap: wrap; }
+    .b-detail-row2 { display: flex; align-items: center; gap: 8px; font-size: 11.5px; color: #64748b; flex-wrap: wrap; }
+
+    /* 最右侧：状态与操作 */
+    .b-action-zone { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; margin-left: auto; }
+    .badge-status { display: inline-block; padding: 2px 7px; border-radius: 4px; font-size: 11.5px; font-weight: 700; white-space: nowrap; }
+    .status-vacant { background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; }
+    .status-tenanted { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+    .status-owner { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+    .date-fresh { color: #059669; font-weight: 700; font-size: 11.5px; white-space: nowrap; }
+    .btn-detail { padding: 4px 10px; border-radius: 5px; font-size: 12px; font-weight: 600; border: 1px solid #cbd5e1; background: #fff; color: #0f172a; cursor: pointer; transition: all 0.2s; }
+    .btn-detail:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+    /* 徽章微调 */
+    .badge-source { display: inline-flex; align-items: center; gap: 3px; padding: 1px 5px; border-radius: 3px; font-size: 10.5px; font-weight: 700; }
+    .badge-own { background: #dcfce7; color: #15803d; border: 1px solid #86efac; font-weight: 800; }
+    .badge-midland { background: #fef3c7; color: #92400e; }
+    .badge-centaline { background: #fee2e2; color: #991b1b; }
+    .badge-landscape { background: #ede9fe; color: #5b21b6; }
+    .badge-age { background: #fef9c3; color: #854d0e; padding: 1px 5px; border-radius: 3px; font-weight: 600; font-size: 10.5px; border: 1px solid #fef08a; }
+    .badge-key { background: #e0f2fe; color: #0369a1; padding: 1px 5px; border-radius: 3px; font-weight: 600; font-size: 10.5px; }
+    .badge-sales { display: inline-flex; align-items: center; gap: 2px; font-size: 11px; font-weight: 700; color: #0f766e; background: #ccfbf1; padding: 1px 5px; border-radius: 3px; }
+    .ref-code { font-family: monospace; font-weight: 700; color: #334155; }
+    .btn-copy { font-size: 9.5px; padding: 1px 4px; border: 1px solid #cbd5e1; border-radius: 3px; background: #fff; cursor: pointer; color: #475569; }
+
+    /* 空状态展示区 (Empty State) */
+    .empty-state-box { background: var(--card-bg); border-radius: 12px; border: 1.5px dashed var(--border); padding: 60px 20px; text-align: center; margin-top: 10px; }
+    .empty-icon { font-size: 46px; margin-bottom: 12px; }
+    .empty-title { font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 6px; }
+    .empty-desc { font-size: 12.5px; color: #64748b; max-width: 480px; margin: 0 auto; line-height: 1.6; }
+
+    /* 相册全屏画廊弹窗 (Photo Lightbox) */
+    .gallery-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(10, 15, 30, 0.9); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); }
+    .gallery-container { width: 920px; max-width: 95vw; height: 88vh; background: #0f172a; border-radius: 12px; display: flex; flex-direction: column; overflow: hidden; }
+    .gallery-header { padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; color: #fff; }
+    .gallery-tabs { display: flex; gap: 8px; }
+    .gallery-tab { padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; background: #1e293b; color: #94a3b8; }
+    .gallery-tab.active { background: #3b82f6; color: #fff; }
+    .gallery-main { flex: 1; display: flex; justify-content: center; align-items: center; background: #020617; overflow: hidden; padding: 10px; }
+    .gallery-main img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 6px; }
+    .gallery-thumbs { height: 86px; background: #0f172a; border-top: 1px solid #334155; padding: 8px 16px; display: flex; gap: 10px; overflow-x: auto; align-items: center; }
+    .g-thumb { width: 76px; height: 56px; border-radius: 6px; overflow: hidden; cursor: pointer; opacity: 0.5; border: 2px solid transparent; flex-shrink: 0; }
+    .g-thumb.active, .g-thumb:hover { opacity: 1; border-color: #3b82f6; }
+    .g-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .gallery-close { background: none; border: none; color: #94a3b8; font-size: 24px; cursor: pointer; }
+
+    /* 文本详情 Modal */
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.6); display: none; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(2px); }
+    .modal-content { background: #fff; width: 660px; max-width: 90vw; max-height: 85vh; border-radius: 12px; overflow-y: auto; padding: 20px; position: relative; }
+    .modal-close { position: absolute; top: 14px; right: 14px; font-size: 20px; font-weight: 700; cursor: pointer; border: none; background: none; color: #64748b; }
+  </style>
+</head>
+<body>
+
+  <!-- 🔒 专属访问密码保护门 (Password Gate: lm8888) -->
+  <div id="siteAuthOverlay" class="site-auth-overlay">
+    <div class="site-auth-card">
+      <div class="auth-icon">🔒</div>
+      <div class="auth-title">二手房源合作情报大盘</div>
+      <p class="auth-subtitle">访问受限，请输入专属授权密码开启体验</p>
+      <div class="auth-input-group">
+        <input type="password" id="siteAuthPassword" class="auth-input" placeholder="请输入访问密码" autocomplete="current-password" autofocus />
+        <button id="siteAuthBtn" class="auth-btn">解锁进入 →</button>
+      </div>
+      <div id="siteAuthError" class="auth-error-msg"></div>
+    </div>
+  </div>
+
+  <div id="appContent">
+    <!-- 顶部控制面板 -->
+    <div class="header-panel">
+      <div class="header-top">
+        <div class="header-title">
+          <span>🏢 二手房源合作情报大盘</span>
+        </div>
+        <div class="stats-bar">
+          <div>在盘房源: <strong id="totalCount" style="color:var(--primary); font-size:13.5px;">0</strong> 套</div>
+          <div>内部自录: <strong id="ownCount" style="color:#15803d; font-size:13.5px;">0</strong> 套</div>
+          <div>合作中介: <strong id="agencyCount" style="color:var(--midland); font-size:13.5px;">0</strong> 套</div>
+        </div>
+      </div>
+
+      <!-- 筛选工具栏 -->
+      <div class="filter-grid">
+        <div class="filter-item">
+          <label>快速搜索</label>
+          <input type="text" id="searchInput" placeholder="搜索屋苑、单位、中介编号、提供销售、楼龄...">
+        </div>
+        <div class="filter-item">
+          <label>商圈片区</label>
+          <select id="districtFilter">
+            <option value="ALL">全部商圈</option>
+            <option value="西半山">西半山</option>
+            <option value="中半山">中半山</option>
+            <option value="渣甸山">渣甸山 / 跑马地</option>
+          </select>
+        </div>
+        <div class="filter-item">
+          <label>户型房数</label>
+          <select id="roomFilter">
+            <option value="ALL">全部户型</option>
+            <option value="1房">1房</option>
+            <option value="2房">2房</option>
+            <option value="3房">3房</option>
+            <option value="4房及以上">4房及以上</option>
+          </select>
+        </div>
+        <div class="filter-item">
+          <label>看房/在盘现状</label>
+          <select id="statusFilter">
+            <option value="ALL">全部状态</option>
+            <option value="吉盘">吉盘 (现楼空置)</option>
+            <option value="租中">租中 (连租约)</option>
+            <option value="自住">业主自住</option>
+          </select>
+        </div>
+        <div class="filter-item">
+          <label>数据排序</label>
+          <select id="sortFilter">
+            <option value="date-desc">最新确认日期优先</option>
+            <option value="price-asc">叫价从低到高</option>
+            <option value="price-desc">叫价从高到低</option>
+            <option value="psf-desc">实用呎价从高到低</option>
+          </select>
+        </div>
+        <div class="filter-item" style="display:flex; justify-content:flex-end;">
+          <label>&nbsp;</label>
+          <button class="btn-detail" style="background:#0f172a; color:#fff; border:none; height:28px;" onclick="resetFilters()">重置筛选</button>
+        </div>
+      </div>
+
+      <!-- 快捷来源过滤 (内部自录使用高亮绿) -->
+      <div style="display:flex; gap:8px; margin-top:10px; align-items:center;">
+        <span style="font-size:11.5px; font-weight:600; color:var(--text-muted); margin-right:2px;">来源快速切换:</span>
+        <button class="source-btn source-all active" onclick="filterBySource('ALL')">全部房源 (0)</button>
+        <button class="source-btn source-own" onclick="filterBySource('内部自录')">💼 内部自录 (0)</button>
+        <button class="source-btn source-midland" onclick="filterBySource('美联物业')">🟡 美联物业 (0)</button>
+        <button class="source-btn source-centaline" onclick="filterBySource('中原地產')">🔴 中原地產 (0)</button>
+        <button class="source-btn source-landscape" onclick="filterBySource('領域顧問')">🟣 領域顧問 (0)</button>
+      </div>
+    </div>
+
+    <!-- 房源条目流容器 -->
+    <div class="listings-container" id="listingsContainer">
+      <!-- 动态注入房源数据或空状态提示 -->
+    </div>
+  </div>
+
+  <!-- 沉浸式相册全屏画廊弹窗 (Photo Lightbox) -->
+  <div class="gallery-overlay" id="galleryModal">
+    <div class="gallery-container">
+      <div class="gallery-header">
+        <div>
+          <strong id="gTitle" style="font-size:16px;">房源名称</strong>
+          <span id="gSubtitle" style="color:#94a3b8; font-size:12px; margin-left:8px;">合作方编号</span>
+        </div>
+        <div class="gallery-tabs">
+          <div class="gallery-tab active" id="tabPhotos" onclick="switchGalleryTab('photos')">📷 室内实景相片</div>
+          <div class="gallery-tab" id="tabPlan" onclick="switchGalleryTab('plan')">📐 户型平面图</div>
+        </div>
+        <button class="gallery-close" onclick="closeGallery()">✕</button>
+      </div>
+      <div class="gallery-main">
+        <img id="gMainImg" src="" alt="房源高清相片">
+      </div>
+      <div class="gallery-thumbs" id="gThumbsContainer"></div>
+    </div>
+  </div>
+
+  <!-- 文本详情 Modal -->
+  <div class="modal-overlay" id="detailModal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <script>
+    // 🔒 专属授权验证逻辑 (lm8888)
+    const AUTH_KEY = 'hk_site_auth_token';
+    function checkAuth() {
+      const isUnlocked = sessionStorage.getItem(AUTH_KEY) === 'unlocked_lm8888' || localStorage.getItem(AUTH_KEY) === 'unlocked_lm8888';
+      if (isUnlocked) {
+        document.documentElement.classList.add('unlocked-auth');
+        document.documentElement.classList.remove('site-locked');
+      } else {
+        document.documentElement.classList.add('site-locked');
+        document.documentElement.classList.remove('unlocked-auth');
+      }
+    }
+
+    document.getElementById('siteAuthBtn').addEventListener('click', doUnlock);
+    document.getElementById('siteAuthPassword').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') doUnlock();
+    });
+
+    function doUnlock() {
+      const pwd = document.getElementById('siteAuthPassword').value.trim();
+      const errEl = document.getElementById('siteAuthError');
+      if (pwd === 'lm8888') {
+        sessionStorage.setItem(AUTH_KEY, 'unlocked_lm8888');
+        localStorage.setItem(AUTH_KEY, 'unlocked_lm8888');
+        checkAuth();
+      } else {
+        errEl.innerText = '密码错误，请重新输入';
+        document.getElementById('siteAuthPassword').value = '';
+        document.getElementById('siteAuthPassword').focus();
+      }
+    }
+    checkAuth();
+
+    // 纯净初始房源数据库 (当前为空，待后续正式录入发布)
+    const mockListings = [];
+
+    let currentSource = 'ALL';
+    let currentGalleryItem = null;
+
+    function render() {
+      const container = document.getElementById("listingsContainer");
+      const search = document.getElementById("searchInput").value.trim().toLowerCase();
+      const district = document.getElementById("districtFilter").value;
+      const room = document.getElementById("roomFilter").value;
+      const status = document.getElementById("statusFilter").value;
+      const sort = document.getElementById("sortFilter").value;
+
+      let filtered = mockListings.filter(item => {
+        if (currentSource !== 'ALL' && item.source !== currentSource) return false;
+        if (district !== 'ALL' && item.district !== district) return false;
+        if (status !== 'ALL' && item.status !== status) return false;
+        if (room !== 'ALL' && !item.layout.includes(room)) return false;
+        if (search) {
+          const matchStr = (item.estate + item.unit + item.refNo + item.source + item.salesPerson + item.age + item.remarks).toLowerCase();
+          if (!matchStr.includes(search)) return false;
+        }
+        return true;
+      });
+
+      document.getElementById("totalCount").innerText = filtered.length;
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state-box">
+            <div class="empty-icon">📦</div>
+            <div class="empty-title">暂无在盘房源数据</div>
+            <div class="empty-desc">
+              系统框架已就绪，当前未加载任何二手房源数据。<br/>
+              后续在《自有二手房源录入模板.xlsx》或中介 PDF 导入后，将自动在此实时呈现！
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      let html = '';
+      filtered.forEach(item => {
+        let badgeClass = "badge-midland";
+        let sourceIcon = "🟡";
+        if (item.sourceType === 'own') { badgeClass = "badge-own"; sourceIcon = "💼"; }
+        if (item.sourceType === 'centaline') { badgeClass = "badge-centaline"; sourceIcon = "🔴"; }
+        if (item.sourceType === 'landscape') { badgeClass = "badge-landscape"; sourceIcon = "🟣"; }
+
+        let statusClass = "status-vacant";
+        if (item.status === '租中') statusClass = "status-tenanted";
+        if (item.status === '自住') statusClass = "status-owner";
+
+        const coverImg = item.photos && item.photos.length > 0 ? item.photos[0] : (item.plan || '');
+        const badgeText = item.photos && item.photos.length > 0 ? '📷 图' : (item.plan ? '📐 户型' : '无图');
+
+        html += `
+          <div class="card-scheme-b">
+            <!-- 缩略图 -->
+            <div class="thumb-box" onclick="openGallery('${item.id}')" title="点击查看大图/户型图">
+              <img src="${coverImg}" alt="${item.estate}" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'72\' height=\'56\' fill=\'%23f1f5f9\'><rect width=\'100%\' height=\'100%\'/><text x=\'50%\' y=\'50%\' font-size=\'10\' fill=\'%2394a3b8\' dominant-baseline=\'middle\' text-anchor=\'middle\'>无图</text></svg>'">
+              <span class="thumb-badge">${badgeText}</span>
+            </div>
+
+            <!-- 左区：核心房产资产区 (上下两列，大字整齐) -->
+            <div class="b-core-zone">
+              <div class="b-core-row1">
+                <span class="b-district-tag">${item.district}</span>
+                <div class="b-prop-name" onclick="openGallery('${item.id}')">${item.estate} · ${item.unit}</div>
+                <span class="b-price-hero">HK$ ${item.priceText}</span>
+                ${item.rent ? `<span class="b-rent-sub">(租: ${item.rent})</span>` : ''}
+              </div>
+              <div class="b-core-row2">
+                <span class="b-pill-layout">${item.layout}</span>
+                <span class="b-pill-area">${item.area.toLocaleString()} 呎</span>
+                <span class="b-pill-psf">@${item.psf}</span>
+              </div>
+            </div>
+
+            <!-- 竖向美学分割线 -->
+            <div class="b-divider"></div>
+
+            <!-- 右区：对接与业务跟进区 (上下两列，清晰分类) -->
+            <div class="b-detail-zone">
+              <div class="b-detail-row1">
+                <span class="badge-source ${badgeClass}">${sourceIcon} ${item.source}</span>
+                <span class="ref-code">${item.refNo}</span>
+                <button class="btn-copy" onclick="copyText('${item.refNo}')">复制</button>
+                <span class="badge-age">🏷️ ${item.age}</span>
+                <span class="badge-sales">👤 ${item.salesPerson}</span>
+              </div>
+              <div class="b-detail-row2">
+                <span class="badge-key">${item.keyInfo}</span>
+                <span>🚗 ${item.carpark}</span>
+                <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:240px;" title="${item.remarks}">💬 ${item.remarks}</span>
+              </div>
+            </div>
+
+            <!-- 最右侧：状态、日期与操作 -->
+            <div class="b-action-zone">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span class="badge-status ${statusClass}">${item.status}</span>
+                <button class="btn-detail" onclick="viewDetails('${item.id}')">详情</button>
+              </div>
+              <div class="date-fresh">📅 ${item.confirmDate}</div>
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function filterBySource(source) {
+      currentSource = source;
+      document.querySelectorAll('.source-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = event ? event.target : null;
+      if (activeBtn) activeBtn.classList.add('active');
+      render();
+    }
+
+    function resetFilters() {
+      document.getElementById("searchInput").value = "";
+      document.getElementById("districtFilter").value = "ALL";
+      document.getElementById("roomFilter").value = "ALL";
+      document.getElementById("statusFilter").value = "ALL";
+      document.getElementById("sortFilter").value = "date-desc";
+      currentSource = 'ALL';
+      document.querySelectorAll('.source-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelector('.source-all').classList.add('active');
+      render();
+    }
+
+    function copyText(txt) {
+      navigator.clipboard.writeText(txt);
+      alert("已复制盘源编号: " + txt);
+    }
+
+    function openGallery(id) {
+      const item = mockListings.find(x => x.id === id);
+      if (!item) return;
+      currentGalleryItem = item;
+      document.getElementById("gTitle").innerText = `${item.estate} ${item.unit}`;
+      document.getElementById("gSubtitle").innerText = `${item.source} · 盘号 ${item.refNo}`;
+      switchGalleryTab('photos');
+      document.getElementById("galleryModal").style.display = "flex";
+    }
+
+    function switchGalleryTab(tab) {
+      if (!currentGalleryItem) return;
+      const mainImg = document.getElementById("gMainImg");
+      const thumbsBox = document.getElementById("gThumbsContainer");
+      const photoList = currentGalleryItem.photos || [];
+      if (photoList.length > 0) {
+        mainImg.src = photoList[0];
+        thumbsBox.innerHTML = photoList.map(src => `<div class="g-thumb active"><img src="${src}"></div>`).join('');
+      } else if (currentGalleryItem.plan) {
+        mainImg.src = currentGalleryItem.plan;
+        thumbsBox.innerHTML = `<div class="g-thumb active"><img src="${currentGalleryItem.plan}"></div>`;
+      }
+    }
+
+    function closeGallery() { document.getElementById("galleryModal").style.display = "none"; }
+    function closeModal() { document.getElementById("detailModal").style.display = "none"; }
+
+    function viewDetails(id) {
+      const item = mockListings.find(x => x.id === id);
+      if (!item) return;
+      document.getElementById("modalBody").innerHTML = `
+        <h3 style="font-size:17px; margin-bottom:8px;">${item.estate} ${item.unit}</h3>
+        <p style="color:#64748b; margin-bottom:12px;">${item.district} · ${item.source} (${item.refNo}) · 楼龄: ${item.age}</p>
+        <div style="background:#f8fafc; padding:12px; border-radius:6px; margin-bottom:12px; line-height:1.8;">
+          <div>💰 叫价: <strong style="color:#dc2626; font-size:15px;">HK$ ${item.priceText}</strong> (${item.psf})</div>
+          <div>📐 面积格局: ${item.area} 呎 · ${item.layout}</div>
+          <div>🔑 钥匙看房: <strong>${item.keyInfo}</strong></div>
+          <div>🚗 车位: ${item.carpark}</div>
+          <div>👤 内部对接销售: <strong>${item.salesPerson}</strong></div>
+          <div>📅 最新确认日期: ${item.confirmDate}</div>
+        </div>
+        <p style="color:#475569; font-size:12.5px; line-height:1.6; margin-bottom:14px;"><strong>详细备注:</strong> ${item.remarks}</p>
+        <div style="text-align:right;"><button class="btn-detail" onclick="closeModal()">关闭</button></div>
+      `;
+      document.getElementById("detailModal").style.display = "flex";
+    }
+
+    // 绑定事件
+    document.getElementById("searchInput").addEventListener("input", render);
+    document.getElementById("districtFilter").addEventListener("change", render);
+    document.getElementById("roomFilter").addEventListener("change", render);
+    document.getElementById("statusFilter").addEventListener("change", render);
+    document.getElementById("sortFilter").addEventListener("change", render);
+
+    // 初始渲染
+    render();
+  </script>
+</body>
+</html>
