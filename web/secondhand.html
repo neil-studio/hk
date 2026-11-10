@@ -343,7 +343,7 @@
         salesPerson: "Vincent",
         confirmDate: "2026-06-03",
         remarks: "渣甸臺罕有独栋洋房放盘，环境清幽私密，地段尊贵。",
-        photos: ["secondhand_images/zhadiantai_2_photos.jpg"],
+        photos: ["secondhand_images/zhadiantai_2_photos_1.jpg", "secondhand_images/zhadiantai_2_photos_2.jpg"],
         plan: ""
       },
       {
@@ -368,7 +368,7 @@
         salesPerson: "Vincent",
         confirmDate: "2026-06-03",
         remarks: "连约 WT 130k 至 2025年7月，租金回报稳定，优质收租资产。",
-        photos: ["secondhand_images/zhadiantai_4_photos.jpg"],
+        photos: ["secondhand_images/zhadiantai_4_photos_1.jpg", "secondhand_images/zhadiantai_4_photos_2.jpg"],
         plan: ""
       },
       {
@@ -488,7 +488,7 @@
         if (item.status === '自住') statusClass = "status-owner";
 
         const coverImg = item.photos && item.photos.length > 0 ? item.photos[0] : (item.plan || '');
-        const badgeText = item.photos && item.photos.length > 0 ? '📷 图' : (item.plan ? '📐 户型' : '无图');
+        const badgeText = item.photos && item.photos.length > 1 ? `📷 ${item.photos.length}张图` : (item.photos && item.photos.length === 1 ? '📷 图' : (item.plan ? '📐 户型' : '无图'));
 
         html += `
           <div class="card-scheme-b">
@@ -577,7 +577,8 @@
       if (!item) return;
       currentGalleryItem = item;
       document.getElementById("gTitle").innerText = `${item.estate} ${item.unit}`;
-      document.getElementById("gSubtitle").innerText = `${item.source} · 盘号 ${item.refNo}`;
+      const photoCountText = item.photos && item.photos.length > 1 ? ` · 共 ${item.photos.length} 页相片 (点击下方切换)` : '';
+      document.getElementById("gSubtitle").innerText = `${item.source} · 盘号 ${item.refNo}${photoCountText}`;
       switchGalleryTab('photos');
       document.getElementById("galleryModal").style.display = "flex";
     }
@@ -589,11 +590,21 @@
       const photoList = currentGalleryItem.photos || [];
       if (photoList.length > 0) {
         mainImg.src = photoList[0];
-        thumbsBox.innerHTML = photoList.map(src => `<div class="g-thumb active"><img src="${src}"></div>`).join('');
+        thumbsBox.innerHTML = photoList.map((src, idx) => `
+          <div class="g-thumb ${idx === 0 ? 'active' : ''}" onclick="setGalleryMain('${src}', this)" title="点击切换第 ${idx + 1} 页相片">
+            <img src="${src}">
+          </div>
+        `).join('');
       } else if (currentGalleryItem.plan) {
         mainImg.src = currentGalleryItem.plan;
         thumbsBox.innerHTML = `<div class="g-thumb active"><img src="${currentGalleryItem.plan}"></div>`;
       }
+    }
+
+    function setGalleryMain(src, el) {
+      document.getElementById("gMainImg").src = src;
+      document.querySelectorAll('.g-thumb').forEach(t => t.classList.remove('active'));
+      if (el) el.classList.add('active');
     }
 
     function closeGallery() { document.getElementById("galleryModal").style.display = "none"; }
