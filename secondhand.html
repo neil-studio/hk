@@ -319,8 +319,84 @@
     }
     checkAuth();
 
-    // 纯净初始房源数据库 (当前为空，待后续正式录入发布)
-    const mockListings = [];
+    // 房源数据库 (已导入中原地产优质房源)
+    const mockListings = [
+      {
+        id: "TAL124",
+        district: "渣甸山",
+        estate: "裴樂士道 2號屋 (渣甸臺)",
+        unit: "独栋2号屋",
+        source: "中原地產",
+        sourceType: "centaline",
+        refNo: "TAL124",
+        priceText: "1.20 亿",
+        price: 12000,
+        psf: "$46,967/呎",
+        psfNum: 46967,
+        rent: "",
+        area: 2555,
+        layout: "3房 2套 3廁",
+        age: "1930年入伙 (洋房)",
+        keyInfo: "预约看房 (吉盘)",
+        carpark: "专属车位",
+        status: "吉盘",
+        salesPerson: "Vincent",
+        confirmDate: "2026-06-03",
+        remarks: "渣甸臺罕有独栋洋房放盘，环境清幽私密，地段尊贵。",
+        photos: ["secondhand_images/zhadiantai_2_photos.jpg"],
+        plan: ""
+      },
+      {
+        id: "TAJ336",
+        district: "渣甸山",
+        estate: "裴樂士道 4號屋 (渣甸臺)",
+        unit: "独栋4号屋",
+        source: "中原地產",
+        sourceType: "centaline",
+        refNo: "TAJ336",
+        priceText: "1.20 亿",
+        price: 12000,
+        psf: "$48,880/呎",
+        psfNum: 48880,
+        rent: "13万/月",
+        area: 2455,
+        layout: "6房 2套 3廁",
+        age: "1930年入伙 (洋房)",
+        keyInfo: "连租约售 (WT 130k)",
+        carpark: "1 CP only",
+        status: "租中",
+        salesPerson: "Vincent",
+        confirmDate: "2026-06-03",
+        remarks: "连约 WT 130k 至 2025年7月，租金回报稳定，优质收租资产。",
+        photos: ["secondhand_images/zhadiantai_4_photos.jpg"],
+        plan: ""
+      },
+      {
+        id: "TAB643",
+        district: "渣甸山",
+        estate: "白建時道 67號 (Falcon Lodge)",
+        unit: "C室",
+        source: "中原地產",
+        sourceType: "centaline",
+        refNo: "TAB643",
+        priceText: "1.10 亿",
+        price: 11000,
+        psf: "$40,999/呎",
+        psfNum: 40999,
+        rent: "18万/月",
+        area: 2683,
+        layout: "4房 1套 2.5廁",
+        age: "54年楼龄 (1972)",
+        keyInfo: "可售可租",
+        carpark: "NO.5 & 6 (双车位)",
+        status: "租中",
+        salesPerson: "Vincent",
+        confirmDate: "2026-06-03",
+        remarks: "可售可租 ($18万/月)，白建時道豪宅地段，附带双车位。",
+        photos: ["secondhand_images/perkins_67_photos.jpg"],
+        plan: ""
+      }
+    ];
 
     let currentSource = 'ALL';
     let currentGalleryItem = null;
@@ -333,17 +409,55 @@
       const status = document.getElementById("statusFilter").value;
       const sort = document.getElementById("sortFilter").value;
 
+      // 更新顶部统计与快捷栏计数
+      const totalNum = mockListings.length;
+      const ownNum = mockListings.filter(x => x.sourceType === 'own').length;
+      const agencyNum = mockListings.filter(x => x.sourceType !== 'own').length;
+      const centalineNum = mockListings.filter(x => x.source === '中原地產').length;
+      const midlandNum = mockListings.filter(x => x.source === '美联物业').length;
+      const landscapeNum = mockListings.filter(x => x.source === '領域顧問').length;
+
+      const elOwn = document.getElementById("ownCount");
+      if (elOwn) elOwn.innerText = ownNum;
+      const elAgency = document.getElementById("agencyCount");
+      if (elAgency) elAgency.innerText = agencyNum;
+
+      const btnAll = document.querySelector('.source-all');
+      if (btnAll) btnAll.innerText = `全部房源 (${totalNum})`;
+      const btnOwn = document.querySelector('.source-own');
+      if (btnOwn) btnOwn.innerText = `💼 内部自录 (${ownNum})`;
+      const btnMidland = document.querySelector('.source-midland');
+      if (btnMidland) btnMidland.innerText = `🟡 美联物业 (${midlandNum})`;
+      const btnCentaline = document.querySelector('.source-centaline');
+      if (btnCentaline) btnCentaline.innerText = `🔴 中原地產 (${centalineNum})`;
+      const btnLandscape = document.querySelector('.source-landscape');
+      if (btnLandscape) btnLandscape.innerText = `🟣 領域顧問 (${landscapeNum})`;
+
       let filtered = mockListings.filter(item => {
         if (currentSource !== 'ALL' && item.source !== currentSource) return false;
         if (district !== 'ALL' && item.district !== district) return false;
         if (status !== 'ALL' && item.status !== status) return false;
-        if (room !== 'ALL' && !item.layout.includes(room)) return false;
+        if (room !== 'ALL') {
+          if (room === '4房及以上') {
+            if (!item.layout.includes('4房') && !item.layout.includes('5房') && !item.layout.includes('6房')) return false;
+          } else if (!item.layout.includes(room)) return false;
+        }
         if (search) {
           const matchStr = (item.estate + item.unit + item.refNo + item.source + item.salesPerson + item.age + item.remarks).toLowerCase();
           if (!matchStr.includes(search)) return false;
         }
         return true;
       });
+
+      if (sort === 'date-desc') {
+        filtered.sort((a, b) => (b.confirmDate || '').localeCompare(a.confirmDate || ''));
+      } else if (sort === 'price-asc') {
+        filtered.sort((a, b) => (a.price || 0) - (b.price || 0));
+      } else if (sort === 'price-desc') {
+        filtered.sort((a, b) => (b.price || 0) - (a.price || 0));
+      } else if (sort === 'psf-desc') {
+        filtered.sort((a, b) => (b.psfNum || 0) - (a.psfNum || 0));
+      }
 
       document.getElementById("totalCount").innerText = filtered.length;
 
