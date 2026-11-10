@@ -712,6 +712,123 @@
                   "secondhand_images/weiran_23a_plan.jpg"
             ],
             "plan": "secondhand_images/weiran_23a_plan.jpg"
+      },
+      {
+            "id": "LS219790",
+            "district": "中半山",
+            "estate": "雅賓利大廈",
+            "unit": "雅賓利道1號",
+            "source": "領域顧問",
+            "sourceType": "landscape",
+            "refNo": "# 219790",
+            "priceText": "意向招标",
+            "price": 0,
+            "psf": "-",
+            "psfNum": 0,
+            "rent": "",
+            "area": 3897,
+            "layout": "6房 5套 5.5廁 2工",
+            "age": "1989年建 (37年)",
+            "keyInfo": "3个有盖车位 · 环回海景",
+            "carpark": "3个有盖车位",
+            "status": "待确认",
+            "salesPerson": "Crystal",
+            "confirmDate": "2026-11-06",
+            "remarks": "中半山顶级豪宅，罕见近4,000呎单层特大平层，相连客饭厅，享翠绿城市与环回海景，附带3个有盖车位。",
+            "photos": [
+                  "secondhand_images/albany_photos_1.jpg",
+                  "secondhand_images/albany_photos_2.jpg",
+                  "secondhand_images/albany_cover.jpg"
+            ],
+            "plan": ""
+      },
+      {
+            "id": "LS31145",
+            "district": "中半山",
+            "estate": "The Mayfair",
+            "unit": "梅道1號",
+            "source": "領域顧問",
+            "sourceType": "landscape",
+            "refNo": "# 31145",
+            "priceText": "1.149 亿",
+            "price": 11490,
+            "psf": "$52,418/呎",
+            "psfNum": 52418,
+            "rent": "15.5万/月",
+            "area": 2192,
+            "layout": "3房 2套 1书房 2.5廁 1工",
+            "age": "1997年建 (29年)",
+            "keyInfo": "连约至2027年11月 · 附车位",
+            "carpark": "1个有盖车位",
+            "status": "租中",
+            "salesPerson": "Crystal",
+            "confirmDate": "2026-11-06",
+            "remarks": "中半山梅道名盘，环回海景，可已公司转让股份形式买卖(省税)，连租约月租15.5万全包至2027年11月1日。",
+            "photos": [
+                  "secondhand_images/mayfair_cover.jpg",
+                  "secondhand_images/mayfair_photos_1.jpg",
+                  "secondhand_images/mayfair_photos_2.jpg",
+                  "secondhand_images/mayfair_photos_3.jpg"
+            ],
+            "plan": ""
+      },
+      {
+            "id": "LS182288",
+            "district": "西半山",
+            "estate": "天汇",
+            "unit": "干德道39號",
+            "source": "領域顧問",
+            "sourceType": "landscape",
+            "refNo": "# 182288",
+            "priceText": "1.38 亿",
+            "price": 13800,
+            "psf": "$55,735/呎",
+            "psfNum": 55735,
+            "rent": "",
+            "area": 2476,
+            "layout": "4房 2套 3.5廁 1工",
+            "age": "2010年建 (16年)",
+            "keyInfo": "维港全海景 · 阳台 1",
+            "carpark": "-",
+            "status": "待确认",
+            "salesPerson": "Crystal",
+            "confirmDate": "2026-11-06",
+            "remarks": "西半山天汇大单位，实尺2,476呎(建3,284呎)，分隔客饭厅，维多利亚港景与城市景，阳台开扬。",
+            "photos": [
+                  "secondhand_images/tianhui_182288_cover.jpg",
+                  "secondhand_images/tianhui_182288_photos_1.jpg",
+                  "secondhand_images/tianhui_182288_photos_2.jpg"
+            ],
+            "plan": ""
+      },
+      {
+            "id": "LS165672",
+            "district": "西半山",
+            "estate": "天汇",
+            "unit": "干德道39號",
+            "source": "領域顧問",
+            "sourceType": "landscape",
+            "refNo": "# 165672",
+            "priceText": "1.40 亿",
+            "price": 14000,
+            "psf": "$59,448/呎",
+            "psfNum": 59448,
+            "rent": "",
+            "area": 2355,
+            "layout": "4房 2套 3.0廁 1工",
+            "age": "2010年建 (16年)",
+            "keyInfo": "附有盖车位 (#501) · 海景",
+            "carpark": "1个有盖车位 (#501)",
+            "status": "待确认",
+            "salesPerson": "Crystal",
+            "confirmDate": "2026-11-06",
+            "remarks": "附带 #501 有盖专属车位，维多利亚港全海景，实尺2,355呎(建3,284呎)，4房双套房奢华格局。",
+            "photos": [
+                  "secondhand_images/tianhui_165672_cover.jpg",
+                  "secondhand_images/tianhui_165672_photos_1.jpg",
+                  "secondhand_images/tianhui_165672_photos_2.jpg"
+            ],
+            "plan": ""
       }
 ];
 
@@ -769,7 +886,11 @@
       if (sort === 'date-desc') {
         filtered.sort((a, b) => (b.confirmDate || '').localeCompare(a.confirmDate || ''));
       } else if (sort === 'price-asc') {
-        filtered.sort((a, b) => (a.price || 0) - (b.price || 0));
+        filtered.sort((a, b) => {
+          if (!a.price) return 1;
+          if (!b.price) return -1;
+          return a.price - b.price;
+        });
       } else if (sort === 'price-desc') {
         filtered.sort((a, b) => (b.price || 0) - (a.price || 0));
       } else if (sort === 'psf-desc') {
@@ -822,7 +943,7 @@
               <div class="b-core-row1">
                 <span class="b-district-tag">${item.district}</span>
                 <div class="b-prop-name" onclick="openGallery('${item.id}')">${item.estate} · ${item.unit}</div>
-                <span class="b-price-hero">HK$ ${item.priceText}</span>
+                <span class="b-price-hero">${item.priceText.includes("招标") ? item.priceText : ("HK$ " + item.priceText)}</span>
                 ${item.rent ? `<span class="b-rent-sub">(租: ${item.rent})</span>` : ''}
               </div>
               <div class="b-core-row2">
@@ -936,7 +1057,7 @@
         <h3 style="font-size:17px; margin-bottom:8px;">${item.estate} ${item.unit}</h3>
         <p style="color:#64748b; margin-bottom:12px;">${item.district} · ${item.source} (${item.refNo}) · 楼龄: ${item.age}</p>
         <div style="background:#f8fafc; padding:12px; border-radius:6px; margin-bottom:12px; line-height:1.8;">
-          <div>💰 叫价: <strong style="color:#dc2626; font-size:15px;">HK$ ${item.priceText}</strong> (${item.psf})</div>
+          <div>💰 叫价: <strong style="color:#dc2626; font-size:15px;">${item.priceText.includes("招标") ? item.priceText : ("HK$ " + item.priceText)}</strong> (${item.psf})</div>
           <div>📐 面积格局: ${item.area} 呎 · ${item.layout}</div>
           <div>🔑 钥匙看房: <strong>${item.keyInfo}</strong></div>
           <div>🚗 车位: ${item.carpark}</div>
