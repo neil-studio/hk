@@ -148,10 +148,8 @@
     .gallery-actions { display: flex; align-items: center; gap: 10px; }
     .gallery-tool-btn { background: #1e293b; border: 1px solid #334155; color: #cbd5e1; padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 5px; }
     .gallery-tool-btn:hover { background: #334155; color: #fff; border-color: #64748b; }
-    .gallery-main { flex: 1; display: flex; justify-content: center; align-items: center; background: #020617; overflow: hidden; position: relative; user-select: none; }
-    .gallery-main img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 6px; cursor: zoom-in; transition: transform 0.22s cubic-bezier(0.2, 0, 0, 1); transform-origin: center center; }
-    .gallery-main.is-zoomed img { cursor: grab; max-width: none; max-height: none; }
-    .gallery-main.is-zoomed.is-dragging img { cursor: grabbing; transition: none !important; }
+    .gallery-main { flex: 1; display: flex; justify-content: center; align-items: center; background: #020617; overflow: hidden; padding: 12px; }
+    .gallery-main img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 6px; }
     .gallery-thumbs { height: 86px; background: #0f172a; border-top: 1px solid #334155; padding: 8px 16px; display: flex; gap: 10px; overflow-x: auto; align-items: center; }
     .g-thumb { width: 76px; height: 56px; border-radius: 6px; overflow: hidden; cursor: pointer; opacity: 0.5; border: 2px solid transparent; flex-shrink: 0; }
     .g-thumb.active, .g-thumb:hover { opacity: 1; border-color: #3b82f6; }
@@ -271,8 +269,7 @@
           <span id="gSubtitle" style="color:#94a3b8; font-size:12px; margin-left:8px;">合作方编号</span>
         </div>
         <div class="gallery-actions">
-          <button class="gallery-tool-btn" id="btnToggleZoom" onclick="toggleZoom()" title="点击或直接点击图片放大查看细节">🔍 点击放大 (2.2x)</button>
-          <button class="gallery-tool-btn" onclick="openFullImage()" title="新标签页打开原始300DPI超清大图">↗️ 查看原图</button>
+          <button class="gallery-tool-btn" onclick="openFullImage()" title="新标签页打开原始300DPI超清原图">↗️ 查看原图</button>
           <button class="gallery-close" onclick="closeGallery()" title="关闭 (Esc)">✕</button>
         </div>
       </div>
@@ -1014,21 +1011,13 @@
       alert("已复制盘源编号: " + txt);
     }
 
-    let isZoomed = false;
-    let zoomLevel = 2.2;
-    let panX = 0, panY = 0;
-    let isDragging = false;
-    let startX = 0, startY = 0;
-    let hasDragged = false;
-
-    function openGallery(id) {
+        function openGallery(id) {
       const item = mockListings.find(x => x.id === id);
       if (!item) return;
       currentGalleryItem = item;
       document.getElementById("gTitle").innerText = `${item.estate} ${item.unit}`;
-      const photoCountText = item.photos && item.photos.length > 1 ? ` · 共 ${item.photos.length} 页资料 (点击下方切换 · 点击大图放大)` : '';
+      const photoCountText = item.photos && item.photos.length > 1 ? ` · 共 ${item.photos.length} 页资料 (可点击右上角查看原图)` : ' (可点击右上角查看原图)';
       document.getElementById("gSubtitle").innerText = `${item.source} · 盘号 ${item.refNo}${photoCountText}`;
-      resetZoom();
       renderGalleryPhotos();
       document.getElementById("galleryModal").style.display = "flex";
     }
@@ -1053,7 +1042,6 @@
     function setGalleryMain(src, el, idx) {
       const mainImg = document.getElementById("gMainImg");
       mainImg.src = src;
-      resetZoom();
       document.querySelectorAll('.g-thumb').forEach(t => t.classList.remove('active'));
       if (el) {
         el.classList.add('active');
@@ -1063,105 +1051,24 @@
       }
     }
 
-    function resetZoom() {
-      isZoomed = false;
-      panX = 0;
-      panY = 0;
-      const box = document.getElementById("galleryMainBox");
-      const img = document.getElementById("gMainImg");
-      if (box) box.classList.remove("is-zoomed", "is-dragging");
-      if (img) {
-        img.style.transform = "none";
-        img.style.cursor = "zoom-in";
-      }
-      const btn = document.getElementById("btnToggleZoom");
-      if (btn) btn.innerHTML = "🔍 点击放大 (2.2x)";
-    }
-
-    function toggleZoom() {
-      const box = document.getElementById("galleryMainBox");
-      const img = document.getElementById("gMainImg");
-      const btn = document.getElementById("btnToggleZoom");
-      if (!isZoomed) {
-        isZoomed = true;
-        panX = 0;
-        panY = 0;
-        if (box) box.classList.add("is-zoomed");
-        if (img) {
-          img.style.transform = `scale(${zoomLevel}) translate(0px, 0px)`;
-          img.style.cursor = "grab";
-        }
-        if (btn) btn.innerHTML = "🔄 还原全貌 (1x)";
-      } else {
-        resetZoom();
-      }
-    }
-
     function openFullImage() {
-      const img = document.getElementById("gMainImg");
-      if (img && img.src) {
-        window.open(img.src, '_blank');
+      const mainImg = document.getElementById("gMainImg");
+      if (mainImg && mainImg.src) {
+        window.open(mainImg.src, '_blank');
       }
     }
-
-    // 缩放与按住平移交互事件绑定
-    (function initGalleryInteractions() {
-      document.addEventListener('DOMContentLoaded', function() {
-        const box = document.getElementById("galleryMainBox");
-        const img = document.getElementById("gMainImg");
-        if (!box || !img) return;
-
-        img.addEventListener('click', function(e) {
-          if (hasDragged) { hasDragged = false; return; }
-          toggleZoom();
-        });
-
-        box.addEventListener('mousedown', function(e) {
-          if (!isZoomed) return;
-          isDragging = true;
-          hasDragged = false;
-          startX = e.clientX - panX;
-          startY = e.clientY - panY;
-          box.classList.add("is-dragging");
-          e.preventDefault();
-        });
-
-        window.addEventListener('mousemove', function(e) {
-          if (!isDragging || !isZoomed) return;
-          const currentX = e.clientX - startX;
-          const currentY = e.clientY - startY;
-          if (Math.abs(currentX - panX) > 4 || Math.abs(currentY - panY) > 4) {
-            hasDragged = true;
-          }
-          panX = currentX;
-          panY = currentY;
-          img.style.transform = `scale(${zoomLevel}) translate(${panX / zoomLevel}px, ${panY / zoomLevel}px)`;
-        });
-
-        window.addEventListener('mouseup', function() {
-          if (!isDragging) return;
-          isDragging = false;
-          if (box) box.classList.remove("is-dragging");
-        });
-
-        window.addEventListener('keydown', function(e) {
-          if (e.key === 'Escape') {
-            if (isZoomed) {
-              resetZoom();
-            } else {
-              closeGallery();
-              closeModal();
-            }
-          }
-        });
-      });
-    })();
 
     function closeGallery() { 
-      resetZoom();
       document.getElementById("galleryModal").style.display = "none"; 
     }
     function closeModal() { document.getElementById("detailModal").style.display = "none"; }
+
+    window.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeGallery();
+        closeModal();
+      }
+    });
 
     function viewDetails(id) {
       const item = mockListings.find(x => x.id === id);
