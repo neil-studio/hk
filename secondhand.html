@@ -83,6 +83,55 @@
     .card-scheme-b { background: var(--card-bg); border-radius: 8px; border: 1px solid var(--border); padding: 10px 14px; display: flex; align-items: center; gap: 14px; transition: all 0.15s; }
     .card-scheme-b:hover { border-color: #93c5fd; box-shadow: 0 4px 12px rgba(0,0,0,0.04); background: #fafcff; }
 
+    /* 🎨 房源卡片合作方品牌专属边框 (方案 3: 左侧 5px 彩标条 + 同色细外框) */
+    .card-scheme-b.card-source-midland {
+      border: 1px solid rgba(245, 158, 11, 0.45) !important;
+      border-left: 5px solid #f59e0b !important;
+      background: #fffdf9;
+    }
+    .card-scheme-b.card-source-midland:hover {
+      border-color: rgba(245, 158, 11, 0.75) !important;
+      border-left-color: #d97706 !important;
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.18);
+      background: #fffbeb;
+    }
+
+    .card-scheme-b.card-source-centaline {
+      border: 1px solid rgba(239, 68, 68, 0.45) !important;
+      border-left: 5px solid #ef4444 !important;
+      background: #fffdfd;
+    }
+    .card-scheme-b.card-source-centaline:hover {
+      border-color: rgba(239, 68, 68, 0.75) !important;
+      border-left-color: #dc2626 !important;
+      box-shadow: 0 4px 14px rgba(239, 68, 68, 0.18);
+      background: #fef2f2;
+    }
+
+    .card-scheme-b.card-source-landscape {
+      border: 1px solid rgba(139, 92, 246, 0.45) !important;
+      border-left: 5px solid #8b5cf6 !important;
+      background: #fdfcff;
+    }
+    .card-scheme-b.card-source-landscape:hover {
+      border-color: rgba(139, 92, 246, 0.75) !important;
+      border-left-color: #7c3aed !important;
+      box-shadow: 0 4px 14px rgba(139, 92, 246, 0.18);
+      background: #f5f3ff;
+    }
+
+    .card-scheme-b.card-source-own {
+      border: 1px solid rgba(22, 163, 74, 0.45) !important;
+      border-left: 5px solid #16a34a !important;
+      background: #fbfdfb;
+    }
+    .card-scheme-b.card-source-own:hover {
+      border-color: rgba(22, 163, 74, 0.75) !important;
+      border-left-color: #15803d !important;
+      box-shadow: 0 4px 14px rgba(22, 163, 74, 0.18);
+      background: #f0fdf4;
+    }
+
     /* 缩略图 */
     .thumb-box { position: relative; width: 72px; height: 56px; border-radius: 6px; overflow: hidden; background: #e2e8f0; cursor: pointer; border: 1px solid #cbd5e1; flex-shrink: 0; }
     .thumb-box img { width: 100%; height: 100%; object-fit: cover; }
@@ -919,9 +968,10 @@
       filtered.forEach(item => {
         let badgeClass = "badge-midland";
         let sourceIcon = "🟡";
-        if (item.sourceType === 'own') { badgeClass = "badge-own"; sourceIcon = "💼"; }
-        if (item.sourceType === 'centaline') { badgeClass = "badge-centaline"; sourceIcon = "🔴"; }
-        if (item.sourceType === 'landscape') { badgeClass = "badge-landscape"; sourceIcon = "🟣"; }
+        let cardSourceClass = "card-source-midland";
+        if (item.sourceType === 'own') { badgeClass = "badge-own"; sourceIcon = "💼"; cardSourceClass = "card-source-own"; }
+        if (item.sourceType === 'centaline') { badgeClass = "badge-centaline"; sourceIcon = "🔴"; cardSourceClass = "card-source-centaline"; }
+        if (item.sourceType === 'landscape') { badgeClass = "badge-landscape"; sourceIcon = "🟣"; cardSourceClass = "card-source-landscape"; }
 
         let statusClass = "status-vacant";
         if (item.status === '租中') statusClass = "status-tenanted";
@@ -933,7 +983,7 @@
         const badgeText = item.photos && item.photos.length > 1 ? `📷 ${item.photos.length}张图` : (item.photos && item.photos.length === 1 ? '📷 图' : (item.plan ? '📐 户型' : '无图'));
 
         html += `
-          <div class="card-scheme-b">
+          <div class="card-scheme-b ${cardSourceClass}">
             <!-- 缩略图 -->
             <div class="thumb-box" onclick="openGallery('${item.id}')" title="点击查看大图/户型图">
               <img src="${coverImg}" alt="${item.estate}" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'72\' height=\'56\' fill=\'%23f1f5f9\'><rect width=\'100%\' height=\'100%\'/><text x=\'50%\' y=\'50%\' font-size=\'10\' fill=\'%2394a3b8\' dominant-baseline=\'middle\' text-anchor=\'middle\'>无图</text></svg>'">
