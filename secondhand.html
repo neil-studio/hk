@@ -143,13 +143,15 @@
 
     /* 相册全屏画廊弹窗 (Photo Lightbox) */
     .gallery-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(10, 15, 30, 0.9); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); }
-    .gallery-container { width: 920px; max-width: 95vw; height: 88vh; background: #0f172a; border-radius: 12px; display: flex; flex-direction: column; overflow: hidden; }
-    .gallery-header { padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; color: #fff; }
-    .gallery-tabs { display: flex; gap: 8px; }
-    .gallery-tab { padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; background: #1e293b; color: #94a3b8; }
-    .gallery-tab.active { background: #3b82f6; color: #fff; }
-    .gallery-main { flex: 1; display: flex; justify-content: center; align-items: center; background: #020617; overflow: hidden; padding: 10px; }
-    .gallery-main img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 6px; }
+    .gallery-container { width: 960px; max-width: 96vw; height: 90vh; background: #0f172a; border-radius: 12px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
+    .gallery-header { padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; color: #fff; user-select: none; }
+    .gallery-actions { display: flex; align-items: center; gap: 10px; }
+    .gallery-tool-btn { background: #1e293b; border: 1px solid #334155; color: #cbd5e1; padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 5px; }
+    .gallery-tool-btn:hover { background: #334155; color: #fff; border-color: #64748b; }
+    .gallery-main { flex: 1; display: flex; justify-content: center; align-items: center; background: #020617; overflow: hidden; position: relative; user-select: none; }
+    .gallery-main img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 6px; cursor: zoom-in; transition: transform 0.22s cubic-bezier(0.2, 0, 0, 1); transform-origin: center center; }
+    .gallery-main.is-zoomed img { cursor: grab; max-width: none; max-height: none; }
+    .gallery-main.is-zoomed.is-dragging img { cursor: grabbing; transition: none !important; }
     .gallery-thumbs { height: 86px; background: #0f172a; border-top: 1px solid #334155; padding: 8px 16px; display: flex; gap: 10px; overflow-x: auto; align-items: center; }
     .g-thumb { width: 76px; height: 56px; border-radius: 6px; overflow: hidden; cursor: pointer; opacity: 0.5; border: 2px solid transparent; flex-shrink: 0; }
     .g-thumb.active, .g-thumb:hover { opacity: 1; border-color: #3b82f6; }
@@ -260,7 +262,7 @@
     </div>
   </div>
 
-  <!-- 沉浸式相册全屏画廊弹窗 (Photo Lightbox) -->
+  <!-- 沉浸式相册全屏画廊弹窗 (Photo Lightbox · 支持点击放大拖拽漫游) -->
   <div class="gallery-overlay" id="galleryModal">
     <div class="gallery-container">
       <div class="gallery-header">
@@ -268,13 +270,13 @@
           <strong id="gTitle" style="font-size:16px;">房源名称</strong>
           <span id="gSubtitle" style="color:#94a3b8; font-size:12px; margin-left:8px;">合作方编号</span>
         </div>
-        <div class="gallery-tabs">
-          <div class="gallery-tab active" id="tabPhotos" onclick="switchGalleryTab('photos')">📷 室内实景相片</div>
-          <div class="gallery-tab" id="tabPlan" onclick="switchGalleryTab('plan')">📐 户型平面图</div>
+        <div class="gallery-actions">
+          <button class="gallery-tool-btn" id="btnToggleZoom" onclick="toggleZoom()" title="点击或直接点击图片放大查看细节">🔍 点击放大 (2.2x)</button>
+          <button class="gallery-tool-btn" onclick="openFullImage()" title="新标签页打开原始300DPI超清大图">↗️ 查看原图</button>
+          <button class="gallery-close" onclick="closeGallery()" title="关闭 (Esc)">✕</button>
         </div>
-        <button class="gallery-close" onclick="closeGallery()">✕</button>
       </div>
-      <div class="gallery-main">
+      <div class="gallery-main" id="galleryMainBox">
         <img id="gMainImg" src="" alt="房源高清相片">
       </div>
       <div class="gallery-thumbs" id="gThumbsContainer"></div>
@@ -458,8 +460,8 @@
             "confirmDate": "2026-11-06",
             "remarks": "现楼吉盘空置，2房2套2工极度罕有，全套精装实拍。",
             "photos": [
-                  "secondhand_images/tianhui_29b_photos.jpg",
-                  "secondhand_images/tianhui_29b_plan.jpg"
+                  "secondhand_images/tianhui_29b_plan.jpg",
+                  "secondhand_images/tianhui_29b_photos.jpg"
             ],
             "plan": "secondhand_images/tianhui_29b_plan.jpg"
       },
@@ -486,8 +488,8 @@
             "confirmDate": "2026-11-06",
             "remarks": "业主自住精心保养，附带 1 个专属车位，维港璀璨景观。",
             "photos": [
-                  "secondhand_images/tianhui_29a_photos.jpg",
-                  "secondhand_images/tianhui_29a_plan.jpg"
+                  "secondhand_images/tianhui_29a_plan.jpg",
+                  "secondhand_images/tianhui_29a_photos.jpg"
             ],
             "plan": "secondhand_images/tianhui_29a_plan.jpg"
       },
@@ -541,8 +543,8 @@
             "confirmDate": "2026-10-31",
             "remarks": "现楼吉盘备有钥匙(key)，东北开扬景观，1套房大阔厅格局。",
             "photos": [
-                  "secondhand_images/weiran_47c_photos.jpg",
-                  "secondhand_images/weiran_47c_plan.jpg"
+                  "secondhand_images/weiran_47c_plan.jpg",
+                  "secondhand_images/weiran_47c_photos.jpg"
             ],
             "plan": "secondhand_images/weiran_47c_plan.jpg"
       },
@@ -569,8 +571,8 @@
             "confirmDate": "2026-10-31",
             "remarks": "连租约放售，月租 88k 至 2028年8月，租约期长回报稳定。",
             "photos": [
-                  "secondhand_images/weiran_32c_photos.jpg",
-                  "secondhand_images/weiran_32c_plan.jpg"
+                  "secondhand_images/weiran_32c_plan.jpg",
+                  "secondhand_images/weiran_32c_photos.jpg"
             ],
             "plan": "secondhand_images/weiran_32c_plan.jpg"
       },
@@ -597,8 +599,8 @@
             "confirmDate": "2026-10-31",
             "remarks": "极具性价比超值叫价，连租约月租 84k 至 2027年3月。",
             "photos": [
-                  "secondhand_images/weiran_29c_photos.jpg",
-                  "secondhand_images/weiran_29c_plan.jpg"
+                  "secondhand_images/weiran_29c_plan.jpg",
+                  "secondhand_images/weiran_29c_photos.jpg"
             ],
             "plan": "secondhand_images/weiran_29c_plan.jpg"
       },
@@ -625,8 +627,8 @@
             "confirmDate": "2026-10-31",
             "remarks": "开扬雅致景观，带租约月租 83k (1年死约3年生约 {1+2} from 4/2026)。",
             "photos": [
-                  "secondhand_images/weiran_17c_photos.jpg",
-                  "secondhand_images/weiran_17c_plan.jpg"
+                  "secondhand_images/weiran_17c_plan.jpg",
+                  "secondhand_images/weiran_17c_photos.jpg"
             ],
             "plan": "secondhand_images/weiran_17c_plan.jpg"
       },
@@ -680,8 +682,8 @@
             "confirmDate": "2026-10-31",
             "remarks": "高层 A 室，辽阔景观，业主自住单位，内附4景实拍。",
             "photos": [
-                  "secondhand_images/weiran_40a_photos.jpg",
-                  "secondhand_images/weiran_40a_plan.jpg"
+                  "secondhand_images/weiran_40a_plan.jpg",
+                  "secondhand_images/weiran_40a_photos.jpg"
             ],
             "plan": "secondhand_images/weiran_40a_plan.jpg"
       },
@@ -708,8 +710,8 @@
             "confirmDate": "2026-10-31",
             "remarks": "开扬景观，附带 1 个专属车位，连约月租 85k 至 2027年3月。",
             "photos": [
-                  "secondhand_images/weiran_23a_photos.jpg",
-                  "secondhand_images/weiran_23a_plan.jpg"
+                  "secondhand_images/weiran_23a_plan.jpg",
+                  "secondhand_images/weiran_23a_photos.jpg"
             ],
             "plan": "secondhand_images/weiran_23a_plan.jpg"
       },
@@ -736,9 +738,9 @@
             "confirmDate": "2026-11-06",
             "remarks": "中半山顶级豪宅，罕见近4,000呎单层特大平层，相连客饭厅，享翠绿城市与环回海景，附带3个有盖车位。",
             "photos": [
+                  "secondhand_images/albany_cover.jpg",
                   "secondhand_images/albany_photos_1.jpg",
-                  "secondhand_images/albany_photos_2.jpg",
-                  "secondhand_images/albany_cover.jpg"
+                  "secondhand_images/albany_photos_2.jpg"
             ],
             "plan": ""
       },
@@ -1012,42 +1014,153 @@
       alert("已复制盘源编号: " + txt);
     }
 
+    let isZoomed = false;
+    let zoomLevel = 2.2;
+    let panX = 0, panY = 0;
+    let isDragging = false;
+    let startX = 0, startY = 0;
+    let hasDragged = false;
+
     function openGallery(id) {
       const item = mockListings.find(x => x.id === id);
       if (!item) return;
       currentGalleryItem = item;
       document.getElementById("gTitle").innerText = `${item.estate} ${item.unit}`;
-      const photoCountText = item.photos && item.photos.length > 1 ? ` · 共 ${item.photos.length} 页相片 (点击下方切换)` : '';
+      const photoCountText = item.photos && item.photos.length > 1 ? ` · 共 ${item.photos.length} 页资料 (点击下方切换 · 点击大图放大)` : '';
       document.getElementById("gSubtitle").innerText = `${item.source} · 盘号 ${item.refNo}${photoCountText}`;
-      switchGalleryTab('photos');
+      resetZoom();
+      renderGalleryPhotos();
       document.getElementById("galleryModal").style.display = "flex";
     }
 
-    function switchGalleryTab(tab) {
+    function renderGalleryPhotos() {
       if (!currentGalleryItem) return;
-      const mainImg = document.getElementById("gMainImg");
       const thumbsBox = document.getElementById("gThumbsContainer");
       const photoList = currentGalleryItem.photos || [];
       if (photoList.length > 0) {
-        mainImg.src = photoList[0];
+        setGalleryMain(photoList[0], null, 0);
         thumbsBox.innerHTML = photoList.map((src, idx) => `
-          <div class="g-thumb ${idx === 0 ? 'active' : ''}" onclick="setGalleryMain('${src}', this)" title="点击切换第 ${idx + 1} 页相片">
+          <div class="g-thumb ${idx === 0 ? 'active' : ''}" onclick="setGalleryMain('${src}', this, ${idx})" title="第 ${idx + 1} 页相片 (点击查看)">
             <img src="${src}">
           </div>
         `).join('');
       } else if (currentGalleryItem.plan) {
-        mainImg.src = currentGalleryItem.plan;
+        setGalleryMain(currentGalleryItem.plan, null, 0);
         thumbsBox.innerHTML = `<div class="g-thumb active"><img src="${currentGalleryItem.plan}"></div>`;
       }
     }
 
-    function setGalleryMain(src, el) {
-      document.getElementById("gMainImg").src = src;
+    function setGalleryMain(src, el, idx) {
+      const mainImg = document.getElementById("gMainImg");
+      mainImg.src = src;
+      resetZoom();
       document.querySelectorAll('.g-thumb').forEach(t => t.classList.remove('active'));
-      if (el) el.classList.add('active');
+      if (el) {
+        el.classList.add('active');
+      } else {
+        const thumbs = document.querySelectorAll('.g-thumb');
+        if (thumbs[idx || 0]) thumbs[idx || 0].classList.add('active');
+      }
     }
 
-    function closeGallery() { document.getElementById("galleryModal").style.display = "none"; }
+    function resetZoom() {
+      isZoomed = false;
+      panX = 0;
+      panY = 0;
+      const box = document.getElementById("galleryMainBox");
+      const img = document.getElementById("gMainImg");
+      if (box) box.classList.remove("is-zoomed", "is-dragging");
+      if (img) {
+        img.style.transform = "none";
+        img.style.cursor = "zoom-in";
+      }
+      const btn = document.getElementById("btnToggleZoom");
+      if (btn) btn.innerHTML = "🔍 点击放大 (2.2x)";
+    }
+
+    function toggleZoom() {
+      const box = document.getElementById("galleryMainBox");
+      const img = document.getElementById("gMainImg");
+      const btn = document.getElementById("btnToggleZoom");
+      if (!isZoomed) {
+        isZoomed = true;
+        panX = 0;
+        panY = 0;
+        if (box) box.classList.add("is-zoomed");
+        if (img) {
+          img.style.transform = `scale(${zoomLevel}) translate(0px, 0px)`;
+          img.style.cursor = "grab";
+        }
+        if (btn) btn.innerHTML = "🔄 还原全貌 (1x)";
+      } else {
+        resetZoom();
+      }
+    }
+
+    function openFullImage() {
+      const img = document.getElementById("gMainImg");
+      if (img && img.src) {
+        window.open(img.src, '_blank');
+      }
+    }
+
+    // 缩放与按住平移交互事件绑定
+    (function initGalleryInteractions() {
+      document.addEventListener('DOMContentLoaded', function() {
+        const box = document.getElementById("galleryMainBox");
+        const img = document.getElementById("gMainImg");
+        if (!box || !img) return;
+
+        img.addEventListener('click', function(e) {
+          if (hasDragged) { hasDragged = false; return; }
+          toggleZoom();
+        });
+
+        box.addEventListener('mousedown', function(e) {
+          if (!isZoomed) return;
+          isDragging = true;
+          hasDragged = false;
+          startX = e.clientX - panX;
+          startY = e.clientY - panY;
+          box.classList.add("is-dragging");
+          e.preventDefault();
+        });
+
+        window.addEventListener('mousemove', function(e) {
+          if (!isDragging || !isZoomed) return;
+          const currentX = e.clientX - startX;
+          const currentY = e.clientY - startY;
+          if (Math.abs(currentX - panX) > 4 || Math.abs(currentY - panY) > 4) {
+            hasDragged = true;
+          }
+          panX = currentX;
+          panY = currentY;
+          img.style.transform = `scale(${zoomLevel}) translate(${panX / zoomLevel}px, ${panY / zoomLevel}px)`;
+        });
+
+        window.addEventListener('mouseup', function() {
+          if (!isDragging) return;
+          isDragging = false;
+          if (box) box.classList.remove("is-dragging");
+        });
+
+        window.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape') {
+            if (isZoomed) {
+              resetZoom();
+            } else {
+              closeGallery();
+              closeModal();
+            }
+          }
+        });
+      });
+    })();
+
+    function closeGallery() { 
+      resetZoom();
+      document.getElementById("galleryModal").style.display = "none"; 
+    }
     function closeModal() { document.getElementById("detailModal").style.display = "none"; }
 
     function viewDetails(id) {
