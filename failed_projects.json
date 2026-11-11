@@ -16,14 +16,6 @@
     "sell_status": "on_sale"
   },
   {
-    "id": "E000016945",
-    "name": "15 Western Street",
-    "region": "港岛",
-    "district": "西营盘及上环",
-    "developer": "万科香港",
-    "sell_status": "sales_suspended"
-  },
-  {
     "id": "E000015470",
     "name": "海天径 1号, 舂磡角道 44, 46, 48, 50号",
     "region": "港岛",
