@@ -167,6 +167,7 @@
     .status-tenanted { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
     .status-owner { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
     .status-dual { background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; }
+    .status-rent { background: #f0fdfa; color: #0d9488; border: 1px solid #5eead4; }
     .status-pending-confirm { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
     .date-fresh { color: #059669; font-weight: 700; font-size: 11.5px; white-space: nowrap; }
     .btn-detail { padding: 4px 10px; border-radius: 5px; font-size: 12px; font-weight: 600; border: 1px solid #cbd5e1; background: #fff; color: #0f172a; cursor: pointer; transition: all 0.2s; }
@@ -274,6 +275,7 @@
             <option value="租中">租中 (连租约)</option>
             <option value="自住">业主自住</option>
             <option value="可售可租">可售可租 (双边放盘)</option>
+            <option value="出租">只出租 (纯租盘)</option>
             <option value="待确认">待确认 (看房待核实)</option>
           </select>
         </div>
@@ -977,6 +979,7 @@
         if (item.status === '租中') statusClass = "status-tenanted";
         if (item.status === '自住') statusClass = "status-owner";
         if (item.status === '可售可租') statusClass = "status-dual";
+        if (item.status === '出租') statusClass = "status-rent";
         if (item.status === '待确认') statusClass = "status-pending-confirm";
 
         const coverImg = item.photos && item.photos.length > 0 ? item.photos[0] : (item.plan || '');
@@ -995,13 +998,15 @@
               <div class="b-core-row1">
                 <span class="b-district-tag">${item.district}</span>
                 <div class="b-prop-name" onclick="openGallery('${item.id}')">${item.estate} · ${item.unit}</div>
-                <span class="b-price-hero">${item.priceText.includes("招标") ? item.priceText : ("HK$ " + item.priceText)}</span>
-                ${item.rent ? `<span class="b-rent-sub">(租: ${item.rent})</span>` : ''}
+                ${(item.status === '出租' || (!item.price && item.rent))
+                  ? `<span class="b-price-hero" style="color:#0284c7;">租 HK$ ${item.rent}</span>`
+                  : `<span class="b-price-hero">${item.priceText && item.priceText.includes("招标") ? item.priceText : ("HK$ " + (item.priceText || '-'))}</span>${item.rent ? ` <span class="b-rent-sub">(租: ${item.rent})</span>` : ''}`
+                }
               </div>
               <div class="b-core-row2">
                 <span class="b-pill-layout">${item.layout}</span>
                 <span class="b-pill-area">${item.area.toLocaleString()} 呎</span>
-                <span class="b-pill-psf">@${item.psf}</span>
+                <span class="b-pill-psf">${item.psf && item.psf !== '-' ? `@${item.psf}` : '@纯租盘'}</span>
               </div>
             </div>
 
@@ -1130,7 +1135,10 @@
         <h3 style="font-size:17px; margin-bottom:8px;">${item.estate} ${item.unit}</h3>
         <p style="color:#64748b; margin-bottom:12px;">${item.district} · ${item.source} (${item.refNo}) · 楼龄: ${item.age}</p>
         <div style="background:#f8fafc; padding:12px; border-radius:6px; margin-bottom:12px; line-height:1.8;">
-          <div>💰 叫价: <strong style="color:#dc2626; font-size:15px;">${item.priceText.includes("招标") ? item.priceText : ("HK$ " + item.priceText)}</strong> (${item.psf})</div>
+          ${(item.status === '出租' || (!item.price && item.rent))
+            ? `<div>💰 放租租金: <strong style="color:#0284c7; font-size:15px;">HK$ ${item.rent}</strong> · 纯出租</div>`
+            : `<div>💰 叫价: <strong style="color:#dc2626; font-size:15px;">${item.priceText.includes("招标") ? item.priceText : ("HK$ " + item.priceText)}</strong> (${item.psf})${item.rent ? ` · 租: <strong>${item.rent}</strong>` : ''}</div>`
+          }
           <div>📐 面积格局: ${item.area} 呎 · ${item.layout}</div>
           <div>🔑 钥匙看房: <strong>${item.keyInfo}</strong></div>
           <div>🚗 车位: ${item.carpark}</div>
