@@ -5,18 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>香港一手新盘全景地图</title>
 
-<!-- 🔒 专属访问密码保护门 (Password Gate: lm8888) 快速拦截 -->
+<!-- 🔒 全站统一鉴权与权限控制 (auth.js) 快速拦截 -->
 <script>
   (function() {
-    var k = 'hk_map_auth_token';
-    var isUnlocked = sessionStorage.getItem(k) === 'unlocked_lm8888' || localStorage.getItem(k) === 'unlocked_lm8888';
-    if (isUnlocked) {
-      document.documentElement.classList.add('unlocked-auth');
-    } else {
-      document.documentElement.classList.add('site-locked');
+    if (!sessionStorage.getItem('hk_auth_token') && !localStorage.getItem('hk_auth_token')) {
+      document.documentElement.style.visibility = 'hidden';
     }
   })();
 </script>
+<script src="../auth.js"></script>
 
 <!-- Leaflet CSS & Google Fonts & Network Optimization -->
 <link rel="preconnect" href="https://basemaps.cartocdn.com" crossorigin />
@@ -2785,20 +2782,6 @@
 </head>
 <body>
 
-<!-- 🔒 专属访问密码保护门 (Password Gate: lm8888) -->
-<div id="siteAuthOverlay" class="site-auth-overlay">
-  <div class="site-auth-card">
-    <div class="auth-icon">🔒</div>
-    <h2>香港一手新盘全景地图</h2>
-    <p class="auth-subtitle">访问受限，请输入专属授权密码开启体验</p>
-    <div class="auth-input-group">
-      <input type="password" id="siteAuthPassword" placeholder="请输入访问密码" autocomplete="current-password" autofocus />
-      <button id="siteAuthBtn">解锁进入 →</button>
-    </div>
-    <div id="siteAuthError" class="auth-error-msg"></div>
-  </div>
-</div>
-
 <!-- Fullscreen Map Container -->
 <div id="map"></div>
 
@@ -3176,65 +3159,17 @@ const LINE_COLORS = {
   "迪士尼綫": "#f15082"
 };
 
-// 🔒 专属访问密码保护门 (Password Gate: lm8888)
-function initSiteAuth() {
-  const AUTH_KEY = 'hk_map_auth_token';
-  const TARGET_PWD = 'lm8888';
-
-  const isUnlocked = sessionStorage.getItem(AUTH_KEY) === 'unlocked_lm8888' || localStorage.getItem(AUTH_KEY) === 'unlocked_lm8888';
-
-  const overlay = document.getElementById('siteAuthOverlay');
-  if (!isUnlocked) {
-    document.documentElement.classList.add('site-locked');
-    document.documentElement.classList.remove('unlocked-auth');
-  } else {
-    document.documentElement.classList.add('unlocked-auth');
-    document.documentElement.classList.remove('site-locked');
-    if (overlay) overlay.classList.add('unlocked');
-    return;
-  }
-
-  if (!overlay) return;
-
-  const pwdInput = document.getElementById('siteAuthPassword');
-  const authBtn = document.getElementById('siteAuthBtn');
-  const errorMsg = document.getElementById('siteAuthError');
-
-  const verify = () => {
-    const inputVal = (pwdInput?.value || '').trim();
-    if (inputVal === TARGET_PWD) {
-      sessionStorage.setItem(AUTH_KEY, 'unlocked_lm8888');
-      localStorage.setItem(AUTH_KEY, 'unlocked_lm8888');
-      document.documentElement.classList.add('unlocked-auth');
-      document.documentElement.classList.remove('site-locked');
-      overlay.classList.add('unlocked');
-      if (errorMsg) errorMsg.textContent = '';
-      if (typeof map !== 'undefined' && map && map.invalidateSize) {
-        setTimeout(() => map.invalidateSize(), 200);
-      }
-    } else {
-      if (errorMsg) errorMsg.textContent = '❌ 密码错误，请重新输入';
-      if (pwdInput) {
-        pwdInput.style.borderColor = '#ef4444';
-        pwdInput.focus();
-        pwdInput.select();
-      }
-    }
-  };
-
-  if (authBtn) authBtn.onclick = verify;
-  if (pwdInput) {
-    pwdInput.onkeydown = (e) => {
-      if (e.key === 'Enter') verify();
-    };
-    setTimeout(() => pwdInput.focus(), 100);
-  }
-}
-
+// 鉴权已由全局 ../auth.js (window.HKAuth) 统一接管
 document.addEventListener('DOMContentLoaded', async () => {
-  initSiteAuth();
   initMap();
-  checkAdminMode();
+  if (window.HKAuth) {
+    window.HKAuth.ready().then(() => {
+      checkAdminMode();
+      window.HKAuth.applyPermissions();
+    });
+  } else {
+    checkAdminMode();
+  }
   await loadData();
   setupFilterEvents();
 });
@@ -6136,9 +6071,13 @@ document.addEventListener('click', (e) => {
    ========================================================================= */
 
 function checkAdminMode() {
-  const params = new URLSearchParams(window.location.search);
-  if (params.get('admin') === '1' || localStorage.getItem('sandbox_admin_mode') === 'true') {
-    isAdminMode = true;
+  if (window.HKAuth && window.HKAuth.getUser()) {
+    isAdminMode = window.HKAuth.hasPermission('map_admin');
+  } else {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('admin') === '1' || localStorage.getItem('sandbox_admin_mode') === 'true') {
+      isAdminMode = true;
+    }
   }
   updateAdminUI();
 }

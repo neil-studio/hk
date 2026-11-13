@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>用户管理与权限后台 — 香港一手新盘一站通</title>
+  <script>
+    (function () {
+      if (!sessionStorage.getItem('hk_auth_token') && !localStorage.getItem('hk_auth_token')) {
+        document.documentElement.style.visibility = 'hidden';
+      }
+    })();
+  </script>
+  <script src="auth.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: #f1f5f9;
+      color: #0f172a;
+      padding: 24px 16px 80px;
+    }
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-top: 28px;
+    }
+    .topbar h1 {
+      margin: 0;
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 9px 16px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      background: #fff;
+      color: #1e293b;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn:hover { background: #f8fafc; }
+    .btn-primary {
+      background: #2563eb;
+      border-color: #2563eb;
+      color: #fff;
+    }
+    .btn-primary:hover { background: #1d4ed8; }
+    .btn-danger {
+      background: #fee2e2;
+      border-color: #fecaca;
+      color: #b91c1c;
+    }
+    .btn-sm { padding: 4px 9px; font-size: 12px; border-radius: 6px; }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    .kpi-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 16px 18px;
+      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.06);
+      border: 1px solid #e2e8f0;
+    }
+    .kpi-label { font-size: 12px; color: #64748b; margin-bottom: 6px; }
+    .kpi-val { font-size: 24px; font-weight: 700; color: #0f172a; }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .tab-btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      background: #e2e8f0;
+      color: #334155;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .tab-btn.active {
+      background: #0f172a;
+      color: #fff;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.06);
+      overflow: hidden;
+    }
+    .table-wrap { overflow-x: auto; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    th, td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid #f1f5f9;
+      white-space: nowrap;
+    }
+    th {
+      background: #f8fafc;
+      color: #475569;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    tr:hover td { background: #f8fafc; }
+
+    .pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .pill-admin { background: #ede9fe; color: #6d28d9; }
+    .pill-agent { background: #e0f2fe; color: #0369a1; }
+    .pill-viewer { background: #f1f5f9; color: #475569; }
+    .pill-ok { background: #dcfce7; color: #15803d; }
+    .pill-off { background: #fee2e2; color: #b91c1c; }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 99999;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal-box {
+      width: 100%;
+      max-width: 460px;
+      background: #fff;
+      border-radius: 14px;
+      padding: 24px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+    }
+    .modal-box h3 { margin: 0 0 16px; font-size: 18px; }
+    .form-group { margin-bottom: 12px; }
+    .form-group label { display: block; font-size: 12px; font-weight: 600; color: #334155; margin-bottom: 5px; }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 9px 11px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 13px;
+    }
+    .quick-exp { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+    .quick-exp button {
+      padding: 3px 8px;
+      font-size: 11px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      cursor: pointer;
+    }
+    .modal-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px; }
+    #deniedBox {
+      display: none;
+      max-width: 480px;
+      margin: 80px auto;
+      background: #fff;
+      padding: 32px;
+      border-radius: 14px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <div id="deniedBox">
+    <h2>⛔ 无访问权限</h2>
+    <p style="color:#64748b;">仅超级管理员可访问用户管理后台。</p>
+    <a class="btn btn-primary" href="index.html">返回首页</a>
+  </div>
+
+  <div class="container" id="adminMain" style="display:none;">
+    <div class="topbar">
+      <h1>👥 用户管理与权限控制后台</h1>
+      <div class="actions">
+        <a class="btn" href="index.html">🏠 返回首页</a>
+        <a class="btn" href="map/index.html">🗺️ 全景地图</a>
+        <button class="btn" id="refreshBtn">🔄 刷新</button>
+        <button class="btn btn-primary" id="addUserBtn">➕ 新增用户</button>
+      </div>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">总账号数</div>
+        <div class="kpi-val" id="kpiTotal">-</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">正常启用中</div>
+        <div class="kpi-val" id="kpiActive" style="color:#15803d;">-</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">已停用 / 已过期</div>
+        <div class="kpi-val" id="kpiDisabled" style="color:#dc2626;">-</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">当前在线会话</div>
+        <div class="kpi-val" id="kpiSessions" style="color:#2563eb;">-</div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="users">用户列表</button>
+      <button class="tab-btn" data-tab="logs">登录审计日志</button>
+    </div>
+
+    <div class="card" id="usersPanel">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>账号</th>
+              <th>姓名/备注</th>
+              <th>角色</th>
+              <th>状态</th>
+              <th>有效期至</th>
+              <th>单设备锁</th>
+              <th>在线会话</th>
+              <th>最后登录</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="usersTbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card" id="logsPanel" style="display:none;">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>时间 (UTC)</th>
+              <th>账号</th>
+              <th>角色</th>
+              <th>动作</th>
+              <th>结果</th>
+              <th>详情</th>
+              <th>IP</th>
+            </tr>
+          </thead>
+          <tbody id="logsTbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 新增/编辑用户弹窗 -->
+  <div class="modal-backdrop" id="userModal">
+    <div class="modal-box">
+      <h3 id="modalTitle">新增用户</h3>
+      <form id="userForm">
+        <input type="hidden" id="editUserId" />
+        <div class="form-group">
+          <label>登录账号（2~32位字母/数字/下划线）</label>
+          <input type="text" id="fUsername" required />
+        </div>
+        <div class="form-group">
+          <label>姓名 / 备注</label>
+          <input type="text" id="fDisplayName" placeholder="例如：李先生 / 中原顾问" />
+        </div>
+        <div class="form-group">
+          <label id="fPwdLabel">初始密码（至少 6 位）</label>
+          <input type="password" id="fPassword" placeholder="编辑时留空则不修改密码" />
+        </div>
+        <div class="form-group">
+          <label>角色权限</label>
+          <select id="fRole">
+            <option value="agent">内部顾问 (agent) — 全站 + 营销工具 + 地图导出</option>
+            <option value="viewer">VIP 访客 (viewer) — 仅基础楼盘浏览（隐藏营销工具/导出）</option>
+            <option value="admin">超级管理员 (admin) — 全部权限 + 用户管理后台</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>有效期（留空表示永久有效）</label>
+          <input type="date" id="fExpiresAt" />
+          <div class="quick-exp">
+            <button type="button" data-days="">永久</button>
+            <button type="button" data-days="7">7天试用</button>
+            <button type="button" data-days="30">30天</button>
+            <button type="button" data-days="90">90天</button>
+          </div>
+        </div>
+        <div class="form-group" style="display:flex;gap:18px;margin-top:10px;">
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
+            <input type="checkbox" id="fActive" checked style="width:auto;" /> 启用账号
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
+            <input type="checkbox" id="fSingleSession" style="width:auto;" /> 限制单设备登录
+          </label>
+        </div>
+        <div id="modalErr" style="color:#dc2626;font-size:12px;margin-top:8px;"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn" id="closeModalBtn">取消</button>
+          <button type="submit" class="btn btn-primary">保存</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    let cachedUsers = [];
+    const ROLE_NAME = { admin: '超级管理员', agent: '内部顾问', viewer: 'VIP 访客' };
+
+    function isUserExpired(exp) {
+      if (!exp) return false;
+      const ts = Date.parse(exp.includes('T') ? exp : exp + 'T23:59:59Z');
+      return !Number.isNaN(ts) && ts <= Date.now();
+    }
+
+    async function loadData() {
+      const [uRes, lRes] = await Promise.all([
+        HKAuth.apiRequest('/api/admin/users'),
+        HKAuth.apiRequest('/api/admin/logs?limit=100')
+      ]);
+      cachedUsers = uRes.users || [];
+      renderUsers(cachedUsers);
+      renderLogs(lRes.logs || []);
+    }
+
+    function renderUsers(users) {
+      let activeCnt = 0, disabledCnt = 0, sessionsCnt = 0;
+      const tbody = document.getElementById('usersTbody');
+      tbody.innerHTML = users.map(u => {
+        const expired = isUserExpired(u.expires_at);
+        const ok = u.is_active && !expired;
+        if (ok) activeCnt++; else disabledCnt++;
+        sessionsCnt += (u.active_sessions || 0);
+
+        const statusHtml = !u.is_active
+          ? '<span class="pill pill-off">已停用</span>'
+          : expired
+            ? '<span class="pill pill-off">已过期</span>'
+            : '<span class="pill pill-ok">正常</span>';
+
+        return `
+          <tr>
+            <td>${u.id}</td>
+            <td><strong>${u.username}</strong></td>
+            <td>${u.display_name || '-'}</td>
+            <td><span class="pill pill-${u.role}">${ROLE_NAME[u.role] || u.role}</span></td>
+            <td>${statusHtml}</td>
+            <td>${u.expires_at ? u.expires_at.slice(0, 10) : '永久'}</td>
+            <td>${u.single_session ? '是' : '否'}</td>
+            <td>${u.active_sessions || 0}</td>
+            <td>${u.last_login_at ? u.last_login_at.slice(0, 16).replace('T', ' ') : '从未'}</td>
+            <td style="display:flex;gap:6px;">
+              <button class="btn btn-sm" onclick="openEdit(${u.id})">编辑</button>
+              <button class="btn btn-sm" onclick="revokeUser(${u.id}, '${u.username}')">踢下线</button>
+              <button class="btn btn-sm btn-danger" onclick="deleteUser(${u.id}, '${u.username}')">删除</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      document.getElementById('kpiTotal').textContent = users.length;
+      document.getElementById('kpiActive').textContent = activeCnt;
+      document.getElementById('kpiDisabled').textContent = disabledCnt;
+      document.getElementById('kpiSessions').textContent = sessionsCnt;
+    }
+
+    function renderLogs(logs) {
+      const tbody = document.getElementById('logsTbody');
+      tbody.innerHTML = logs.map(l => `
+        <tr>
+          <td>${(l.created_at || '').slice(0, 19).replace('T', ' ')}</td>
+          <td><strong>${l.username}</strong></td>
+          <td>${l.role || '-'}</td>
+          <td>${l.action}</td>
+          <td>${l.success ? '<span class="pill pill-ok">成功</span>' : '<span class="pill pill-off">失败</span>'}</td>
+          <td>${l.detail || '-'}</td>
+          <td>${l.ip || '-'}</td>
+        </tr>
+      `).join('');
+    }
+
+    function openAdd() {
+      document.getElementById('modalTitle').textContent = '新增用户';
+      document.getElementById('editUserId').value = '';
+      document.getElementById('fUsername').value = '';
+      document.getElementById('fUsername').disabled = false;
+      document.getElementById('fDisplayName').value = '';
+      document.getElementById('fPassword').value = '';
+      document.getElementById('fPassword').required = true;
+      document.getElementById('fPwdLabel').textContent = '初始密码（至少 6 位）';
+      document.getElementById('fRole').value = 'agent';
+      document.getElementById('fExpiresAt').value = '';
+      document.getElementById('fActive').checked = true;
+      document.getElementById('fSingleSession').checked = false;
+      document.getElementById('modalErr').textContent = '';
+      document.getElementById('userModal').classList.add('open');
+    }
+
+    window.openEdit = function (id) {
+      const u = cachedUsers.find(x => x.id === id);
+      if (!u) return;
+      document.getElementById('modalTitle').textContent = `编辑用户：${u.username}`;
+      document.getElementById('editUserId').value = u.id;
+      document.getElementById('fUsername').value = u.username;
+      document.getElementById('fUsername').disabled = true;
+      document.getElementById('fDisplayName').value = u.display_name || '';
+      document.getElementById('fPassword').value = '';
+      document.getElementById('fPassword').required = false;
+      document.getElementById('fPwdLabel').textContent = '重置密码（留空则保持原密码）';
+      document.getElementById('fRole').value = u.role;
+      document.getElementById('fExpiresAt').value = u.expires_at ? u.expires_at.slice(0, 10) : '';
+      document.getElementById('fActive').checked = Boolean(u.is_active);
+      document.getElementById('fSingleSession').checked = Boolean(u.single_session);
+      document.getElementById('modalErr').textContent = '';
+      document.getElementById('userModal').classList.add('open');
+    };
+
+    window.revokeUser = async function (id, username) {
+      if (!confirm(`确定强制踢下线账号「${username}」的所有登录会话？`)) return;
+      await HKAuth.apiRequest(`/api/admin/users/${id}/revoke`, { method: 'POST' });
+      await loadData();
+    };
+
+    window.deleteUser = async function (id, username) {
+      if (!confirm(`确定永久删除账号「${username}」？此操作不可恢复。`)) return;
+      try {
+        await HKAuth.apiRequest(`/api/admin/users/${id}`, { method: 'DELETE' });
+        await loadData();
+      } catch (err) {
+        alert(err.message);
+      }
+    };
+
+    document.querySelectorAll('.quick-exp button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const days = btn.getAttribute('data-days');
+        if (!days) {
+          document.getElementById('fExpiresAt').value = '';
+        } else {
+          const d = new Date(Date.now() + Number(days) * 86400 * 1000);
+          document.getElementById('fExpiresAt').value = d.toISOString().slice(0, 10);
+        }
+      });
+    });
+
+    document.getElementById('addUserBtn').addEventListener('click', openAdd);
+    document.getElementById('closeModalBtn').addEventListener('click', () => {
+      document.getElementById('userModal').classList.remove('open');
+    });
+    document.getElementById('refreshBtn').addEventListener('click', loadData);
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const tab = btn.getAttribute('data-tab');
+        document.getElementById('usersPanel').style.display = tab === 'users' ? 'block' : 'none';
+        document.getElementById('logsPanel').style.display = tab === 'logs' ? 'block' : 'none';
+      });
+    });
+
+    document.getElementById('userForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const errEl = document.getElementById('modalErr');
+      errEl.textContent = '';
+
+      const id = document.getElementById('editUserId').value;
+      const expVal = document.getElementById('fExpiresAt').value;
+      const payload = {
+        display_name: document.getElementById('fDisplayName').value.trim(),
+        role: document.getElementById('fRole').value,
+        expires_at: expVal ? `${expVal}T23:59:59Z` : null,
+        is_active: document.getElementById('fActive').checked,
+        single_session: document.getElementById('fSingleSession').checked
+      };
+      const pwd = document.getElementById('fPassword').value;
+      if (pwd) payload.password = pwd;
+
+      try {
+        if (id) {
+          await HKAuth.apiRequest(`/api/admin/users/${id}`, {
+            method: 'PATCH',
+            body: JSON.stringify(payload)
+          });
+        } else {
+          payload.username = document.getElementById('fUsername').value.trim();
+          await HKAuth.apiRequest('/api/admin/users', {
+            method: 'POST',
+            body: JSON.stringify(payload)
+          });
+        }
+        document.getElementById('userModal').classList.remove('open');
+        await loadData();
+      } catch (err) {
+        errEl.textContent = err.message;
+      }
+    });
+
+    HKAuth.ready().then(user => {
+      if (user.role !== 'admin') {
+        document.getElementById('deniedBox').style.display = 'block';
+        return;
+      }
+      document.getElementById('adminMain').style.display = 'block';
+      loadData().catch(err => alert('加载后台数据失败：' + err.message));
+    });
+  </script>
+</body>
+</html>
