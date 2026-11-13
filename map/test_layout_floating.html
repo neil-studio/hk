@@ -4781,13 +4781,15 @@ function getProjectMobilityProfile(proj) {
       summaryTag: '🚗 半山高地 · 专车/小巴接驳中环/港大站'
     };
   }
-  if (name.includes('天御')) {
+  if (name.includes('天御') || name.includes('巴丙顿山') || name.includes('罗便臣道80号') || name.includes('Upper Central') ||
+      (proj.address || '').includes('巴丙顿道') || (proj.address || '').includes('羅便臣道') || (proj.address || '').includes('罗便臣道') ||
+      (proj.address || '').includes('堅道') || (proj.address || '').includes('坚道')) {
     return {
       isWalkable: false,
-      envTag: '👑 西半山百年名门地脉 · 坚道/卫城道名邸',
-      transitDesc: '出门步行约2分即达坚道小巴/城巴站，约 3~5 分钟直通上环/中环核心枢纽',
+      envTag: '👑 西半山百年名门地脉 · 半山坡道名邸',
+      transitDesc: '地处西半山半山坡道高地，坡度大不设步行地铁通勤，依赖坚道/半山专线小巴及巴士约 3~5 分钟直通上环/中环/西营盘枢纽',
       btnText: '🚗 查看半山接驳动线',
-      summaryTag: '🚌 坚道专线小巴/巴士约3~5分达中环/上环'
+      summaryTag: '🚌 半山专线小巴/巴士约3~5分达中环/西营盘'
     };
   }
 
