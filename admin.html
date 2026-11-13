@@ -241,6 +241,7 @@
 
     <div class="tabs">
       <button class="tab-btn active" data-tab="users">用户列表</button>
+      <button class="tab-btn" data-tab="analytics">📊 活跃度统计</button>
       <button class="tab-btn" data-tab="logs">登录审计日志</button>
     </div>
 
@@ -282,6 +283,62 @@
           </thead>
           <tbody id="logsTbody"></tbody>
         </table>
+      </div>
+    </div>
+
+    <div id="analyticsPanel" style="display:none;">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
+        <div style="font-size:13px;color:#475569;">
+          ⏱️ 统计口径：10 分钟无操作自动暂停计时；12 小时无操作自动退出；每 12 小时/关闭页面时汇总同步（含未同步本地缓存兜底）。
+        </div>
+        <div style="display:flex;gap:6px;">
+          <button class="btn btn-sm analytics-range active" data-days="7" style="background:#0f172a;color:#fff;">近 7 天</button>
+          <button class="btn btn-sm analytics-range" data-days="30">近 30 天</button>
+          <button class="btn btn-sm analytics-range" data-days="90">近 90 天</button>
+        </div>
+      </div>
+
+      <div class="kpi-grid" id="analyticsKpis"></div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px;margin-bottom:16px;">
+        <div class="card" style="padding:16px;">
+          <div style="font-weight:700;font-size:14px;margin-bottom:12px;">📈 每日活跃与点击趋势</div>
+          <div id="dailyTrendBox" style="display:flex;align-items:flex-end;gap:6px;height:140px;padding-top:16px;overflow-x:auto;"></div>
+        </div>
+        <div class="card" style="padding:16px;">
+          <div style="font-weight:700;font-size:14px;margin-bottom:12px;">🔥 全站各板块使用分布</div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>板块</th><th>人数</th><th>访问</th><th>点击</th><th>有效时长</th></tr>
+              </thead>
+              <tbody id="moduleStatsTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="padding:14px 16px;border-bottom:1px solid #f1f5f9;font-weight:700;font-size:14px;">
+          👤 个人活动量明细榜（按点击量降序）
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>账号</th>
+                <th>姓名/备注</th>
+                <th>角色</th>
+                <th>登录天数</th>
+                <th>有效总时长</th>
+                <th>总访问 / 总点击</th>
+                <th>各板块操作明细</th>
+                <th>最近活跃日期</th>
+              </tr>
+            </thead>
+            <tbody id="userStatsTbody"></tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -538,6 +595,118 @@
     });
     document.getElementById('refreshBtn').addEventListener('click', loadData);
 
+    let analyticsDays = 7;
+    const MODULE_LABELS = {
+      home: '首页门户',
+      sales: '销控查询',
+      analytics: '历史成交',
+      featured: '精选盘',
+      secondhand: '二手房源',
+      map: '全景地图',
+      admin: '管理后台'
+    };
+
+    function fmtDuration(sec) {
+      sec = Math.max(0, Number(sec) || 0);
+      if (sec < 60) return `${sec}秒`;
+      const m = Math.floor(sec / 60);
+      const h = Math.floor(m / 60);
+      const rm = m % 60;
+      return h > 0 ? `${h}小时${rm}分` : `${m}分钟`;
+    }
+
+    async function loadAnalytics(days = analyticsDays) {
+      analyticsDays = days;
+      const data = await HKAuth.apiRequest(`/api/admin/analytics?days=${days}`);
+      const ov = data.overview || {};
+      document.getElementById('analyticsKpis').innerHTML = `
+        <div class="kpi-card">
+          <div class="kpi-label">活跃 / 沉睡账号</div>
+          <div class="kpi-val">${ov.active_users ?? 0} <span style="font-size:14px;color:#94a3b8;font-weight:500;">/ ${ov.sleeping_users ?? 0} 沉睡</span></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">累计访问 / 总点击</div>
+          <div class="kpi-val">${ov.total_visits ?? 0} <span style="font-size:14px;color:#2563eb;font-weight:600;">/ ${ov.total_clicks ?? 0} 次</span></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">全站有效总时长</div>
+          <div class="kpi-val" style="font-size:20px;">${fmtDuration(ov.total_active_seconds)}</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">人均活跃天数 / 人均时长</div>
+          <div class="kpi-val" style="font-size:18px;">${ov.avg_active_days ?? 0}天 · ${fmtDuration(ov.avg_active_seconds)}</div>
+        </div>
+      `;
+
+      // 每日趋势柱状图
+      const trend = data.daily_trend || [];
+      const trendBox = document.getElementById('dailyTrendBox');
+      if (trend.length === 0) {
+        trendBox.innerHTML = '<div style="color:#94a3b8;font-size:13px;margin:auto;">暂无活动数据（用户切换页面或关闭页面后将自动同步）</div>';
+      } else {
+        const maxClicks = Math.max(1, ...trend.map(t => t.clicks || t.visits || 1));
+        trendBox.innerHTML = trend.map(t => {
+          const pct = Math.max(8, Math.round(((t.clicks || t.visits) / maxClicks) * 100));
+          return `
+            <div style="flex:1;min-width:34px;display:flex;flex-direction:column;align-items:center;gap:4px;" title="${t.date}&#10;活跃人数: ${t.dau}&#10;访问: ${t.visits}&#10;点击: ${t.clicks}&#10;时长: ${fmtDuration(t.active_seconds)}">
+              <div style="font-size:10px;color:#64748b;">${t.dau}人</div>
+              <div style="width:100%;max-width:26px;height:90px;display:flex;align-items:flex-end;justify-content:center;background:#f1f5f9;border-radius:6px;overflow:hidden;">
+                <div style="width:100%;height:${pct}%;background:linear-gradient(180deg,#3b82f6,#1d4ed8);border-radius:4px;"></div>
+              </div>
+              <div style="font-size:10px;color:#475569;">${t.date.slice(5)}</div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // 板块统计
+      const mods = data.module_stats || [];
+      document.getElementById('moduleStatsTbody').innerHTML = mods.length === 0
+        ? '<tr><td colspan="5" style="text-align:center;color:#94a3b8;">暂无数据</td></tr>'
+        : mods.map(m => `
+          <tr>
+            <td><strong>${MODULE_LABELS[m.module] || m.module}</strong></td>
+            <td>${m.users_count}</td>
+            <td>${m.visits}</td>
+            <td><strong>${m.clicks}</strong></td>
+            <td>${fmtDuration(m.active_seconds)}</td>
+          </tr>
+        `).join('');
+
+      // 个人活动明细榜
+      const uStats = data.user_stats || [];
+      document.getElementById('userStatsTbody').innerHTML = uStats.map(u => {
+        const modBadges = Object.entries(u.modules || {})
+          .sort((a, b) => (b[1].clicks || 0) - (a[1].clicks || 0))
+          .map(([mKey, mv]) => `<span class="pill" style="background:#f1f5f9;color:#334155;margin-right:4px;">${MODULE_LABELS[mKey] || mKey}: ${mv.visits}访/${mv.clicks}点</span>`)
+          .join('');
+        return `
+          <tr>
+            <td><strong>${u.username}</strong></td>
+            <td>${u.display_name || '-'}</td>
+            <td><span class="pill pill-${u.role}">${ROLE_NAME[u.role] || u.role}</span></td>
+            <td>${u.active_days > 0 ? `<strong>${u.active_days} 天</strong>` : '<span style="color:#94a3b8;">0 天(沉睡)</span>'}</td>
+            <td>${fmtDuration(u.total_active_seconds)}</td>
+            <td>${u.total_visits} / <strong>${u.total_clicks}</strong></td>
+            <td style="white-space:normal;min-width:240px;">${modBadges || '<span style="color:#94a3b8;">暂无操作记录</span>'}</td>
+            <td>${u.last_active_date || '从未活跃'}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    document.querySelectorAll('.analytics-range').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.analytics-range').forEach(b => {
+          b.style.background = '#fff';
+          b.style.color = '#1e293b';
+        });
+        btn.style.background = '#0f172a';
+        btn.style.color = '#fff';
+        loadAnalytics(Number(btn.getAttribute('data-days'))).catch(err => alert(err.message));
+      });
+    });
+
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -545,6 +714,10 @@
         const tab = btn.getAttribute('data-tab');
         document.getElementById('usersPanel').style.display = tab === 'users' ? 'block' : 'none';
         document.getElementById('logsPanel').style.display = tab === 'logs' ? 'block' : 'none';
+        document.getElementById('analyticsPanel').style.display = tab === 'analytics' ? 'block' : 'none';
+        if (tab === 'analytics') {
+          loadAnalytics(analyticsDays).catch(err => alert('加载统计失败：' + err.message));
+        }
       });
     });
 

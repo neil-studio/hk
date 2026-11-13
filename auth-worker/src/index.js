@@ -143,9 +143,7 @@ async function writeAuditLog(env, { username, userId = null, role = '', action, 
   }
 }
 
-async function authenticateRequest(request, env) {
-  const authHeader = request.headers.get('Authorization') || '';
-  const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : '';
+async function authenticateToken(token, env) {
   if (!token) return null;
 
   const row = await env.DB.prepare(
@@ -166,6 +164,12 @@ async function authenticateRequest(request, env) {
     return null;
   }
   return { token, user: row };
+}
+
+async function authenticateRequest(request, env) {
+  const authHeader = request.headers.get('Authorization') || '';
+  const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : '';
+  return authenticateToken(token, env);
 }
 
 // ==================== 路由处理 ====================
@@ -695,6 +699,206 @@ export default {
             .all();
           return jsonResponse({ logs: rows.results || [] }, 200, cors);
         }
+
+        // 11. 账号活动量与整体网站统计分析
+        if (path === '/api/admin/analytics' && request.method === 'GET') {
+          const days = Math.min(Math.max(Number(url.searchParams.get('days') || 30), 1), 365);
+          const sinceDate = new Date(Date.now() - (days - 1) * 86400 * 1000).toISOString().slice(0, 10);
+
+          const [usersRes, statsRes] = await Promise.all([
+            env.DB.prepare(
+              `SELECT id, username, display_name, role, is_active, needs_password_setup, expires_at, last_login_at, created_at
+               FROM users ORDER BY id ASC`
+            ).all(),
+            env.DB.prepare(
+              `SELECT stat_date, user_id, module, visits, clicks, active_seconds
+               FROM user_daily_stats
+               WHERE stat_date >= ?
+               ORDER BY stat_date ASC`
+            )
+              .bind(sinceDate)
+              .all()
+          ]);
+
+          const allUsers = usersRes.results || [];
+          const rows = statsRes.results || [];
+
+          const dailyMap = new Map();
+          const moduleMap = new Map();
+          const userMap = new Map();
+
+          for (const u of allUsers) {
+            userMap.set(u.id, {
+              id: u.id,
+              username: u.username,
+              display_name: u.display_name || u.username,
+              role: u.role,
+              is_active: Boolean(u.is_active),
+              needs_password_setup: Boolean(u.needs_password_setup),
+              last_login_at: u.last_login_at,
+              days_set: new Set(),
+              total_visits: 0,
+              total_clicks: 0,
+              total_active_seconds: 0,
+              last_active_date: null,
+              modules: {}
+            });
+          }
+
+          let totalVisits = 0;
+          let totalClicks = 0;
+          let totalActiveSeconds = 0;
+
+          for (const r of rows) {
+            const v = Number(r.visits) || 0;
+            const c = Number(r.clicks) || 0;
+            const s = Number(r.active_seconds) || 0;
+            totalVisits += v;
+            totalClicks += c;
+            totalActiveSeconds += s;
+
+            if (!dailyMap.has(r.stat_date)) {
+              dailyMap.set(r.stat_date, { date: r.stat_date, users: new Set(), visits: 0, clicks: 0, active_seconds: 0 });
+            }
+            const dObj = dailyMap.get(r.stat_date);
+            dObj.users.add(r.user_id);
+            dObj.visits += v;
+            dObj.clicks += c;
+            dObj.active_seconds += s;
+
+            if (!moduleMap.has(r.module)) {
+              moduleMap.set(r.module, { module: r.module, users: new Set(), visits: 0, clicks: 0, active_seconds: 0 });
+            }
+            const mObj = moduleMap.get(r.module);
+            mObj.users.add(r.user_id);
+            mObj.visits += v;
+            mObj.clicks += c;
+            mObj.active_seconds += s;
+
+            const uObj = userMap.get(r.user_id);
+            if (uObj) {
+              uObj.days_set.add(r.stat_date);
+              uObj.total_visits += v;
+              uObj.total_clicks += c;
+              uObj.total_active_seconds += s;
+              if (!uObj.last_active_date || r.stat_date > uObj.last_active_date) {
+                uObj.last_active_date = r.stat_date;
+              }
+              if (!uObj.modules[r.module]) {
+                uObj.modules[r.module] = { visits: 0, clicks: 0, active_seconds: 0 };
+              }
+              uObj.modules[r.module].visits += v;
+              uObj.modules[r.module].clicks += c;
+              uObj.modules[r.module].active_seconds += s;
+            }
+          }
+
+          const userStats = Array.from(userMap.values())
+            .map(u => ({
+              id: u.id,
+              username: u.username,
+              display_name: u.display_name,
+              role: u.role,
+              is_active: u.is_active,
+              needs_password_setup: u.needs_password_setup,
+              last_login_at: u.last_login_at,
+              active_days: u.days_set.size,
+              total_visits: u.total_visits,
+              total_clicks: u.total_clicks,
+              total_active_seconds: u.total_active_seconds,
+              last_active_date: u.last_active_date,
+              modules: u.modules
+            }))
+            .sort((a, b) => b.total_clicks - a.total_clicks || b.total_active_seconds - a.total_active_seconds);
+
+          const activeUsersCount = userStats.filter(u => u.active_days > 0).length;
+          const totalActiveDaysSum = userStats.reduce((sum, u) => sum + u.active_days, 0);
+
+          const dailyTrend = Array.from(dailyMap.values())
+            .map(d => ({
+              date: d.date,
+              dau: d.users.size,
+              visits: d.visits,
+              clicks: d.clicks,
+              active_seconds: d.active_seconds
+            }))
+            .sort((a, b) => a.date.localeCompare(b.date));
+
+          const moduleStats = Array.from(moduleMap.values())
+            .map(m => ({
+              module: m.module,
+              users_count: m.users.size,
+              visits: m.visits,
+              clicks: m.clicks,
+              active_seconds: m.active_seconds
+            }))
+            .sort((a, b) => b.clicks - a.clicks || b.visits - a.visits);
+
+          return jsonResponse(
+            {
+              days,
+              since_date: sinceDate,
+              overview: {
+                total_users: allUsers.length,
+                active_users: activeUsersCount,
+                sleeping_users: allUsers.length - activeUsersCount,
+                total_visits: totalVisits,
+                total_clicks: totalClicks,
+                total_active_seconds: totalActiveSeconds,
+                avg_active_seconds: activeUsersCount ? Math.round(totalActiveSeconds / activeUsersCount) : 0,
+                avg_active_days: activeUsersCount ? Number((totalActiveDaysSum / activeUsersCount).toFixed(1)) : 0
+              },
+              daily_trend: dailyTrend,
+              module_stats: moduleStats,
+              user_stats: userStats
+            },
+            200,
+            cors
+          );
+        }
+      }
+
+      // 12. 低频汇总上报用户活动量（支持 Authorization 头或 sendBeacon body.token）
+      if (path === '/api/activity/sync' && request.method === 'POST') {
+        const body = await request.json().catch(() => ({}));
+        const authHeader = request.headers.get('Authorization') || '';
+        const headerToken = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : '';
+        const token = headerToken || String(body.token || '').trim();
+
+        const authCtx = await authenticateToken(token, env);
+        if (!authCtx) {
+          return jsonResponse({ error: '未登录或会话已失效' }, 401, cors);
+        }
+
+        const items = Array.isArray(body.items) ? body.items.slice(0, 100) : [];
+        const VALID_MODULES = new Set(['home', 'sales', 'analytics', 'featured', 'secondhand', 'map', 'admin']);
+        let synced = 0;
+
+        for (const item of items) {
+          const statDate = String(item?.date || '').slice(0, 10);
+          const mod = String(item?.module || '').trim();
+          const visits = Math.max(0, Math.min(Number(item?.visits) || 0, 5000));
+          const clicks = Math.max(0, Math.min(Number(item?.clicks) || 0, 50000));
+          const activeSeconds = Math.max(0, Math.min(Number(item?.active_seconds) || 0, 86400));
+
+          if (!/^\d{4}-\d{2}-\d{2}$/.test(statDate) || !VALID_MODULES.has(mod)) continue;
+          if (visits === 0 && clicks === 0 && activeSeconds === 0) continue;
+
+          await env.DB.prepare(
+            `INSERT INTO user_daily_stats (stat_date, user_id, module, visits, clicks, active_seconds)
+             VALUES (?, ?, ?, ?, ?, ?)
+             ON CONFLICT(stat_date, user_id, module) DO UPDATE SET
+               visits = visits + excluded.visits,
+               clicks = clicks + excluded.clicks,
+               active_seconds = active_seconds + excluded.active_seconds,
+               updated_at = datetime('now')`
+          )
+            .bind(statDate, authCtx.user.id, mod, visits, clicks, activeSeconds)
+            .run();
+          synced++;
+        }
+
+        return jsonResponse({ ok: true, synced }, 200, cors);
       }
 
       return jsonResponse({ error: 'Not Found' }, 404, cors);

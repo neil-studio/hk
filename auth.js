@@ -42,6 +42,7 @@
   function saveSession(token, user, remember = true) {
     sessionStorage.setItem(AUTH_CONFIG.tokenKey, token);
     sessionStorage.setItem(AUTH_CONFIG.userKey, JSON.stringify(user));
+    localStorage.setItem('hk_last_active_at', String(Date.now()));
     if (remember) {
       localStorage.setItem(AUTH_CONFIG.tokenKey, token);
       localStorage.setItem(AUTH_CONFIG.userKey, JSON.stringify(user));
@@ -56,6 +57,7 @@
     sessionStorage.removeItem(AUTH_CONFIG.userKey);
     localStorage.removeItem(AUTH_CONFIG.tokenKey);
     localStorage.removeItem(AUTH_CONFIG.userKey);
+    localStorage.removeItem('hk_last_active_at');
     currentUser = null;
   }
 
@@ -594,10 +596,193 @@
     });
   }
 
+  // ==================== 活动量低频采集与无操作超时控制 ====================
+  const IDLE_PAUSE_MS = 10 * 60 * 1000;        // 10 分钟无操作暂停计入有效时长
+  const IDLE_LOGOUT_MS = 12 * 60 * 60 * 1000;  // 12 小时无操作强制退出登录
+  const SYNC_INTERVAL_MS = 12 * 60 * 60 * 1000; // 12 小时汇总上报周期
+  const BUFFER_KEY = 'hk_activity_buffer';
+  const LAST_SYNC_KEY = 'hk_activity_last_sync';
+  const LAST_ACTIVE_KEY = 'hk_last_active_at';
+  let trackerStarted = false;
+
+  function detectModule() {
+    const p = window.location.pathname;
+    if (p.includes('/map/')) return 'map';
+    if (p.includes('sales.html')) return 'sales';
+    if (p.includes('analytics.html')) return 'analytics';
+    if (p.includes('featured.html')) return 'featured';
+    if (p.includes('secondhand.html')) return 'secondhand';
+    if (p.includes('admin.html')) return 'admin';
+    return 'home';
+  }
+
+  function getTodayStr() {
+    const d = new Date(Date.now() + 8 * 3600 * 1000); // 北京/香港时间 YYYY-MM-DD
+    return d.toISOString().slice(0, 10);
+  }
+
+  function readActivityBuffer() {
+    try {
+      return JSON.parse(localStorage.getItem(BUFFER_KEY) || '{}') || {};
+    } catch (_) {
+      return {};
+    }
+  }
+
+  function writeActivityBuffer(buf) {
+    try {
+      localStorage.setItem(BUFFER_KEY, JSON.stringify(buf));
+    } catch (_) {}
+  }
+
+  function recordActivityDelta(moduleName, { visits = 0, clicks = 0, active_seconds = 0 }) {
+    if (!currentUser) return;
+    const date = getTodayStr();
+    const key = `${currentUser.id}|${date}|${moduleName}`;
+    const buf = readActivityBuffer();
+    if (!buf[key]) {
+      buf[key] = { user_id: currentUser.id, date, module: moduleName, visits: 0, clicks: 0, active_seconds: 0 };
+    }
+    buf[key].visits += visits;
+    buf[key].clicks += clicks;
+    buf[key].active_seconds += active_seconds;
+    writeActivityBuffer(buf);
+  }
+
+  async function flushActivity(useBeacon = false) {
+    const token = getToken();
+    if (!token) return;
+    const buf = readActivityBuffer();
+    const allEntries = Object.entries(buf);
+    if (allEntries.length === 0) return;
+
+    const uid = currentUser ? currentUser.id : null;
+    const items = [];
+    const remaining = {};
+    for (const [k, v] of allEntries) {
+      if (!uid || v.user_id === uid) {
+        items.push({ date: v.date, module: v.module, visits: v.visits, clicks: v.clicks, active_seconds: v.active_seconds });
+      } else {
+        remaining[k] = v;
+      }
+    }
+    if (items.length === 0) return;
+
+    writeActivityBuffer(remaining);
+    localStorage.setItem(LAST_SYNC_KEY, String(Date.now()));
+
+    const url = `${AUTH_CONFIG.apiBase}/api/activity/sync`;
+    if (useBeacon && navigator.sendBeacon) {
+      try {
+        const blob = new Blob([JSON.stringify({ token, items })], { type: 'application/json' });
+        const sent = navigator.sendBeacon(url, blob);
+        if (sent) return;
+      } catch (_) {}
+    }
+
+    try {
+      await apiRequest('/api/activity/sync', {
+        method: 'POST',
+        body: JSON.stringify({ items })
+      });
+    } catch (_) {
+      // 网络失败时放回本地账本，下次补报
+      const cur = readActivityBuffer();
+      for (const it of items) {
+        const key = `${uid || 'x'}|${it.date}|${it.module}`;
+        if (!cur[key]) cur[key] = { user_id: uid, ...it };
+        else {
+          cur[key].visits += it.visits;
+          cur[key].clicks += it.clicks;
+          cur[key].active_seconds += it.active_seconds;
+        }
+      }
+      writeActivityBuffer(cur);
+    }
+  }
+
+  function isIdleTimedOut() {
+    const last = Number(localStorage.getItem(LAST_ACTIVE_KEY) || 0);
+    return last > 0 && Date.now() - last >= IDLE_LOGOUT_MS;
+  }
+
+  function startActivityTracker() {
+    if (trackerStarted || !currentUser) return;
+    trackerStarted = true;
+
+    const mod = detectModule();
+    if (!localStorage.getItem(LAST_ACTIVE_KEY)) {
+      localStorage.setItem(LAST_ACTIVE_KEY, String(Date.now()));
+    }
+
+    // 记录本次进入板块访问 +1
+    recordActivityDelta(mod, { visits: 1 });
+
+    // 若本地有积压超过 12 小时的未同步数据，顺手补报一次
+    const lastSync = Number(localStorage.getItem(LAST_SYNC_KEY) || 0);
+    if (!lastSync || Date.now() - lastSync >= SYNC_INTERVAL_MS) {
+      flushActivity(false);
+    }
+
+    let lastTouchWrite = 0;
+    const touchActive = () => {
+      const now = Date.now();
+      if (now - lastTouchWrite > 5000) {
+        lastTouchWrite = now;
+        localStorage.setItem(LAST_ACTIVE_KEY, String(now));
+      }
+    };
+
+    ['mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart'].forEach(evt => {
+      window.addEventListener(evt, touchActive, { passive: true });
+    });
+
+    // 记录有效点击次数（仅记录真实按钮/链接/交互元素或页面点击）
+    document.addEventListener('click', (e) => {
+      touchActive();
+      if (e.target && e.target.closest && e.target.closest('#hkAuthOverlay')) return;
+      recordActivityDelta(mod, { clicks: 1 });
+    }, true);
+
+    // 每 30 秒检测一次：10分钟无操作暂停时长，12小时无操作强制登出
+    setInterval(async () => {
+      if (!currentUser) return;
+      const now = Date.now();
+      const lastActive = Number(localStorage.getItem(LAST_ACTIVE_KEY) || now);
+      const idleMs = now - lastActive;
+
+      if (idleMs >= IDLE_LOGOUT_MS) {
+        await flushActivity(false);
+        await logout();
+        return;
+      }
+
+      if (idleMs < IDLE_PAUSE_MS && !document.hidden) {
+        recordActivityDelta(mod, { active_seconds: 30 });
+      }
+
+      const ls = Number(localStorage.getItem(LAST_SYNC_KEY) || 0);
+      if (ls && now - ls >= SYNC_INTERVAL_MS) {
+        flushActivity(false);
+      }
+    }, 30000);
+
+    // 页面隐藏或关闭时通过 sendBeacon 低频打包上报（防丢数）
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        flushActivity(true);
+      }
+    });
+    window.addEventListener('pagehide', () => {
+      flushActivity(true);
+    });
+  }
+
   function onAuthenticated() {
     revealPage();
     applyPermissions();
     mountUserBadge();
+    startActivityTracker();
     if (currentUser.role === 'admin') {
       try { localStorage.setItem('sandbox_admin_mode', 'true'); } catch (_) {}
     } else {
@@ -618,6 +803,13 @@
       await showLoginOverlay('login');
       return;
     }
+    if (isIdleTimedOut()) {
+      await flushActivity(false);
+      try { await apiRequest('/api/logout', { method: 'POST' }); } catch (_) {}
+      clearSession();
+      await showLoginOverlay('login');
+      return;
+    }
     try {
       const res = await apiRequest('/api/me');
       currentUser = res.user;
@@ -631,6 +823,7 @@
   }
 
   async function logout() {
+    await flushActivity(false);
     try {
       await apiRequest('/api/logout', { method: 'POST' });
     } catch (_) {}

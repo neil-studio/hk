@@ -43,3 +43,19 @@ CREATE TABLE IF NOT EXISTS audit_logs (
 );
 
 CREATE INDEX IF NOT EXISTS idx_audit_logs_created_at ON audit_logs(created_at DESC);
+
+-- 用户每日分板块活动量汇总表
+CREATE TABLE IF NOT EXISTS user_daily_stats (
+  stat_date TEXT NOT NULL,
+  user_id INTEGER NOT NULL,
+  module TEXT NOT NULL,
+  visits INTEGER NOT NULL DEFAULT 0,
+  clicks INTEGER NOT NULL DEFAULT 0,
+  active_seconds INTEGER NOT NULL DEFAULT 0,
+  updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+  PRIMARY KEY (stat_date, user_id, module),
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_daily_stats_date ON user_daily_stats(stat_date DESC);
+CREATE INDEX IF NOT EXISTS idx_daily_stats_user ON user_daily_stats(user_id);
