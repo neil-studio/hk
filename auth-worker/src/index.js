@@ -122,6 +122,7 @@ function formatUserPublic(user) {
     role: user.role,
     permissions: ROLE_PERMISSIONS[user.role] || [],
     is_active: Boolean(user.is_active),
+    needs_password_setup: Boolean(user.needs_password_setup),
     expires_at: user.expires_at,
     single_session: Boolean(user.single_session),
     last_login_at: user.last_login_at,
@@ -225,27 +226,13 @@ export default {
         const username = String(body.username || '').trim();
         const password = String(body.password || '');
 
-        if (!username || !password) {
-          return jsonResponse({ error: '请输入账号和密码' }, 400, cors);
+        if (!username) {
+          return jsonResponse({ error: '请输入账号' }, 400, cors);
         }
 
         const user = await env.DB.prepare('SELECT * FROM users WHERE username = ?').bind(username).first();
         if (!user) {
           await writeAuditLog(env, { username, action: 'login', success: false, detail: '账号不存在', ...meta });
-          return jsonResponse({ error: '账号或密码错误' }, 401, cors);
-        }
-
-        const ok = await verifyPassword(password, user.password_hash);
-        if (!ok) {
-          await writeAuditLog(env, {
-            username,
-            userId: user.id,
-            role: user.role,
-            action: 'login',
-            success: false,
-            detail: '密码错误',
-            ...meta
-          });
           return jsonResponse({ error: '账号或密码错误' }, 401, cors);
         }
 
@@ -273,6 +260,37 @@ export default {
             ...meta
           });
           return jsonResponse({ error: '该账号已过期，请联系管理员续期' }, 403, cors);
+        }
+
+        // 首次登录未设密引导
+        if (user.needs_password_setup || user.password_hash === '__PENDING_SETUP__') {
+          return jsonResponse(
+            {
+              requires_password_setup: true,
+              username: user.username,
+              display_name: user.display_name || user.username
+            },
+            200,
+            cors
+          );
+        }
+
+        if (!password) {
+          return jsonResponse({ error: '请输入密码' }, 400, cors);
+        }
+
+        const ok = await verifyPassword(password, user.password_hash);
+        if (!ok) {
+          await writeAuditLog(env, {
+            username,
+            userId: user.id,
+            role: user.role,
+            action: 'login',
+            success: false,
+            detail: '密码错误',
+            ...meta
+          });
+          return jsonResponse({ error: '账号或密码错误' }, 401, cors);
         }
 
         if (user.single_session) {
@@ -307,6 +325,72 @@ export default {
             token,
             expires_at: sessionExpires,
             user: formatUserPublic(user)
+          },
+          200,
+          cors
+        );
+      }
+
+      // 3.5 首次登录设置密码并激活
+      if (path === '/api/setup-password' && request.method === 'POST') {
+        const body = await request.json().catch(() => ({}));
+        const username = String(body.username || '').trim();
+        const newPassword = String(body.new_password || '');
+        if (!username || newPassword.length < 6) {
+          return jsonResponse({ error: '账号不能为空且新密码至少 6 位' }, 400, cors);
+        }
+
+        const user = await env.DB.prepare('SELECT * FROM users WHERE username = ?').bind(username).first();
+        if (!user) {
+          return jsonResponse({ error: '账号不存在' }, 404, cors);
+        }
+        if (!user.is_active) {
+          return jsonResponse({ error: '该账号已被停用，请联系管理员' }, 403, cors);
+        }
+        if (isExpired(user.expires_at)) {
+          return jsonResponse({ error: '该账号已过期，请联系管理员续期' }, 403, cors);
+        }
+        if (!user.needs_password_setup && user.password_hash !== '__PENDING_SETUP__') {
+          return jsonResponse({ error: '该账号已设置过密码，请直接使用密码登录' }, 403, cors);
+        }
+
+        const pwHash = await hashPassword(newPassword);
+        await env.DB.prepare(
+          `UPDATE users
+           SET password_hash = ?, needs_password_setup = 0, last_login_at = datetime('now'), updated_at = datetime('now')
+           WHERE id = ?`
+        )
+          .bind(pwHash, user.id)
+          .run();
+
+        if (user.single_session) {
+          await env.DB.prepare('DELETE FROM sessions WHERE user_id = ?').bind(user.id).run();
+        }
+
+        const token = generateToken();
+        const sessionExpires = new Date(Date.now() + SESSION_TTL_HOURS * 3600 * 1000).toISOString();
+        await env.DB.prepare(
+          `INSERT INTO sessions (token, user_id, expires_at, ip, user_agent) VALUES (?, ?, ?, ?, ?)`
+        )
+          .bind(token, user.id, sessionExpires, meta.ip, meta.ua)
+          .run();
+
+        await writeAuditLog(env, {
+          username: user.username,
+          userId: user.id,
+          role: user.role,
+          action: 'setup_password',
+          success: true,
+          detail: '首次登录完成设密并激活',
+          ...meta
+        });
+
+        const updatedUser = { ...user, needs_password_setup: 0 };
+        return jsonResponse(
+          {
+            token,
+            expires_at: sessionExpires,
+            user: formatUserPublic(updatedUser)
           },
           200,
           cors
@@ -401,11 +485,11 @@ export default {
           const singleSession = body.single_session ? 1 : 0;
           const expiresAt = body.expires_at ? String(body.expires_at).trim() : null;
 
-          if (!username || !/^[a-zA-Z0-9_.-]{2,32}$/.test(username)) {
-            return jsonResponse({ error: '账号需为 2~32 位字母/数字/下划线' }, 400, cors);
+          if (!username || !/^[^\s]{2,40}$/.test(username)) {
+            return jsonResponse({ error: '账号需为 2~40 位非空白字符' }, 400, cors);
           }
-          if (password.length < 6) {
-            return jsonResponse({ error: '密码长度至少 6 位' }, 400, cors);
+          if (password.length > 0 && password.length < 6) {
+            return jsonResponse({ error: '若填写初始密码，长度至少 6 位（也可留空待用户首次设密）' }, 400, cors);
           }
           if (!VALID_ROLES.has(role)) {
             return jsonResponse({ error: '无效的角色类型' }, 400, cors);
@@ -416,12 +500,13 @@ export default {
             return jsonResponse({ error: '该账号已存在' }, 409, cors);
           }
 
-          const pwHash = await hashPassword(password);
+          const needsSetup = password.length === 0 ? 1 : 0;
+          const pwHash = needsSetup ? '__PENDING_SETUP__' : await hashPassword(password);
           const res = await env.DB.prepare(
-            `INSERT INTO users (username, display_name, password_hash, role, is_active, expires_at, single_session)
-             VALUES (?, ?, ?, ?, ?, ?, ?)`
+            `INSERT INTO users (username, display_name, password_hash, role, is_active, needs_password_setup, expires_at, single_session)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
           )
-            .bind(username, displayName, pwHash, role, isActive, expiresAt, singleSession)
+            .bind(username, displayName, pwHash, role, isActive, needsSetup, expiresAt, singleSession)
             .run();
 
           await writeAuditLog(env, {
@@ -430,11 +515,84 @@ export default {
             role: auth.user.role,
             action: 'admin_create_user',
             success: true,
-            detail: `创建账号 ${username} (${role})`,
+            detail: `创建账号 ${username} (${role}${needsSetup ? ', 待首次设密' : ''})`,
             ...meta
           });
 
-          return jsonResponse({ ok: true, id: res.meta?.last_row_id }, 201, cors);
+          return jsonResponse({ ok: true, id: res.meta?.last_row_id, needs_password_setup: Boolean(needsSetup) }, 201, cors);
+        }
+
+        // 8.5 批量导入用户（支持密码留空 -> 首次登录设密）
+        if (path === '/api/admin/users/batch' && request.method === 'POST') {
+          const body = await request.json().catch(() => ({}));
+          const items = Array.isArray(body.users) ? body.users : [];
+          if (items.length === 0) {
+            return jsonResponse({ error: '导入列表不能为空' }, 400, cors);
+          }
+          if (items.length > 100) {
+            return jsonResponse({ error: '单次最多支持批量导入 100 个账号' }, 400, cors);
+          }
+
+          const defaultRole = VALID_ROLES.has(body.default_role) ? body.default_role : 'viewer';
+          const defaultExpiresAt = body.default_expires_at ? String(body.default_expires_at).trim() : null;
+          const defaultSingleSession = body.default_single_session ? 1 : 0;
+
+          const created = [];
+          const skipped = [];
+          const failed = [];
+          const seen = new Set();
+
+          for (const raw of items) {
+            const username = String(raw?.username || '').trim();
+            const displayName = String(raw?.display_name || username).trim();
+            const password = String(raw?.password || '');
+            const role = VALID_ROLES.has(raw?.role) ? raw.role : defaultRole;
+            const expiresAt = raw?.expires_at ? String(raw.expires_at).trim() : defaultExpiresAt;
+            const singleSession = raw?.single_session !== undefined ? (raw.single_session ? 1 : 0) : defaultSingleSession;
+
+            if (!username || !/^[^\s]{2,40}$/.test(username)) {
+              failed.push({ username: username || '(空)', reason: '账号需为 2~40 位非空白字符' });
+              continue;
+            }
+            if (password.length > 0 && password.length < 6) {
+              failed.push({ username, reason: '密码不足 6 位' });
+              continue;
+            }
+            if (seen.has(username)) {
+              skipped.push({ username, reason: '导入列表内重复' });
+              continue;
+            }
+            seen.add(username);
+
+            const exists = await env.DB.prepare('SELECT id FROM users WHERE username = ?').bind(username).first();
+            if (exists) {
+              skipped.push({ username, reason: '账号已存在' });
+              continue;
+            }
+
+            const needsSetup = password.length === 0 ? 1 : 0;
+            const pwHash = needsSetup ? '__PENDING_SETUP__' : await hashPassword(password);
+            await env.DB.prepare(
+              `INSERT INTO users (username, display_name, password_hash, role, is_active, needs_password_setup, expires_at, single_session)
+               VALUES (?, ?, ?, ?, 1, ?, ?, ?)`
+            )
+              .bind(username, displayName, pwHash, role, needsSetup, expiresAt, singleSession)
+              .run();
+
+            created.push({ username, display_name: displayName, role, needs_password_setup: Boolean(needsSetup) });
+          }
+
+          await writeAuditLog(env, {
+            username: auth.user.username,
+            userId: auth.user.id,
+            role: auth.user.role,
+            action: 'admin_batch_import',
+            success: true,
+            detail: `批量导入：成功 ${created.length}，跳过 ${skipped.length}，失败 ${failed.length}`,
+            ...meta
+          });
+
+          return jsonResponse({ ok: true, created, skipped, failed }, 201, cors);
         }
 
         // 9. 编辑用户 / 踢下线 / 删除用户

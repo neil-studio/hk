@@ -367,7 +367,7 @@
     };
   }
 
-  async function showLoginOverlay(mode = 'login') {
+  async function showLoginOverlay(mode = 'login', setupInfo = null) {
     injectStyles();
     revealPage();
     const old = document.getElementById('hkAuthOverlay');
@@ -377,14 +377,26 @@
     overlay.id = 'hkAuthOverlay';
 
     const isBootstrap = mode === 'bootstrap';
+    const isSetup = mode === 'setup';
+    const titleText = isBootstrap
+      ? '初始化超级管理员'
+      : isSetup
+        ? '首次登录 · 设置专属密码'
+        : '香港一手新盘一站通';
+    const subText = isBootstrap
+      ? '首次使用，请创建系统首个管理员账号'
+      : isSetup
+        ? `欢迎 ${setupInfo?.display_name || setupInfo?.username || ''}，请设置密码激活账号`
+        : '请输入您的授权账号与密码登录（首次登录密码可留空）';
+
     overlay.innerHTML = `
       <div class="hk-auth-card">
-        <h2 class="hk-auth-title">${isBootstrap ? '初始化超级管理员' : '香港一手新盘一站通'}</h2>
-        <p class="hk-auth-sub">${isBootstrap ? '首次使用，请创建系统首个管理员账号' : '请输入您的授权账号与密码登录'}</p>
+        <h2 class="hk-auth-title">${titleText}</h2>
+        <p class="hk-auth-sub">${subText}</p>
         <form id="hkAuthForm">
           <div class="hk-auth-field">
             <label>账号</label>
-            <input type="text" id="hkAuthUser" value="${isBootstrap ? 'admin' : ''}" placeholder="请输入账号" autocomplete="username" required />
+            <input type="text" id="hkAuthUser" value="${isBootstrap ? 'admin' : isSetup ? (setupInfo?.username || '') : ''}" ${isSetup ? 'readonly style="background:#f1f5f9;color:#475569;"' : ''} placeholder="请输入账号" autocomplete="username" required />
           </div>
           ${isBootstrap ? `
           <div class="hk-auth-field">
@@ -392,16 +404,21 @@
             <input type="text" id="hkAuthDisplayName" value="超级管理员" placeholder="例如：张经理" />
           </div>` : ''}
           <div class="hk-auth-field">
-            <label>密码</label>
-            <input type="password" id="hkAuthPass" placeholder="${isBootstrap ? '请设置至少 6 位密码' : '请输入密码'}" autocomplete="current-password" required />
+            <label>${isSetup ? '设置新密码（至少 6 位）' : '密码'}</label>
+            <input type="password" id="hkAuthPass" placeholder="${isBootstrap || isSetup ? '请设置至少 6 位密码' : '请输入密码（首次登录可留空）'}" autocomplete="${isSetup ? 'new-password' : 'current-password'}" ${isBootstrap || isSetup ? 'required' : ''} />
           </div>
+          ${isSetup ? `
+          <div class="hk-auth-field">
+            <label>确认新密码</label>
+            <input type="password" id="hkAuthPassConfirm" placeholder="请再次输入新密码" autocomplete="new-password" required />
+          </div>` : ''}
           ${!isBootstrap ? `
           <div class="hk-auth-row">
             <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
               <input type="checkbox" id="hkAuthRemember" checked /> 7天内记住登录状态
             </label>
           </div>` : ''}
-          <button type="submit" id="hkAuthSubmit" class="hk-auth-btn">${isBootstrap ? '创建管理员并进入' : '登 录'}</button>
+          <button type="submit" id="hkAuthSubmit" class="hk-auth-btn">${isBootstrap ? '创建管理员并进入' : isSetup ? '设置密码并进入' : '登 录'}</button>
           <div id="hkAuthErr" class="hk-auth-err"></div>
         </form>
         <div id="hkAuthExtra" class="hk-auth-bootstrap-tip" style="display:none;"></div>
@@ -414,15 +431,14 @@
     const btnEl = document.getElementById('hkAuthSubmit');
     const extraEl = document.getElementById('hkAuthExtra');
 
-    // 检查后端是否尚未初始化
-    if (!isBootstrap) {
+    if (mode === 'login') {
       apiRequest('/api/health').then(health => {
         if (health && health.initialized === false) {
           extraEl.style.display = 'block';
           extraEl.innerHTML = '检测到系统尚未初始化，<button type="button" class="hk-auth-link" id="hkGoBootstrap">点此创建首个超级管理员</button>';
           document.getElementById('hkGoBootstrap').onclick = () => showLoginOverlay('bootstrap');
         }
-      }).catch(err => {
+      }).catch(() => {
         extraEl.style.display = 'block';
         extraEl.innerHTML = `<span style="color:#b45309;">⚠️ 暂未连接到鉴权服务 (${AUTH_CONFIG.apiBase})，请确认 Worker 已部署</span>`;
       });
@@ -436,7 +452,7 @@
       e.preventDefault();
       errEl.style.display = 'none';
       btnEl.disabled = true;
-      btnEl.textContent = isBootstrap ? '正在创建...' : '正在验证...';
+      btnEl.textContent = isBootstrap ? '正在创建...' : isSetup ? '正在激活...' : '正在验证...';
 
       const username = document.getElementById('hkAuthUser').value.trim();
       const password = document.getElementById('hkAuthPass').value;
@@ -448,19 +464,40 @@
             method: 'POST',
             body: JSON.stringify({ username, display_name: displayName, password })
           });
-          // 创建后自动登录
           const loginRes = await apiRequest('/api/login', {
             method: 'POST',
             body: JSON.stringify({ username, password })
           });
           saveSession(loginRes.token, loginRes.user, true);
           currentUser = loginRes.user;
+        } else if (isSetup) {
+          const confirmPwd = document.getElementById('hkAuthPassConfirm').value;
+          if (password.length < 6) {
+            throw new Error('新密码长度至少 6 位');
+          }
+          if (password !== confirmPwd) {
+            throw new Error('两次输入的密码不一致');
+          }
+          const remember = document.getElementById('hkAuthRemember').checked;
+          const setupRes = await apiRequest('/api/setup-password', {
+            method: 'POST',
+            body: JSON.stringify({ username, new_password: password })
+          });
+          saveSession(setupRes.token, setupRes.user, remember);
+          currentUser = setupRes.user;
         } else {
           const remember = document.getElementById('hkAuthRemember').checked;
           const loginRes = await apiRequest('/api/login', {
             method: 'POST',
             body: JSON.stringify({ username, password })
           });
+          if (loginRes.requires_password_setup) {
+            await showLoginOverlay('setup', {
+              username: loginRes.username,
+              display_name: loginRes.display_name
+            });
+            return;
+          }
           saveSession(loginRes.token, loginRes.user, remember);
           currentUser = loginRes.user;
         }
@@ -471,7 +508,7 @@
         errEl.textContent = err.message || '登录失败，请检查网络或账号密码';
         errEl.style.display = 'block';
         btnEl.disabled = false;
-        btnEl.textContent = isBootstrap ? '创建管理员并进入' : '登 录';
+        btnEl.textContent = isBootstrap ? '创建管理员并进入' : isSetup ? '设置密码并进入' : '登 录';
       }
     });
   }

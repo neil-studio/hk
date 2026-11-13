@@ -215,6 +215,7 @@
         <a class="btn" href="index.html">🏠 返回首页</a>
         <a class="btn" href="map/index.html">🗺️ 全景地图</a>
         <button class="btn" id="refreshBtn">🔄 刷新</button>
+        <button class="btn" id="batchImportBtn">📥 批量导入</button>
         <button class="btn btn-primary" id="addUserBtn">➕ 新增用户</button>
       </div>
     </div>
@@ -338,6 +339,56 @@
     </div>
   </div>
 
+  <!-- 批量导入用户弹窗 -->
+  <div class="modal-backdrop" id="batchModal">
+    <div class="modal-box" style="max-width:560px;">
+      <h3>📥 批量导入用户（支持仅填用户名）</h3>
+      <p style="font-size:12px;color:#64748b;margin:-8px 0 12px;line-height:1.5;">
+        每行一个账号，支持直接从 Excel 复制粘贴或上传 CSV（单次最多 100 个）。<br/>
+        格式支持：仅填 <code>用户名</code>，或 <code>用户名,姓名备注,角色(agent/viewer),有效期(YYYY-MM-DD)</code>。密码留空时，用户首次登录将自动弹窗设置专属密码。
+      </p>
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap;">
+        <label class="btn btn-sm" style="cursor:pointer;">
+          📂 上传 CSV 文件
+          <input type="file" id="batchCsvFile" accept=".csv,.txt" style="display:none;" />
+        </label>
+        <button type="button" class="btn btn-sm" id="downloadTplBtn">📄 下载 CSV 模板</button>
+        <span id="batchPreviewCount" style="font-size:12px;color:#2563eb;font-weight:600;margin-left:auto;">已识别 0 个账号</span>
+      </div>
+      <div class="form-group">
+        <textarea id="batchTextarea" rows="7" style="width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;font-size:13px;font-family:monospace;" placeholder="zhangsan&#10;lisi&#10;wangwu,王五,viewer,2026-12-31"></textarea>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="form-group">
+          <label>默认角色（未指定时使用）</label>
+          <select id="bDefaultRole">
+            <option value="agent">内部顾问 (agent)</option>
+            <option value="viewer">VIP 访客 (viewer)</option>
+            <option value="admin">超级管理员 (admin)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>默认有效期（留空为永久）</label>
+          <input type="date" id="bDefaultExpires" />
+        </div>
+      </div>
+      <div class="quick-exp" style="margin-top:-4px;margin-bottom:10px;">
+        <button type="button" class="b-quick-exp" data-days="">永久</button>
+        <button type="button" class="b-quick-exp" data-days="7">7天试用</button>
+        <button type="button" class="b-quick-exp" data-days="30">30天</button>
+        <button type="button" class="b-quick-exp" data-days="90">90天</button>
+        <label style="display:flex;align-items:center;gap:5px;font-size:12px;margin-left:auto;cursor:pointer;">
+          <input type="checkbox" id="bDefaultSingle" /> 限制单设备登录
+        </label>
+      </div>
+      <div id="batchResultBox" style="display:none;max-height:140px;overflow:auto;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px;font-size:12px;margin-top:8px;"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn" id="closeBatchBtn">关闭</button>
+        <button type="button" class="btn btn-primary" id="submitBatchBtn">确认批量导入</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     let cachedUsers = [];
     const ROLE_NAME = { admin: '超级管理员', agent: '内部顾问', viewer: 'VIP 访客' };
@@ -371,7 +422,9 @@
           ? '<span class="pill pill-off">已停用</span>'
           : expired
             ? '<span class="pill pill-off">已过期</span>'
-            : '<span class="pill pill-ok">正常</span>';
+            : u.needs_password_setup
+              ? '<span class="pill" style="background:#fef3c7;color:#b45309;">待首次设密</span>'
+              : '<span class="pill pill-ok">正常</span>';
 
         return `
           <tr>
@@ -421,8 +474,9 @@
       document.getElementById('fUsername').disabled = false;
       document.getElementById('fDisplayName').value = '';
       document.getElementById('fPassword').value = '';
-      document.getElementById('fPassword').required = true;
-      document.getElementById('fPwdLabel').textContent = '初始密码（至少 6 位）';
+      document.getElementById('fPassword').required = false;
+      document.getElementById('fPassword').placeholder = '留空则用户首次登录时自行设密';
+      document.getElementById('fPwdLabel').textContent = '初始密码（可选，留空待首次登录设密）';
       document.getElementById('fRole').value = 'agent';
       document.getElementById('fExpiresAt').value = '';
       document.getElementById('fActive').checked = true;
@@ -538,6 +592,126 @@
       }
       document.getElementById('adminMain').style.display = 'block';
       loadData().catch(err => alert('加载后台数据失败：' + err.message));
+    });
+
+    // ==================== 批量导入逻辑 ====================
+    function parseBatchLines(text) {
+      const lines = (text || '').split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+      const users = [];
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        // 跳过表头行
+        if (i === 0 && /^(username|账号|用户名)/i.test(line)) continue;
+        const cols = line.split(/[\t,，]+/).map(c => c.trim());
+        const username = cols[0] || '';
+        if (!username) continue;
+        const item = { username };
+        if (cols[1]) item.display_name = cols[1];
+        if (cols[2] && ['admin', 'agent', 'viewer'].includes(cols[2])) item.role = cols[2];
+        if (cols[3] && /^\d{4}-\d{2}-\d{2}/.test(cols[3])) item.expires_at = cols[3].slice(0, 10) + 'T23:59:59Z';
+        users.push(item);
+      }
+      return users;
+    }
+
+    function updateBatchPreview() {
+      const list = parseBatchLines(document.getElementById('batchTextarea').value);
+      document.getElementById('batchPreviewCount').textContent = `已识别 ${list.length} 个账号`;
+    }
+
+    document.getElementById('batchImportBtn').addEventListener('click', () => {
+      document.getElementById('batchTextarea').value = '';
+      document.getElementById('batchResultBox').style.display = 'none';
+      document.getElementById('batchResultBox').innerHTML = '';
+      updateBatchPreview();
+      document.getElementById('batchModal').classList.add('open');
+    });
+
+    document.getElementById('closeBatchBtn').addEventListener('click', () => {
+      document.getElementById('batchModal').classList.remove('open');
+    });
+
+    document.getElementById('batchTextarea').addEventListener('input', updateBatchPreview);
+
+    document.getElementById('batchCsvFile').addEventListener('change', (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        document.getElementById('batchTextarea').value = String(reader.result || '');
+        updateBatchPreview();
+      };
+      reader.readAsText(file, 'utf-8');
+      e.target.value = '';
+    });
+
+    document.getElementById('downloadTplBtn').addEventListener('click', () => {
+      const csv = '\uFEFF用户名,姓名备注,角色(agent或viewer),有效期(YYYY-MM-DD)\nzhangsan,张三,agent,\nlisi,李四,viewer,2026-12-31\n';
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = '批量导入用户模板.csv';
+      a.click();
+    });
+
+    document.querySelectorAll('.b-quick-exp').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const days = btn.getAttribute('data-days');
+        if (!days) {
+          document.getElementById('bDefaultExpires').value = '';
+        } else {
+          const d = new Date(Date.now() + Number(days) * 86400 * 1000);
+          document.getElementById('bDefaultExpires').value = d.toISOString().slice(0, 10);
+        }
+      });
+    });
+
+    document.getElementById('submitBatchBtn').addEventListener('click', async () => {
+      const list = parseBatchLines(document.getElementById('batchTextarea').value);
+      const box = document.getElementById('batchResultBox');
+      if (list.length === 0) {
+        alert('请先粘贴或上传至少 1 个账号');
+        return;
+      }
+      if (list.length > 100) {
+        alert('单次最多支持 100 个账号，请分批导入');
+        return;
+      }
+      const btn = document.getElementById('submitBatchBtn');
+      btn.disabled = true;
+      btn.textContent = '导入中...';
+
+      const expVal = document.getElementById('bDefaultExpires').value;
+      try {
+        const res = await HKAuth.apiRequest('/api/admin/users/batch', {
+          method: 'POST',
+          body: JSON.stringify({
+            users: list,
+            default_role: document.getElementById('bDefaultRole').value,
+            default_expires_at: expVal ? `${expVal}T23:59:59Z` : null,
+            default_single_session: document.getElementById('bDefaultSingle').checked
+          })
+        });
+        const c = res.created?.length || 0;
+        const s = res.skipped?.length || 0;
+        const f = res.failed?.length || 0;
+        let html = `<div><strong>✅ 导入完成：</strong>成功 <span style="color:#15803d;">${c}</span> 条，跳过 <span style="color:#b45309;">${s}</span> 条，失败 <span style="color:#dc2626;">${f}</span> 条</div>`;
+        if (s > 0) {
+          html += `<div style="margin-top:4px;color:#b45309;">跳过明细：${res.skipped.map(x => `${x.username}(${x.reason})`).join('、')}</div>`;
+        }
+        if (f > 0) {
+          html += `<div style="margin-top:4px;color:#dc2626;">失败明细：${res.failed.map(x => `${x.username}(${x.reason})`).join('、')}</div>`;
+        }
+        box.innerHTML = html;
+        box.style.display = 'block';
+        await loadData();
+      } catch (err) {
+        box.innerHTML = `<span style="color:#dc2626;">❌ 导入失败：${err.message}</span>`;
+        box.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '确认批量导入';
+      }
     });
   </script>
 </body>

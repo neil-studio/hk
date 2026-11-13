@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS users (
   password_hash TEXT NOT NULL,
   role TEXT NOT NULL DEFAULT 'viewer' CHECK (role IN ('admin', 'agent', 'viewer')),
   is_active INTEGER NOT NULL DEFAULT 1,
+  needs_password_setup INTEGER NOT NULL DEFAULT 0,
   expires_at TEXT DEFAULT NULL,
   single_session INTEGER NOT NULL DEFAULT 0,
   last_login_at TEXT DEFAULT NULL,
