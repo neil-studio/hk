@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+.DS_Store
+Icon?
+Icon*
+Icon
+*.log
+*.bak
+~$*
+preview_shots/
+preview_district_*.html
+generate_district_*.py
+*_backup*.xlsx
+*_backup*
+preview_5d_system.html

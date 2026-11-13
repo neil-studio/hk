@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🚇 地铁上盖与商场地图标注优化对比预览 (Before vs After)</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 24px 20px 60px;
+    }
+    .header-banner {
+      max-width: 1300px;
+      margin: 0 auto 28px;
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      border: 1px solid #334155;
+      border-radius: 14px;
+      padding: 24px 28px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+    }
+    .header-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .header-desc {
+      font-size: 14px;
+      color: #94a3b8;
+      line-height: 1.6;
+    }
+    .highlight-pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 700;
+      margin: 0 3px;
+    }
+    .pill-red { background: #dc2626; color: #fff; }
+    .pill-green { background: #16a34a; color: #fff; }
+    .pill-blue { background: #2563eb; color: #fff; }
+    .pill-orange { background: #ea580c; color: #fff; }
+
+    .showcase-grid {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+    .case-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    }
+    .case-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #334155;
+    }
+    .case-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #f1f5f9;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .case-meta {
+      font-size: 13px;
+      color: #94a3b8;
+    }
+
+    .compare-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .map-panel {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .map-panel.is-after {
+      border: 1.5px solid #10b981;
+    }
+    .map-panel.is-before {
+      border: 1.5px solid #ef4444;
+    }
+    .panel-tag {
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .tag-before { background: #7f1d1d; color: #fca5a5; }
+    .tag-after { background: #064e3b; color: #6ee7b7; }
+    .map-canvas {
+      height: 380px;
+      width: 100%;
+      background: #1e293b;
+    }
+    .panel-footer {
+      padding: 10px 14px;
+      font-size: 12px;
+      color: #94a3b8;
+      background: #1e293b;
+      border-top: 1px solid #334155;
+      line-height: 1.5;
+    }
+
+    /* === 原版 CSS 模拟 === */
+    .proj-pin-box-legacy {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3.5px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 800;
+      box-shadow: 0 3px 10px rgba(37, 99, 235, 0.45);
+      border: 1.5px solid #ffffff;
+      white-space: nowrap;
+      position: absolute;
+      left: 0; top: 0;
+      transform: translate(-50%, -50%);
+      background: #2563EB;
+      color: #ffffff;
+      z-index: 1000;
+    }
+    .mtr-dot-pin-legacy {
+      width: 14px;
+      height: 14px;
+      background: #C8102E;
+      border: 1.5px solid #ffffff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+      position: absolute;
+      left: 0; top: 0;
+      transform: translate(-50%, -50%);
+      z-index: 800;
+    }
+    .mtr-dot-pin-legacy svg { width: 10px; height: 8px; display: block; }
+    .mall-dot-pin-legacy {
+      width: 13px;
+      height: 13px;
+      background: #ea580c;
+      border: 1.5px solid #ffffff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      position: absolute;
+      left: 0; top: 0;
+      transform: translate(-50%, -50%);
+      z-index: 500;
+    }
+    .mall-dot-pin-legacy svg { width: 9px; height: 9px; fill: #fff; }
+
+    /* === 🚀 优化新版 CSS (智能黄金三角错位排版) === */
+    /* 1. 本案楼盘顶置 (带优雅小下三角指针，正居上) */
+    .proj-pin-box-smart {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 9px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-weight: 800;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.5), 0 1px 3px rgba(0,0,0,0.3);
+      border: 1.5px solid #ffffff;
+      white-space: nowrap;
+      position: absolute;
+      left: 0; top: 0;
+      transform: translate(-50%, -100%) translateY(-7px);
+      background: #2563EB;
+      color: #ffffff;
+      z-index: 2500;
+    }
+    .proj-pin-box-smart::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 6px 5px 0 5px;
+      border-style: solid;
+      border-color: #2563EB transparent transparent transparent;
+    }
+    .proj-dot-anchor {
+      width: 7px;
+      height: 7px;
+      background: #ffffff;
+      border: 2px solid #2563EB;
+      border-radius: 50%;
+      position: absolute;
+      left: 0; top: 0;
+      transform: translate(-50%, -50%);
+      z-index: 2400;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+    }
+
+    /* 2. 港铁站微型胶囊 (智能左下错位，带文字与官方Logo) */
+    .mtr-pin-smart {
+      background: #ffffff;
+      border: 1.5px solid #C8102E;
+      border-radius: 12px;
+      padding: 2px 7px 2px 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 3px 8px rgba(200, 16, 46, 0.25), 0 1px 4px rgba(0,0,0,0.15);
+      white-space: nowrap;
+      position: absolute;
+      left: 0; top: 0;
+      transform: translate(-95%, 8px);
+      z-index: 2200;
+    }
+    .mtr-pin-smart-logo {
+      background: #C8102E;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .mtr-pin-smart-logo svg {
+      width: 11px;
+      height: 9px;
+      display: block;
+    }
+    .mtr-pin-smart-text {
+      font-size: 10px;
+      font-weight: 800;
+      color: #991b1b;
+      letter-spacing: -0.2px;
+    }
+
+    /* 3. 商场微型胶囊 (智能右下错位，带文字与商场Logo) */
+    .mall-pin-smart {
+      background: #ffffff;
+      border: 1.5px solid #ea580c;
+      border-radius: 12px;
+      padding: 2px 7px 2px 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 3px 8px rgba(234, 88, 12, 0.25), 0 1px 4px rgba(0,0,0,0.15);
+      white-space: nowrap;
+      position: absolute;
+      left: 0; top: 0;
+      transform: translate(6px, 8px);
+      z-index: 2100;
+    }
+    .mall-pin-smart-logo {
+      background: #ea580c;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .mall-pin-smart-logo svg {
+      width: 10px;
+      height: 10px;
+      fill: #ffffff;
+    }
+    .mall-pin-smart-text {
+      font-size: 10px;
+      font-weight: 800;
+      color: #9a3412;
+      letter-spacing: -0.2px;
+    }
+
+    /* 常规距离地标标准卡片 */
+    .norm-school-pin {
+      background: #ffffff;
+      border: 1.5px solid #7c3aed;
+      border-radius: 12px;
+      padding: 2px 6px 2px 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+      white-space: nowrap;
+      position: absolute;
+      left: 0; top: 0;
+      transform: translate(-50%, -50%);
+      font-size: 9.5px;
+      font-weight: 700;
+      color: #5b21b6;
+      z-index: 1500;
+    }
+    .norm-school-pin svg { width: 11px; height: 11px; fill: #7c3aed; }
+  </style>
+</head>
+<body>
+
+  <div class="header-banner">
+    <div class="header-title">
+      <span>🚇 地铁上盖项目单页介绍：地图标注优化方案对比</span>
+      <span class="highlight-pill pill-blue">LIVE PREVIEW</span>
+    </div>
+    <div class="header-desc">
+      针对用户指出的<span class="highlight-pill pill-red">“地铁上盖项目，地图没有显示商场和地铁名称”</span>问题，本页面呈现了
+      <strong>【原版逻辑（左侧）】</strong>与<strong>【优化版智能错位逻辑（右侧）】</strong>的 1:1 真实 Leaflet 地图对比。<br>
+      优化方案解决了两大技术缺陷：
+      ① <strong>排除干扰</strong>：不再将“地铁站(category: mtr)”当做商场重复添加，让真商场（如 V Walk、圆方）准确露出；
+      ② <strong>智能三向发散锚定</strong>：楼盘居上、地铁居左下、商场居右下，三方完整保留醒目文字标签，彻底消除原版“防重叠小圆点吞没名称”的副作用。
+    </div>
+  </div>
+
+  <div class="showcase-grid">
+
+    <!-- CASE 1: 汇玺II -->
+    <div class="case-card">
+      <div class="case-header">
+        <div class="case-title">
+          <span>📍 案例 1：汇玺II (Cullinan West II)</span>
+          <span class="highlight-pill pill-blue">南昌站正上盖</span>
+          <span class="highlight-pill pill-orange">下楼直达 V Walk 约30万呎商场</span>
+        </div>
+        <div class="case-meta">港铁南昌站 (76m) · V Walk商场 (105m)</div>
+      </div>
+      <div class="compare-container">
+        <div class="map-panel is-before">
+          <div class="panel-tag tag-before">
+            <span>❌ 原版现状 (Before)</span>
+            <span>触发距离&lt;140m，全退化为无字小圆点</span>
+          </div>
+          <div id="map-case1-before" class="map-canvas"></div>
+          <div class="panel-footer">
+            <strong>现状痛点</strong>：南昌站与 V Walk 全被强制压缩成 13px 无字小圆点，甚至被汇玺II的蓝色大卡片部分遮盖，用户无法感知地铁与商场名称。
+          </div>
+        </div>
+        <div class="map-panel is-after">
+          <div class="panel-tag tag-after">
+            <span>✅ 优化新版 (After)</span>
+            <span>品字形智能发散：南昌站 + V Walk 文字全露</span>
+          </div>
+          <div id="map-case1-after" class="map-canvas"></div>
+          <div class="panel-footer">
+            <strong>优化效果</strong>：楼盘置顶正中，<strong>【🚇 南昌站】</strong>紧贴左下，<strong>【🛍️ V Walk】</strong>紧贴右下，文字与官方Logo全量呈现且绝无重叠。
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CASE 2: 天玺 -->
+    <div class="case-card">
+      <div class="case-header">
+        <div class="case-title">
+          <span>📍 案例 2：天玺 (The Cullinan)</span>
+          <span class="highlight-pill pill-blue">九龙站正上盖</span>
+          <span class="highlight-pill pill-orange">直通圆方 ELEMENTS 百万呎地标</span>
+        </div>
+        <div class="case-meta">港铁九龙站 (64m) · 圆方商场 (138m)</div>
+      </div>
+      <div class="compare-container">
+        <div class="map-panel is-before">
+          <div class="panel-tag tag-before">
+            <span>❌ 原版现状 (Before)</span>
+            <span>九龙站/圆方皆为小圆点，无法辨识</span>
+          </div>
+          <div id="map-case2-before" class="map-canvas"></div>
+          <div class="panel-footer">
+            <strong>现状痛点</strong>：原版误将九龙站当商场重复抓取，同时又因距离近将圆方打入 dot-pin，导致“圆方”二字在地图上彻底消失。
+          </div>
+        </div>
+        <div class="map-panel is-after">
+          <div class="panel-tag tag-after">
+            <span>✅ 优化新版 (After)</span>
+            <span>九龙站与圆方双双高亮展示</span>
+          </div>
+          <div id="map-case2-after" class="map-canvas"></div>
+          <div class="panel-footer">
+            <strong>优化效果</strong>：排除重复项，<strong>【🚇 九龙站】</strong>与<strong>【🛍️ 圆方 (Elements)】</strong>左右错开拱卫天玺，清晰展现顶奢铁路上盖身价。
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CASE 3: Blue Coast II -->
+    <div class="case-card">
+      <div class="case-header">
+        <div class="case-title">
+          <span>📍 案例 3：Blue Coast II (港岛南岸)</span>
+          <span class="highlight-pill pill-blue">黄竹坑站正上盖</span>
+          <span class="highlight-pill pill-orange">下楼直通 The Southside 51万呎商场</span>
+        </div>
+        <div class="case-meta">港铁黄竹坑站 (87m) · The Southside商场 (47m)</div>
+      </div>
+      <div class="compare-container">
+        <div class="map-panel is-before">
+          <div class="panel-tag tag-before">
+            <span>❌ 原版现状 (Before)</span>
+            <span>商场与地铁叠在站体，均无字</span>
+          </div>
+          <div id="map-case3-before" class="map-canvas"></div>
+          <div class="panel-footer">
+            <strong>现状痛点</strong>：The Southside 距项目仅47米，直接被判定为密集点变小圆圈，客户无法看到港岛南区最大商场名字。
+          </div>
+        </div>
+        <div class="map-panel is-after">
+          <div class="panel-tag tag-after">
+            <span>✅ 优化新版 (After)</span>
+            <span>【黄竹坑站】与【The Southside】清晰可读</span>
+          </div>
+          <div id="map-case3-after" class="map-canvas"></div>
+          <div class="panel-footer">
+            <strong>优化效果</strong>：<strong>【🚇 黄竹坑站】</strong>与<strong>【🛍️ The Southside】</strong>稳固呈现，兼顾周边新加坡国际学校等真实配套。
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const mtrSvg = `
+      <svg viewBox="0 0 65 52">
+        <ellipse cx="33" cy="26" rx="32" ry="26" fill="#C8102E" />
+        <path d="M 33,8 V 44 M 21,9 A 12,12 0 0 0 45,9 M 21,43 A 12,12 0 0 1 45,43" stroke="white" stroke-width="6" stroke-linecap="round" fill="none" />
+      </svg>
+    `;
+    const mallSvg = `
+      <svg viewBox="0 0 24 24">
+        <path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3zm7 17H5V8h14v12zm-7-8c-1.66 0-3-1.34-3-3H7c0 2.76 2.24 5 5 5s5-2.24 5-5h-2c0 1.66-1.34 3-3 3z"/>
+      </svg>
+    `;
+
+    const cases = [
+      {
+        id: 'case1',
+        proj: { name: '汇玺II', lat: 22.327139, lng: 114.153955 },
+        mtr: { name: '南昌站', lat: 22.3265, lng: 114.1537 },
+        mall: { name: 'V Walk', lat: 22.3262, lng: 114.1538 },
+        school: { name: '圣玛加利男女英文中小学', lat: 22.3283, lng: 114.1546 }
+      },
+      {
+        id: 'case2',
+        proj: { name: '天玺', lat: 22.3045, lng: 114.1612 },
+        mtr: { name: '九龍站', lat: 22.3050, lng: 114.1615 },
+        mall: { name: '圆方 (Elements)', lat: 22.3040, lng: 114.1620 },
+        school: { name: '拔萃女书院', lat: 22.3072, lng: 114.1710 }
+      },
+      {
+        id: 'case3',
+        proj: { name: 'Blue Coast II', lat: 22.2464, lng: 114.1685 },
+        mtr: { name: '黃竹坑站', lat: 22.2480, lng: 114.1680 },
+        mall: { name: 'The Southside', lat: 22.2475, lng: 114.1688 },
+        school: { name: '新加坡国际学校 (SISHK)', lat: 22.2462, lng: 114.1658 }
+      }
+    ];
+
+    cases.forEach(c => {
+      // 1. Render BEFORE (原版现状)
+      const mapBefore = L.map(`map-${c.id}-before`, { zoomControl: false, attributionControl: false }).setView([c.proj.lat, c.proj.lng], 16.5);
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=cb1_2agc_1_eee20b45a89c95d86e5610c5', { maxZoom: 19 }).addTo(mapBefore);
+
+      // 楼盘标记
+      L.marker([c.proj.lat, c.proj.lng], {
+        icon: L.divIcon({ className: '', html: `<div class="proj-pin-box-legacy">${c.proj.name}</div>`, iconSize: [0,0] }),
+        zIndexOffset: 2000
+      }).addTo(mapBefore);
+
+      // 原版地铁 (退化为无字红点)
+      L.marker([c.mtr.lat, c.mtr.lng], {
+        icon: L.divIcon({ className: '', html: `<div class="mtr-dot-pin-legacy" title="${c.mtr.name}">${mtrSvg}</div>`, iconSize: [0,0] }),
+        zIndexOffset: 1500
+      }).addTo(mapBefore);
+
+      // 原版商场 (退化为无字橙点)
+      L.marker([c.mall.lat, c.mall.lng], {
+        icon: L.divIcon({ className: '', html: `<div class="mall-dot-pin-legacy" title="${c.mall.name}">${mallSvg}</div>`, iconSize: [0,0] }),
+        zIndexOffset: 500
+      }).addTo(mapBefore);
+
+      // 2. Render AFTER (优化新版)
+      const mapAfter = L.map(`map-${c.id}-after`, { zoomControl: false, attributionControl: false }).setView([c.proj.lat, c.proj.lng], 16.5);
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=cb1_2agc_1_eee20b45a89c95d86e5610c5', { maxZoom: 19 }).addTo(mapAfter);
+
+      // 楼盘标记 (顶置 + 指针锚点)
+      L.marker([c.proj.lat, c.proj.lng], {
+        icon: L.divIcon({
+          className: '',
+          html: `
+            <div class="proj-dot-anchor"></div>
+            <div class="proj-pin-box-smart">${c.proj.name}</div>
+          `,
+          iconSize: [0,0]
+        }),
+        zIndexOffset: 3000
+      }).addTo(mapAfter);
+
+      // 地铁标记 (智能居左下，带南昌站字样)
+      L.marker([c.mtr.lat, c.mtr.lng], {
+        icon: L.divIcon({
+          className: '',
+          html: `
+            <div class="mtr-pin-smart">
+              <span class="mtr-pin-smart-logo">${mtrSvg}</span>
+              <span class="mtr-pin-smart-text">${c.mtr.name}</span>
+            </div>
+          `,
+          iconSize: [0,0]
+        }),
+        zIndexOffset: 2500
+      }).addTo(mapAfter);
+
+      // 商场标记 (智能居右下，带 V Walk 字样)
+      L.marker([c.mall.lat, c.mall.lng], {
+        icon: L.divIcon({
+          className: '',
+          html: `
+            <div class="mall-pin-smart">
+              <span class="mall-pin-smart-logo">${mallSvg}</span>
+              <span class="mall-pin-smart-text">${c.mall.name}</span>
+            </div>
+          `,
+          iconSize: [0,0]
+        }),
+        zIndexOffset: 2400
+      }).addTo(mapAfter);
+
+      // 重点学校 (标准卡片)
+      if (c.school) {
+        L.marker([c.school.lat, c.school.lng], {
+          icon: L.divIcon({
+            className: '',
+            html: `
+              <div class="norm-school-pin">
+                <svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg>
+                <span>${c.school.name}</span>
+              </div>
+            `,
+            iconSize: [0,0]
+          }),
+          zIndexOffset: 1500
+        }).addTo(mapAfter);
+      }
+    });
+  </script>
+</body>
+</html>

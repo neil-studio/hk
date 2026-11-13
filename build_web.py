@@ -681,7 +681,7 @@ def main():
     valid_new_project_names = set()
     for d in os.listdir(BASE_DIR):
         dir_path = os.path.join(BASE_DIR, d)
-        if not os.path.isdir(dir_path) or d.startswith('.') or d in ['web', 'scratch']:
+        if not os.path.isdir(dir_path) or d.startswith('.') or d in ['web', 'scratch', 'map', 'api']:
             continue
         parts = d.split('-')
         if len(parts) >= 3:
@@ -1003,7 +1003,7 @@ def main():
         if not os.path.isdir(dir_path):
             continue
             
-        if d.startswith('.') or d in ['web', 'scratch']:
+        if d.startswith('.') or d in ['web', 'scratch', 'map', 'api']:
             continue
             
         parts = d.split('-')

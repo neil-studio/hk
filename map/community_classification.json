@@ -1,0 +1,1505 @@
+{
+  "The Monet 第1期": {
+    "name": "The Monet 第1期",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "The Monet",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "The Monet 第2期": {
+    "name": "The Monet 第2期",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "The Monet",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "The Monet 第3期": {
+    "name": "The Monet 第3期",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "The Monet",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "博峰": {
+    "name": "博峰",
+    "category": "A",
+    "category_name": "多座组团地标大盘",
+    "is_community": true,
+    "parent_community": "博峰",
+    "community_tag": "🏡【社区】多座组团地标大盘，配备大型度假式综合会所与园林",
+    "volume_format": "estate"
+  },
+  "皇廷汇": {
+    "name": "皇廷汇",
+    "category": "C",
+    "category_name": "纯独立洋房聚落",
+    "is_community": true,
+    "parent_community": "皇廷汇",
+    "community_tag": "🏡【社区】顶级纯独立洋房聚落，享私家花园泳池与至高隐逸私密",
+    "volume_format": "villa"
+  },
+  "缇外": {
+    "name": "缇外",
+    "category": "D",
+    "category_name": "高低配复合庄园",
+    "is_community": true,
+    "parent_community": "笔架山洋房与大宅复合庄园",
+    "community_tag": "🏡【社区】洋房与低密大宅复合庄园，享私家花园与低密专属会所",
+    "volume_format": "manor"
+  },
+  "天玺": {
+    "name": "天玺",
+    "category": "A",
+    "category_name": "多座组团地标大盘",
+    "is_community": true,
+    "parent_community": "天玺",
+    "community_tag": "🏡【社区】多座组团地标大盘，配备大型度假式综合会所与园林",
+    "volume_format": "estate"
+  },
+  "128 Waterloo": {
+    "name": "128 Waterloo",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "128 Waterloo",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "Prince Central": {
+    "name": "Prince Central",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "Prince Central",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "VAU Residence": {
+    "name": "VAU Residence",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "VAU Residence",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "st. george's mansions": {
+    "name": "st. george's mansions",
+    "category": "A",
+    "category_name": "多座组团地标大盘",
+    "is_community": true,
+    "parent_community": "st. george's mansions",
+    "community_tag": "🏡【社区】多座组团地标大盘，配备大型度假式综合会所与园林",
+    "volume_format": "estate"
+  },
+  "傲玟": {
+    "name": "傲玟",
+    "category": "A",
+    "category_name": "多座组团地标大盘",
+    "is_community": true,
+    "parent_community": "傲玟",
+    "community_tag": "🏡【社区】多座组团地标大盘，配备大型度假式综合会所与园林",
+    "volume_format": "estate"
+  },
+  "名钻": {
+    "name": "名钻",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "名钻",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "天铸 (第2期)": {
+    "name": "天铸 (第2期)",
+    "category": "A",
+    "category_name": "多座组团地标大盘",
+    "is_community": true,
+    "parent_community": "天铸 (第2期)",
+    "community_tag": "🏡【社区】多座组团地标大盘，配备大型度假式综合会所与园林",
+    "volume_format": "estate"
+  },
+  "太子道西233号": {
+    "name": "太子道西233号",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "太子道西233号",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "明寓": {
+    "name": "明寓",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "明寓",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "朗贤峰第IIA期": {
+    "name": "朗贤峰第IIA期",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "朗贤峰",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "朗贤峰第IIB期": {
+    "name": "朗贤峰第IIB期",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "朗贤峰",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "瑜一第IC期": {
+    "name": "瑜一第IC期",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "瑜一",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "瑜一．天海": {
+    "name": "瑜一．天海",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "瑜一",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "耀爵台": {
+    "name": "耀爵台",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "耀爵台",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "芳菲": {
+    "name": "芳菲",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "芳菲",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "誉林": {
+    "name": "誉林",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "誉林",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "隆敍": {
+    "name": "隆敍",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "隆敍",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "Double Coast I": {
+    "name": "Double Coast I",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "Double Coast",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "Double Coast III": {
+    "name": "Double Coast III",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "Double Coast",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "Henley Park": {
+    "name": "Henley Park",
+    "category": "A",
+    "category_name": "多座组团地标大盘",
+    "is_community": true,
+    "parent_community": "Henley Park",
+    "community_tag": "🏡【社区】多座组团地标大盘，配备大型度假式综合会所与园林",
+    "volume_format": "estate"
+  },
+  "Miami Quay I": {
+    "name": "Miami Quay I",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "Miami Quay",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "Miami Quay II": {
+    "name": "Miami Quay II",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "Miami Quay",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "Monaco Marine": {
+    "name": "Monaco Marine",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "Monaco",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "Monaco One": {
+    "name": "Monaco One",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "Monaco",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "Monaco 第1期": {
+    "name": "Monaco 第1期",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "Monaco",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "The Henley I": {
+    "name": "The Henley I",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "The Henley",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "The Henley II": {
+    "name": "The Henley II",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "The Henley",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "The Henley III": {
+    "name": "The Henley III",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "The Henley",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "启德海湾 1": {
+    "name": "启德海湾 1",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "启德海湾",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "启德海湾 2": {
+    "name": "启德海湾 2",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "启德海湾",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "天泷": {
+    "name": "天泷",
+    "category": "A",
+    "category_name": "多座组团地标大盘",
+    "is_community": true,
+    "parent_community": "天泷",
+    "community_tag": "🏡【社区】多座组团地标大盘，配备大型度假式综合会所与园林",
+    "volume_format": "estate"
+  },
+  "天玺．天": {
+    "name": "天玺．天",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "天玺．天",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "天玺．天第2期": {
+    "name": "天玺．天第2期",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "天玺．天",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "天玺．海第1期": {
+    "name": "天玺．海第1期",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "天玺．海",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "天玺．海第2A期": {
+    "name": "天玺．海第2A期",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "天玺．海",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "天玺．海第2B期": {
+    "name": "天玺．海第2B期",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "天玺．海",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "柏蔚森 I": {
+    "name": "柏蔚森 I",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "柏蔚森",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "柏蔚森 II": {
+    "name": "柏蔚森 II",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "柏蔚森",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "柏蔚森 III": {
+    "name": "柏蔚森 III",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "柏蔚森",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "沄璟": {
+    "name": "沄璟",
+    "category": "A",
+    "category_name": "多座组团地标大盘",
+    "is_community": true,
+    "parent_community": "沄璟",
+    "community_tag": "🏡【社区】多座组团地标大盘，配备大型度假式综合会所与园林",
+    "volume_format": "estate"
+  },
+  "维港1号": {
+    "name": "维港1号",
+    "category": "A",
+    "category_name": "多座组团地标大盘",
+    "is_community": true,
+    "parent_community": "维港1号",
+    "community_tag": "🏡【社区】多座组团地标大盘，配备大型度假式综合会所与园林",
+    "volume_format": "estate"
+  },
+  "维港．双钻": {
+    "name": "维港．双钻",
+    "category": "A",
+    "category_name": "多座组团地标大盘",
+    "is_community": true,
+    "parent_community": "维港．双钻",
+    "community_tag": "🏡【社区】多座组团地标大盘，配备大型度假式综合会所与园林",
+    "volume_format": "estate"
+  },
+  "维港．湾畔第1A期": {
+    "name": "维港．湾畔第1A期",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "维港．湾畔",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "维港．湾畔第1B期": {
+    "name": "维港．湾畔第1B期",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "维港．湾畔",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "维港．湾畔第2B期": {
+    "name": "维港．湾畔第2B期",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "维港．湾畔",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "本木": {
+    "name": "本木",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "本木",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "The Boundary": {
+    "name": "The Boundary",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "The Boundary",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "Upper Prince": {
+    "name": "Upper Prince",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "Upper Prince",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "利奥坊．凯岸": {
+    "name": "利奥坊．凯岸",
+    "category": "B",
+    "category_name": "大型旧改综合体分期",
+    "is_community": true,
+    "parent_community": "利奥坊",
+    "community_tag": "🏡【社区】大型旧改综合体分期",
+    "volume_format": "phase"
+  },
+  "利奥坊．曦岸": {
+    "name": "利奥坊．曦岸",
+    "category": "B",
+    "category_name": "大型旧改综合体分期",
+    "is_community": true,
+    "parent_community": "利奥坊",
+    "community_tag": "🏡【社区】大型旧改综合体分期",
+    "volume_format": "phase"
+  },
+  "映居": {
+    "name": "映居",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "映居",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "原舍": {
+    "name": "原舍",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "原舍",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "Beacon Peak 第1期": {
+    "name": "Beacon Peak 第1期",
+    "category": "A",
+    "category_name": "多座组团地标大盘",
+    "is_community": true,
+    "parent_community": "Beacon Peak 第1期",
+    "community_tag": "🏡【社区】多座组团地标大盘，配备大型度假式综合会所与园林",
+    "volume_format": "estate"
+  },
+  "滶蕴": {
+    "name": "滶蕴",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "滶蕴",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "The Haddon": {
+    "name": "The Haddon",
+    "category": "B",
+    "category_name": "大型重建综合体分期",
+    "is_community": true,
+    "parent_community": "必嘉坊",
+    "community_tag": "🏡【社区】大型重建综合体分期，享会所与区域配套绿化",
+    "volume_format": "phase"
+  },
+  "必嘉坊．曦汇": {
+    "name": "必嘉坊．曦汇",
+    "category": "B",
+    "category_name": "大型重建综合体分期",
+    "is_community": true,
+    "parent_community": "必嘉坊",
+    "community_tag": "🏡【社区】大型重建综合体分期，享会所与区域配套绿化",
+    "volume_format": "phase"
+  },
+  "必嘉坊．迎汇": {
+    "name": "必嘉坊．迎汇",
+    "category": "B",
+    "category_name": "大型重建综合体分期",
+    "is_community": true,
+    "parent_community": "必嘉坊",
+    "community_tag": "🏡【社区】大型重建综合体分期，享会所与区域配套绿化",
+    "volume_format": "phase"
+  },
+  "悦麓": {
+    "name": "悦麓",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "悦麓",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "首岸第1期": {
+    "name": "首岸第1期",
+    "category": "B",
+    "category_name": "大型综合体分期",
+    "is_community": true,
+    "parent_community": "首岸",
+    "community_tag": "🏡【社区】大型综合体分期，尊享全期园林与会所",
+    "volume_format": "phase"
+  },
+  "首岸第2期": {
+    "name": "首岸第2期",
+    "category": "B",
+    "category_name": "大型综合体分期",
+    "is_community": true,
+    "parent_community": "首岸",
+    "community_tag": "🏡【社区】大型综合体分期，尊享全期园林与会所",
+    "volume_format": "phase"
+  },
+  "首岸第3期": {
+    "name": "首岸第3期",
+    "category": "B",
+    "category_name": "大型综合体分期",
+    "is_community": true,
+    "parent_community": "首岸",
+    "community_tag": "🏡【社区】大型综合体分期，尊享全期园林与会所",
+    "volume_format": "phase"
+  },
+  "首岸第4期": {
+    "name": "首岸第4期",
+    "category": "B",
+    "category_name": "大型综合体分期",
+    "is_community": true,
+    "parent_community": "首岸",
+    "community_tag": "🏡【社区】大型综合体分期，尊享全期园林与会所",
+    "volume_format": "phase"
+  },
+  "首汇": {
+    "name": "首汇",
+    "category": "B",
+    "category_name": "大型重建综合体分期",
+    "is_community": true,
+    "parent_community": "必嘉坊",
+    "community_tag": "🏡【社区】大型重建综合体分期，享会所与区域配套绿化",
+    "volume_format": "phase"
+  },
+  "叡璟I": {
+    "name": "叡璟I",
+    "category": "A",
+    "category_name": "多座组团地标大盘",
+    "is_community": true,
+    "parent_community": "叡璟I",
+    "community_tag": "🏡【社区】多座组团地标大盘，配备大型度假式综合会所与园林",
+    "volume_format": "estate"
+  },
+  "汇玺III": {
+    "name": "汇玺III",
+    "category": "A",
+    "category_name": "多座组团地标大盘",
+    "is_community": true,
+    "parent_community": "汇玺III",
+    "community_tag": "🏡【社区】多座组团地标大盘，配备大型度假式综合会所与园林",
+    "volume_format": "estate"
+  },
+  "维港汇 III": {
+    "name": "维港汇 III",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "维港汇",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "南首": {
+    "name": "南首",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "南首",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "壹沐第1期": {
+    "name": "壹沐第1期",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "壹沐",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "壹沐第2期": {
+    "name": "壹沐第2期",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "壹沐",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "文曜": {
+    "name": "文曜",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "文曜",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "101 Kings Road": {
+    "name": "101 Kings Road",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "101 Kings Road",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "君誉峰": {
+    "name": "君誉峰",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "君誉峰",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "嘉居．天后": {
+    "name": "嘉居．天后",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "嘉居．天后",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "柏蔚山": {
+    "name": "柏蔚山",
+    "category": "A",
+    "category_name": "多座组团地标大盘",
+    "is_community": true,
+    "parent_community": "柏蔚山",
+    "community_tag": "🏡【社区】多座组团地标大盘，配备大型度假式综合会所与园林",
+    "volume_format": "estate"
+  },
+  "海璇": {
+    "name": "海璇",
+    "category": "A",
+    "category_name": "多座组团地标大盘",
+    "is_community": true,
+    "parent_community": "海璇",
+    "community_tag": "🏡【社区】多座组团地标大盘，配备大型度假式综合会所与园林",
+    "volume_format": "estate"
+  },
+  "海璇 II": {
+    "name": "海璇 II",
+    "category": "A",
+    "category_name": "多座组团地标大盘",
+    "is_community": true,
+    "parent_community": "海璇 II",
+    "community_tag": "🏡【社区】多座组团地标大盘，配备大型度假式综合会所与园林",
+    "volume_format": "estate"
+  },
+  "海璇 II (第2B-3期)": {
+    "name": "海璇 II (第2B-3期)",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "海璇",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "雅盈峰": {
+    "name": "雅盈峰",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "雅盈峰",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "Central Peak I": {
+    "name": "Central Peak I",
+    "category": "D",
+    "category_name": "高低配复合庄园",
+    "is_community": true,
+    "parent_community": "司徒拔道18号复合低密庄园第1期",
+    "community_tag": "🏡【社区】洋房与低密大宅复合庄园，享私家花园与低密专属会所",
+    "volume_format": "manor"
+  },
+  "Central Peak II": {
+    "name": "Central Peak II",
+    "category": "D",
+    "category_name": "高低配复合庄园",
+    "is_community": true,
+    "parent_community": "司徒拔道18号复合低密庄园第2期",
+    "community_tag": "🏡【社区】洋房与低密大宅复合庄园，享私家花园与低密专属会所",
+    "volume_format": "manor"
+  },
+  "21 Borrett Road 第1期": {
+    "name": "21 Borrett Road 第1期",
+    "category": "A",
+    "category_name": "多座组团地标大盘",
+    "is_community": true,
+    "parent_community": "21 Borrett Road 第1期",
+    "community_tag": "🏡【社区】多座组团地标大盘，配备大型度假式综合会所与园林",
+    "volume_format": "estate"
+  },
+  "Mount Pokfulam": {
+    "name": "Mount Pokfulam",
+    "category": "C",
+    "category_name": "纯独立洋房聚落",
+    "is_community": true,
+    "parent_community": "Mount Pokfulam",
+    "community_tag": "🏡【社区】顶级纯独立洋房聚落，享私家花园泳池与至高隐逸私密",
+    "volume_format": "villa"
+  },
+  "Upper Central": {
+    "name": "Upper Central",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "Upper Central",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "大学阁": {
+    "name": "大学阁",
+    "category": "A",
+    "category_name": "多座组团地标大盘",
+    "is_community": true,
+    "parent_community": "大学阁",
+    "community_tag": "🏡【社区】多座组团地标大盘，配备大型度假式综合会所与园林",
+    "volume_format": "estate"
+  },
+  "天御第1期": {
+    "name": "天御第1期",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "天御",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "天御第2期": {
+    "name": "天御第2期",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "天御",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "宝峰": {
+    "name": "宝峰",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "宝峰",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "帝汇豪庭": {
+    "name": "帝汇豪庭",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "帝汇豪庭",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "应天": {
+    "name": "应天",
+    "category": "A",
+    "category_name": "多座组团地标大盘",
+    "is_community": true,
+    "parent_community": "应天",
+    "community_tag": "🏡【社区】多座组团地标大盘，配备大型度假式综合会所与园林",
+    "volume_format": "estate"
+  },
+  "罗便臣道80号": {
+    "name": "罗便臣道80号",
+    "category": "A",
+    "category_name": "多座组团地标大盘",
+    "is_community": true,
+    "parent_community": "罗便臣道80号",
+    "community_tag": "🏡【社区】多座组团地标大盘，配备大型度假式综合会所与园林",
+    "volume_format": "estate"
+  },
+  "Kennedy 38": {
+    "name": "Kennedy 38",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "Kennedy 38",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "吉喆": {
+    "name": "吉喆",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "吉喆",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "海嵎": {
+    "name": "海嵎",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "海嵎",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "皇府湾": {
+    "name": "皇府湾",
+    "category": "C",
+    "category_name": "纯独立洋房聚落",
+    "is_community": true,
+    "parent_community": "皇府湾",
+    "community_tag": "🏡【社区】顶级纯独立洋房聚落，享私家花园泳池与至高隐逸私密",
+    "volume_format": "villa"
+  },
+  "寿臣山15号": {
+    "name": "寿臣山15号",
+    "category": "C",
+    "category_name": "纯独立洋房聚落",
+    "is_community": true,
+    "parent_community": "寿臣山15号",
+    "community_tag": "🏡【社区】顶级纯独立洋房聚落，享私家花园泳池与至高隐逸私密",
+    "volume_format": "villa"
+  },
+  "No.3 Repulse Bay Road": {
+    "name": "No.3 Repulse Bay Road",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "No.3 Repulse Bay Road",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "Shouson Peak": {
+    "name": "Shouson Peak",
+    "category": "C",
+    "category_name": "纯独立洋房聚落",
+    "is_community": true,
+    "parent_community": "Shouson Peak",
+    "community_tag": "🏡【社区】顶级纯独立洋房聚落，享私家花园泳池与至高隐逸私密",
+    "volume_format": "villa"
+  },
+  "浅水湾108": {
+    "name": "浅水湾108",
+    "category": "C",
+    "category_name": "纯独立洋房聚落",
+    "is_community": true,
+    "parent_community": "浅水湾108",
+    "community_tag": "🏡【社区】顶级纯独立洋房聚落，享私家花园泳池与至高隐逸私密",
+    "volume_format": "villa"
+  },
+  "深水湾径8号": {
+    "name": "深水湾径8号",
+    "category": "A",
+    "category_name": "多座组团地标大盘",
+    "is_community": true,
+    "parent_community": "深水湾径8号",
+    "community_tag": "🏡【社区】多座组团地标大盘，配备大型度假式综合会所与园林",
+    "volume_format": "estate"
+  },
+  "Mount Nicholson I": {
+    "name": "Mount Nicholson I",
+    "category": "D",
+    "category_name": "高低配复合庄园",
+    "is_community": true,
+    "parent_community": "聂歌信山道顶奢复合庄园第1期",
+    "community_tag": "🏡【社区】洋房与低密大宅复合庄园，享私家花园与低密专属会所",
+    "volume_format": "manor"
+  },
+  "Mount Nicholson II": {
+    "name": "Mount Nicholson II",
+    "category": "D",
+    "category_name": "高低配复合庄园",
+    "is_community": true,
+    "parent_community": "聂歌信山道顶奢复合庄园第2期",
+    "community_tag": "🏡【社区】洋房与低密大宅复合庄园，享私家花园与低密专属会所",
+    "volume_format": "manor"
+  },
+  "Twelve Peaks": {
+    "name": "Twelve Peaks",
+    "category": "C",
+    "category_name": "纯独立洋房聚落",
+    "is_community": true,
+    "parent_community": "Twelve Peaks",
+    "community_tag": "🏡【社区】顶级纯独立洋房聚落，享私家花园泳池与至高隐逸私密",
+    "volume_format": "villa"
+  },
+  "宾吉道3号": {
+    "name": "宾吉道3号",
+    "category": "C",
+    "category_name": "纯独立洋房聚落",
+    "is_community": true,
+    "parent_community": "宾吉道3号",
+    "community_tag": "🏡【社区】顶级纯独立洋房聚落，享私家花园泳池与至高隐逸私密",
+    "volume_format": "villa"
+  },
+  "海德园第1期": {
+    "name": "海德园第1期",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "海德园",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "峻誉．渣甸山": {
+    "name": "峻誉．渣甸山",
+    "category": "A",
+    "category_name": "多座组团地标大盘",
+    "is_community": true,
+    "parent_community": "峻誉．渣甸山",
+    "community_tag": "🏡【社区】多座组团地标大盘，配备大型度假式综合会所与园林",
+    "volume_format": "estate"
+  },
+  "Woodis": {
+    "name": "Woodis",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "Woodis",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "One Eighty": {
+    "name": "One Eighty",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "One Eighty",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "傲华": {
+    "name": "傲华",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "傲华",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "远晴": {
+    "name": "远晴",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "远晴",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "Victoria Coast": {
+    "name": "Victoria Coast",
+    "category": "D",
+    "category_name": "高低配复合庄园",
+    "is_community": true,
+    "parent_community": "薄扶林海景低密庄园",
+    "community_tag": "🏡【社区】洋房与低密大宅复合庄园，享私家花园与低密专属会所",
+    "volume_format": "manor"
+  },
+  "15 Western Street": {
+    "name": "15 Western Street",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "15 Western Street",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "42 Tung St.": {
+    "name": "42 Tung St.",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "42 Tung St.",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "50 Stanley Village Road": {
+    "name": "50 Stanley Village Road",
+    "category": "C",
+    "category_name": "纯独立洋房聚落",
+    "is_community": true,
+    "parent_community": "50 Stanley Village Road",
+    "community_tag": "🏡【社区】顶级纯独立洋房聚落，享私家花园泳池与至高隐逸私密",
+    "volume_format": "villa"
+  },
+  "One Stanley": {
+    "name": "One Stanley",
+    "category": "D",
+    "category_name": "高低配复合庄园",
+    "is_community": true,
+    "parent_community": "赤柱临海洋房与大宅复合庄园",
+    "community_tag": "🏡【社区】洋房与低密大宅复合庄园，享私家花园与低密专属会所",
+    "volume_format": "manor"
+  },
+  "Solace": {
+    "name": "Solace",
+    "category": "C",
+    "category_name": "纯独立洋房聚落",
+    "is_community": true,
+    "parent_community": "Solace",
+    "community_tag": "🏡【社区】顶级纯独立洋房聚落，享私家花园泳池与至高隐逸私密",
+    "volume_format": "villa"
+  },
+  "海天径 1号, 舂磡角道 44, 46, 48, 50号": {
+    "name": "海天径 1号, 舂磡角道 44, 46, 48, 50号",
+    "category": "C",
+    "category_name": "纯独立洋房聚落",
+    "is_community": true,
+    "parent_community": "海天径 1号, 舂磡角道 44, 46, 48, 50号",
+    "community_tag": "🏡【社区】顶级纯独立洋房聚落，享私家花园泳池与至高隐逸私密",
+    "volume_format": "villa"
+  },
+  "环角道7号、9号及11号": {
+    "name": "环角道7号、9号及11号",
+    "category": "C",
+    "category_name": "纯独立洋房聚落",
+    "is_community": true,
+    "parent_community": "环角道7号、9号及11号",
+    "community_tag": "🏡【社区】顶级纯独立洋房聚落，享私家花园泳池与至高隐逸私密",
+    "volume_format": "villa"
+  },
+  "339 Tai Hang Road": {
+    "name": "339 Tai Hang Road",
+    "category": "A",
+    "category_name": "多座组团地标大盘",
+    "is_community": true,
+    "parent_community": "339 Tai Hang Road",
+    "community_tag": "🏡【社区】多座组团地标大盘，配备大型度假式综合会所与园林",
+    "volume_format": "estate"
+  },
+  "Blue Coast": {
+    "name": "Blue Coast",
+    "category": "A",
+    "category_name": "多座组团地标大盘",
+    "is_community": true,
+    "parent_community": "Blue Coast",
+    "community_tag": "🏡【社区】多座组团地标大盘，配备大型度假式综合会所与园林",
+    "volume_format": "estate"
+  },
+  "Blue Coast II": {
+    "name": "Blue Coast II",
+    "category": "A",
+    "category_name": "多座组团地标大盘",
+    "is_community": true,
+    "parent_community": "Blue Coast II",
+    "community_tag": "🏡【社区】多座组团地标大盘，配备大型度假式综合会所与园林",
+    "volume_format": "estate"
+  },
+  "Deep Water South 第6A期": {
+    "name": "Deep Water South 第6A期",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "Deep Water South",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "Deep Water South 第6B期": {
+    "name": "Deep Water South 第6B期",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "Deep Water South",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "PORTO": {
+    "name": "PORTO",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "PORTO",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "弦岸": {
+    "name": "弦岸",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "弦岸",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "扬海": {
+    "name": "扬海",
+    "category": "A",
+    "category_name": "多座组团地标大盘",
+    "is_community": true,
+    "parent_community": "扬海",
+    "community_tag": "🏡【社区】多座组团地标大盘，配备大型度假式综合会所与园林",
+    "volume_format": "estate"
+  },
+  "晋环": {
+    "name": "晋环",
+    "category": "A",
+    "category_name": "多座组团地标大盘",
+    "is_community": true,
+    "parent_community": "晋环",
+    "community_tag": "🏡【社区】多座组团地标大盘，配备大型度假式综合会所与园林",
+    "volume_format": "estate"
+  },
+  "海盈山第4A期": {
+    "name": "海盈山第4A期",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "海盈山",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "海盈山第4B期": {
+    "name": "海盈山第4B期",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "海盈山",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "滶晨 II": {
+    "name": "滶晨 II",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "滶晨",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "璟南": {
+    "name": "璟南",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "璟南",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "逸南": {
+    "name": "逸南",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "逸南",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "君豪峰": {
+    "name": "君豪峰",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "君豪峰",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "凯玥": {
+    "name": "凯玥",
+    "category": "A",
+    "category_name": "多座组团地标大盘",
+    "is_community": true,
+    "parent_community": "凯玥",
+    "community_tag": "🏡【社区】多座组团地标大盘，配备大型度假式综合会所与园林",
+    "volume_format": "estate"
+  },
+  "Eight Kwai Fong Happy Valley": {
+    "name": "Eight Kwai Fong Happy Valley",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "Eight Kwai Fong Happy Valley",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "蓝塘道23-39号": {
+    "name": "蓝塘道23-39号",
+    "category": "C",
+    "category_name": "纯独立洋房聚落",
+    "is_community": true,
+    "parent_community": "蓝塘道23-39号",
+    "community_tag": "🏡【社区】顶级纯独立洋房聚落，享私家花园泳池与至高隐逸私密",
+    "volume_format": "villa"
+  },
+  "滶晨": {
+    "name": "滶晨",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "滶晨",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "花语海第1期": {
+    "name": "花语海第1期",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "花语海",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "花语海第2期": {
+    "name": "花语海第2期",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "花语海",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "Elize Park": {
+    "name": "Elize Park",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "Elize Park",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "维港汇 I": {
+    "name": "维港汇 I",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "维港汇",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "红山半岛 - C区": {
+    "name": "红山半岛 - C区",
+    "category": "C",
+    "category_name": "纯独立洋房聚落",
+    "is_community": true,
+    "parent_community": "红山半岛 - C区",
+    "community_tag": "🏡【社区】顶级纯独立洋房聚落，享私家花园泳池与至高隐逸私密",
+    "volume_format": "villa"
+  },
+  "红山半岛 - B区": {
+    "name": "红山半岛 - B区",
+    "category": "C",
+    "category_name": "纯独立洋房聚落",
+    "is_community": true,
+    "parent_community": "红山半岛 - B区",
+    "community_tag": "🏡【社区】顶级纯独立洋房聚落，享私家花园泳池与至高隐逸私密",
+    "volume_format": "villa"
+  },
+  "泓璟": {
+    "name": "泓璟",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "泓璟",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "海德园第2期": {
+    "name": "海德园第2期",
+    "category": "B",
+    "category_name": "分期大盘分期",
+    "is_community": true,
+    "parent_community": "海德园",
+    "community_tag": "🏡【社区】大型地标综合体分期，尊享全期中央园林与旗舰会所群",
+    "volume_format": "phase"
+  },
+  "叡璟II": {
+    "name": "叡璟II",
+    "category": "A",
+    "category_name": "多座组团地标大盘",
+    "is_community": true,
+    "parent_community": "叡璟II",
+    "community_tag": "🏡【社区】多座组团地标大盘，配备大型度假式综合会所与园林",
+    "volume_format": "estate"
+  },
+  "映汇": {
+    "name": "映汇",
+    "category": "B",
+    "category_name": "大型重建综合体分期",
+    "is_community": true,
+    "parent_community": "必嘉坊",
+    "community_tag": "🏡【社区】大型重建综合体分期，享会所与区域配套绿化",
+    "volume_format": "phase"
+  },
+  "肇辉台6号": {
+    "name": "肇辉台6号",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "肇辉台6号",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "海瑅湾 I": {
+    "name": "海瑅湾 I",
+    "category": "A",
+    "category_name": "多座组团地标大盘",
+    "is_community": true,
+    "parent_community": "海瑅湾 I",
+    "community_tag": "🏡【社区】多座组团地标大盘，配备大型度假式综合会所与园林",
+    "volume_format": "estate"
+  },
+  "海瑅湾 II": {
+    "name": "海瑅湾 II",
+    "category": "A",
+    "category_name": "多座组团地标大盘",
+    "is_community": true,
+    "parent_community": "海瑅湾 II",
+    "community_tag": "🏡【社区】多座组团地标大盘，配备大型度假式综合会所与园林",
+    "volume_format": "estate"
+  },
+  "皇璇": {
+    "name": "皇璇",
+    "category": "E",
+    "category_name": "市区单幢精致物业",
+    "is_community": false,
+    "parent_community": "皇璇",
+    "community_tag": "🏢【社区】属单幢精致物业，公用绿化及大型会所相对小巧",
+    "volume_format": "single"
+  },
+  "逸里1号": {
+    "name": "逸里1号",
+    "category": "B",
+    "category_name": "大型旧改综合体分期",
+    "is_community": true,
+    "parent_community": "利奥坊",
+    "community_tag": "🏡【社区】大型旧改综合体分期",
+    "volume_format": "phase"
+  },
+  "瑅海": {
+    "name": "瑅海",
+    "category": "A",
+    "category_name": "大型重建综合体",
+    "is_community": true,
+    "parent_community": "瑅海",
+    "community_tag": "🏡【社区】大型重建综合体，享会所与区域配套绿化",
+    "volume_format": "estate"
+  },
+  "天铸": {
+    "name": "天铸",
+    "category": "A",
+    "category_name": "多座组团地标大盘",
+    "is_community": true,
+    "parent_community": "天铸",
+    "community_tag": "🏡【社区】多座组团地标大盘，配备大型度假式综合会所与园林",
+    "volume_format": "estate"
+  },
+  "南天第": {
+    "name": "南天第",
+    "category": "B",
+    "category_name": "单幢顶奢独立洋房",
+    "is_community": false,
+    "parent_community": "南天第",
+    "community_tag": "👑【洋房】全盘仅3座顶奢家族洋房，户户配独立私家泳池与花园",
+    "volume_format": "boutique"
+  },
+  "巴丙顿山": {
+    "name": "巴丙顿山",
+    "category": "B",
+    "category_name": "单幢精品住宅",
+    "is_community": false,
+    "parent_community": "巴丙顿山",
+    "community_tag": "🏡【单幢】半山精品低密住宅，私密清幽",
+    "volume_format": "boutique"
+  },
+  "汇玺II": {
+    "name": "汇玺II",
+    "category": "A",
+    "category_name": "多座组团地标大盘",
+    "is_community": true,
+    "parent_community": "汇玺II",
+    "community_tag": "🏡【社区】多座组团地标大盘，配备大型度假式综合会所与园林",
+    "volume_format": "estate"
+  },
+  "尚誉": {
+    "name": "尚誉",
+    "category": "B",
+    "category_name": "单幢精品住宅",
+    "is_community": false,
+    "parent_community": "尚誉",
+    "community_tag": "🏢【单幢】核心地段精巧公寓，主打高租金回报与灵动投资",
+    "volume_format": "boutique"
+  },
+  "柏汇": {
+    "name": "柏汇",
+    "category": "B",
+    "category_name": "单幢精品住宅",
+    "is_community": false,
+    "parent_community": "柏汇",
+    "community_tag": "🏢【单幢】铁路口精品住宅，小户型易租易转手",
+    "volume_format": "boutique"
+  },
+  "南津．迎岸": {
+    "name": "南津．迎岸",
+    "category": "B",
+    "category_name": "单幢精品住宅",
+    "is_community": false,
+    "parent_community": "南津．迎岸",
+    "community_tag": "🏢【单幢】南区小资亲海精品，总价友好",
+    "volume_format": "boutique"
+  },
+  "南湾": {
+    "name": "南湾",
+    "category": "A",
+    "category_name": "多座组团地标大盘",
+    "is_community": true,
+    "parent_community": "南湾",
+    "community_tag": "🏡【社区】9座沿海帆船地标豪宅群，配超豪华私家游艇会所",
+    "volume_format": "estate"
+  }
+}
