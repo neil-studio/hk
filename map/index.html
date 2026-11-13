@@ -21,7 +21,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 
 <style>
   :root {
@@ -3244,7 +3244,41 @@ function initMap() {
   });
 }
 
-const MAP_DATA_VERSION = 'v_' + Date.now();
+const MAP_CACHE_NAME = 'hk-map-json-cache-v1';
+
+async function fetchMapJsonCached(fileName, onBgUpdate = null) {
+  const cacheKey = fileName;
+  const freshUrl = fileName + '?v=' + Date.now();
+  try {
+    if ('caches' in window) {
+      const cache = await caches.open(MAP_CACHE_NAME);
+      const cached = await cache.match(cacheKey);
+      if (cached) {
+        const cachedData = await cached.json();
+        // 后台静默拉取最新数据更新缓存
+        fetch(freshUrl)
+          .then(async res => {
+            if (!res.ok) return;
+            const clone = res.clone();
+            await cache.put(cacheKey, clone);
+            if (onBgUpdate) {
+              const freshData = await res.json();
+              onBgUpdate(freshData);
+            }
+          })
+          .catch(() => {});
+        return cachedData;
+      }
+      const res = await fetch(freshUrl);
+      if (!res.ok) return null;
+      await cache.put(cacheKey, res.clone());
+      return await res.json();
+    }
+  } catch (e) {
+    console.warn('CacheStorage 读取失败，降级直连:', fileName, e);
+  }
+  return fetch(freshUrl).then(r => r.ok ? r.json() : null).catch(() => null);
+}
 
 function getProjectImageInfo(projName) {
   if (!projName) return null;
@@ -3261,13 +3295,20 @@ async function loadData() {
   console.time('⚡ 核心地图首屏瞬时直出');
 
   try {
-    // 1. 核心首屏关键链路：并行获取渲染地图所必需的坐标、港铁、地标及楼盘图片清单数据（轻量本地 JSON，毫秒级直出）
+    // 1. 优先秒读本地 CacheStorage 缓存渲染，同时后台静默更新最新 JSON
     const [resCoords, resMtr, resMtrLines, resLandmarks, resImgManifest] = await Promise.all([
-      fetch('hk_project_coords.json?v=' + MAP_DATA_VERSION).then(r => r.ok ? r.json() : null).catch(e => { console.error('楼盘坐标加载异常:', e); return null; }),
-      fetch('hk_mtr_stations.json?v=' + MAP_DATA_VERSION).then(r => r.ok ? r.json() : null).catch(e => null),
-      fetch('hk_mtr_lines.json?v=' + MAP_DATA_VERSION).then(r => r.ok ? r.json() : null).catch(e => null),
-      fetch('hk_landmarks.json?v=' + MAP_DATA_VERSION).then(r => r.ok ? r.json() : null).catch(e => null),
-      fetch('project_images_manifest.json?v=' + MAP_DATA_VERSION).then(r => r.ok ? r.json() : {}).catch(e => ({}))
+      fetchMapJsonCached('hk_project_coords.json', (freshCoords) => {
+        if (Array.isArray(freshCoords) && freshCoords.length > 0) {
+          const EXCLUDE_PROJECTS = ['33清水湾第1期'];
+          projectsData = freshCoords.filter(p => !EXCLUDE_PROJECTS.includes(p.name));
+          populateSelects();
+          applyFilters();
+        }
+      }),
+      fetchMapJsonCached('hk_mtr_stations.json'),
+      fetchMapJsonCached('hk_mtr_lines.json'),
+      fetchMapJsonCached('hk_landmarks.json'),
+      fetchMapJsonCached('project_images_manifest.json')
     ]);
 
     if (resImgManifest) {
@@ -3303,9 +3344,8 @@ async function loadData() {
     console.error('地图核心数据首屏初始化异常:', err);
   }
 
-  // 2. 第二阶段（无感异步加载）：商圈规划微板块面层 GeoJSON（后台异步获取后叠加，不阻塞首屏）
-  fetch('hong_kong_micro_districts.geojson?v=' + MAP_DATA_VERSION)
-    .then(r => r.ok ? r.json() : null)
+  // 2. 第二阶段（无感异步加载）：商圈规划微板块面层 GeoJSON（同样走本地缓存秒开）
+  fetchMapJsonCached('hong_kong_micro_districts.geojson')
     .then(resGeo => {
       if (resGeo) {
         microDistrictsGeoJSON = resGeo;

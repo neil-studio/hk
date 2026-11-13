@@ -4,19 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>香港一手新盘一站通 - 全局门户</title>
-  <!-- 引入 Google Fonts -->
+  <!-- 引入 Google Fonts（非阻塞异步加载，防白屏） -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <!-- 引入自定义样式 -->
   <link rel="stylesheet" href="style.css?v=20260806_fresh_v9">
-  <!-- 引入全量预编译静态数据 (零延迟离线载入) -->
-  <script src="data.js?v=20260811_fresh_v9"></script>
-  <script src="analytics_data.js?v=20260811_fresh_v9"></script>
+  <!-- 引入全量预编译静态数据（defer 异步不阻塞页面首屏渲染） -->
+  <script defer src="data.js?v=20260811_fresh_v9"></script>
+  <script defer src="analytics_data.js?v=20260811_fresh_v9"></script>
   <!-- 引入 SheetJS 用于在线解析 Excel -->
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <!-- 引入 Chart.js 用于绘制图形 -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- 📊 Google Analytics 4 (GA4) 零延迟全量埋点 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-HG6944H8MW"></script>
   <script>
@@ -286,6 +286,6 @@
   </div>
 
   <!-- 引入主程序逻辑 -->
-  <script src="app.js?v=20260811_V2"></script>
+  <script defer src="app.js?v=20260811_V2"></script>
 </body>
 </html>

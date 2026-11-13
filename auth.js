@@ -810,13 +810,40 @@
       await showLoginOverlay('login');
       return;
     }
+
+    // 优先读取本地缓存用户信息实现 0ms 秒开，同时后台异步向云端核验有效性
+    let cachedUser = null;
+    try {
+      const raw = sessionStorage.getItem(AUTH_CONFIG.userKey) || localStorage.getItem(AUTH_CONFIG.userKey);
+      if (raw) cachedUser = JSON.parse(raw);
+    } catch (_) {}
+
+    if (cachedUser && cachedUser.username) {
+      currentUser = cachedUser;
+      onAuthenticated();
+      apiRequest('/api/me')
+        .then(res => {
+          if (res && res.user) {
+            currentUser = res.user;
+            localStorage.setItem(AUTH_CONFIG.userKey, JSON.stringify(currentUser));
+            applyPermissions();
+          }
+        })
+        .catch(async (err) => {
+          if (err && (err.status === 401 || err.status === 403)) {
+            clearSession();
+            await showLoginOverlay('login');
+          }
+        });
+      return;
+    }
+
     try {
       const res = await apiRequest('/api/me');
       currentUser = res.user;
       localStorage.setItem(AUTH_CONFIG.userKey, JSON.stringify(currentUser));
       onAuthenticated();
     } catch (err) {
-      // Token 失效或被管理员踢下线
       clearSession();
       await showLoginOverlay('login');
     }
