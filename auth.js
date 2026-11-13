@@ -209,60 +209,104 @@
         font-size: 12px;
       }
 
-      /* 右上角用户状态栏 */
+      /* 首页页头内嵌用户菜单（浅色融入原风格，零遮挡） */
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
       #hkUserBadge {
-        position: fixed;
-        top: 12px;
-        right: 14px;
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      }
+      #hkUserTrigger {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(255, 255, 255, 0.92);
+        color: #1e293b;
+        border: 1px solid #cbd5e1;
+        border-radius: 999px;
+        padding: 5px 12px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+        transition: all 0.15s;
+      }
+      #hkUserTrigger:hover {
+        background: #ffffff;
+        border-color: #94a3b8;
+      }
+      #hkUserTrigger .hk-role-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        display: inline-block;
+      }
+      #hkUserTrigger .hk-role-tag {
+        font-size: 11px;
+        font-weight: 600;
+        color: #64748b;
+      }
+      #hkUserMenu {
+        position: absolute;
+        top: calc(100% + 6px);
+        right: 0;
+        min-width: 170px;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.14);
+        padding: 6px;
         z-index: 99990;
+        display: none;
+      }
+      #hkUserMenu.open {
+        display: block;
+      }
+      .hk-menu-head {
+        padding: 6px 10px 8px;
+        border-bottom: 1px solid #f1f5f9;
+        margin-bottom: 4px;
+        font-size: 12px;
+        color: #64748b;
+      }
+      .hk-menu-head strong {
+        display: block;
+        color: #0f172a;
+        font-size: 13px;
+      }
+      #hkUserMenu a, #hkUserMenu button {
+        width: 100%;
         display: flex;
         align-items: center;
         gap: 8px;
-        background: rgba(15, 23, 42, 0.88);
-        backdrop-filter: blur(8px);
-        color: #f8fafc;
-        padding: 6px 12px;
-        border-radius: 999px;
-        font-size: 12px;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
-        border: 1px solid rgba(255, 255, 255, 0.14);
-        font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
-      }
-      #hkUserBadge .hk-role-pill {
-        padding: 2px 8px;
-        border-radius: 999px;
-        font-size: 11px;
-        font-weight: 600;
-      }
-      #hkUserBadge a, #hkUserBadge button {
-        color: #e2e8f0;
-        background: rgba(255, 255, 255, 0.1);
+        padding: 8px 10px;
         border: none;
-        border-radius: 6px;
-        padding: 3px 8px;
-        font-size: 11px;
+        background: transparent;
+        color: #334155;
+        font-size: 13px;
+        font-weight: 500;
+        border-radius: 8px;
         cursor: pointer;
         text-decoration: none;
-        transition: background 0.15s;
+        text-align: left;
       }
-      #hkUserBadge a:hover, #hkUserBadge button:hover {
-        background: rgba(255, 255, 255, 0.22);
+      #hkUserMenu a:hover, #hkUserMenu button:hover {
+        background: #f1f5f9;
+        color: #0f172a;
       }
-      #hkUserBadge .hk-btn-admin {
-        background: #7c3aed;
-        color: #fff;
+      #hkUserMenu .hk-menu-admin {
+        color: #6d28d9;
         font-weight: 600;
       }
-      #hkUserBadge .hk-btn-admin:hover {
-        background: #6d28d9;
-      }
-      @media (max-width: 640px) {
-        #hkUserBadge {
-          top: auto;
-          bottom: 12px;
-          right: 10px;
-          padding: 5px 10px;
-        }
+      #hkUserMenu .hk-menu-logout {
+        color: #dc2626;
       }
     `;
     document.head.appendChild(style);
@@ -292,31 +336,68 @@
     });
   }
 
+  function isHomePage() {
+    const p = window.location.pathname;
+    if (p.includes('/map/')) return false;
+    return p === '/' || p.endsWith('/index.html') || p.endsWith('/hk') || p.endsWith('/hk/');
+  }
+
   function mountUserBadge() {
     if (!currentUser || !document.body) return;
     const old = document.getElementById('hkUserBadge');
     if (old) old.remove();
 
+    // 仅在首页页头文档流内展示，不遮挡其他页面（如地图导出按钮）
+    if (!isHomePage()) return;
+    const headerActions = document.querySelector('.header-actions');
+    if (!headerActions) return;
+
     const badge = document.createElement('div');
     badge.id = 'hkUserBadge';
     const roleMeta = ROLE_LABELS[currentUser.role] || ROLE_LABELS.viewer;
     const prefix = getRootPrefix();
+    const displayName = currentUser.display_name || currentUser.username;
 
     const adminLink = currentUser.role === 'admin'
-      ? `<a class="hk-btn-admin" href="${prefix}admin.html">👥 用户管理</a>`
+      ? `<a class="hk-menu-admin" href="${prefix}admin.html">👥 用户管理后台</a>`
       : '';
 
     badge.innerHTML = `
-      <span class="hk-role-pill" style="background:${roleMeta.bg};color:${roleMeta.color}">${roleMeta.text}</span>
-      <span style="font-weight:600;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${currentUser.username}">${currentUser.display_name || currentUser.username}</span>
-      ${adminLink}
-      <button type="button" id="hkChangePwdBtn">改密</button>
-      <button type="button" id="hkLogoutBtn">退出</button>
+      <button type="button" id="hkUserTrigger" title="账号与权限菜单">
+        <span class="hk-role-dot" style="background:${roleMeta.bg};"></span>
+        <span>${displayName}</span>
+        <span class="hk-role-tag">(${roleMeta.text})</span>
+        <span style="font-size:10px;color:#94a3b8;">▾</span>
+      </button>
+      <div id="hkUserMenu">
+        <div class="hk-menu-head">
+          <strong>${displayName}</strong>
+          <span>账号：${currentUser.username} · ${roleMeta.text}</span>
+        </div>
+        ${adminLink}
+        <button type="button" id="hkChangePwdBtn">🔑 修改密码</button>
+        <button type="button" id="hkLogoutBtn" class="hk-menu-logout">🚪 退出登录</button>
+      </div>
     `;
-    document.body.appendChild(badge);
+    headerActions.appendChild(badge);
+
+    const trigger = document.getElementById('hkUserTrigger');
+    const menu = document.getElementById('hkUserMenu');
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      menu.classList.toggle('open');
+    });
+    document.addEventListener('click', (e) => {
+      if (!badge.contains(e.target)) {
+        menu.classList.remove('open');
+      }
+    });
 
     document.getElementById('hkLogoutBtn').addEventListener('click', logout);
-    document.getElementById('hkChangePwdBtn').addEventListener('click', showChangePasswordModal);
+    document.getElementById('hkChangePwdBtn').addEventListener('click', () => {
+      menu.classList.remove('open');
+      showChangePasswordModal();
+    });
   }
 
   function showChangePasswordModal() {
