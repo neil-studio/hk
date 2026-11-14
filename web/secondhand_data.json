@@ -194,6 +194,34 @@
     "plan": "secondhand_images/LMXG-005/7e5cfd4d0092cf4c378fdda58165f6b3.jpg"
   },
   {
+    "id": "LMXG-006",
+    "district": "坚尼地城",
+    "estate": "Imperial Kennedy",
+    "unit": "42A",
+    "source": "内部自录",
+    "sourceType": "own",
+    "refNo": "LMXG-006",
+    "priceText": "4780 万",
+    "price": 4780,
+    "psf": ",000/呎",
+    "psfNum": 38000,
+    "rent": "8.8万/月",
+    "area": 1257,
+    "layout": "4房改3房双套房",
+    "age": "2016年入伙",
+    "keyInfo": "一个月只能看一次 · 无车位",
+    "carpark": "无车位",
+    "status": "租中",
+    "salesPerson": "Cara",
+    "confirmDate": "2026-11-11",
+    "remarks": "公司物业交易税低，两梯一户专属电梯厅，海景+山景，4个阳台/露台，保姆间独立卫浴，层高3.23米，新鸿基开发，宠物友好。",
+    "photos": [
+      "secondhand_images/LMXG-006/page_1.jpg",
+      "secondhand_images/LMXG-006/page_2.jpg"
+    ],
+    "plan": "secondhand_images/LMXG-006/page_2.jpg"
+  },
+  {
     "id": "TAL124",
     "district": "渣甸山",
     "estate": "裴樂士道 2號屋 (渣甸臺)",
