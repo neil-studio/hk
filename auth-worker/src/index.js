@@ -711,7 +711,7 @@ export default {
                FROM users ORDER BY id ASC`
             ).all(),
             env.DB.prepare(
-              `SELECT stat_date, user_id, module, visits, clicks, active_seconds
+              `SELECT stat_date, user_id, module, visits, clicks, exports, active_seconds
                FROM user_daily_stats
                WHERE stat_date >= ?
                ORDER BY stat_date ASC`
@@ -739,6 +739,7 @@ export default {
               days_set: new Set(),
               total_visits: 0,
               total_clicks: 0,
+              total_exports: 0,
               total_active_seconds: 0,
               last_active_date: null,
               modules: {}
@@ -747,32 +748,37 @@ export default {
 
           let totalVisits = 0;
           let totalClicks = 0;
+          let totalExports = 0;
           let totalActiveSeconds = 0;
 
           for (const r of rows) {
             const v = Number(r.visits) || 0;
             const c = Number(r.clicks) || 0;
+            const ex = Number(r.exports) || 0;
             const s = Number(r.active_seconds) || 0;
             totalVisits += v;
             totalClicks += c;
+            totalExports += ex;
             totalActiveSeconds += s;
 
             if (!dailyMap.has(r.stat_date)) {
-              dailyMap.set(r.stat_date, { date: r.stat_date, users: new Set(), visits: 0, clicks: 0, active_seconds: 0 });
+              dailyMap.set(r.stat_date, { date: r.stat_date, users: new Set(), visits: 0, clicks: 0, exports: 0, active_seconds: 0 });
             }
             const dObj = dailyMap.get(r.stat_date);
             dObj.users.add(r.user_id);
             dObj.visits += v;
             dObj.clicks += c;
+            dObj.exports += ex;
             dObj.active_seconds += s;
 
             if (!moduleMap.has(r.module)) {
-              moduleMap.set(r.module, { module: r.module, users: new Set(), visits: 0, clicks: 0, active_seconds: 0 });
+              moduleMap.set(r.module, { module: r.module, users: new Set(), visits: 0, clicks: 0, exports: 0, active_seconds: 0 });
             }
             const mObj = moduleMap.get(r.module);
             mObj.users.add(r.user_id);
             mObj.visits += v;
             mObj.clicks += c;
+            mObj.exports += ex;
             mObj.active_seconds += s;
 
             const uObj = userMap.get(r.user_id);
@@ -780,15 +786,17 @@ export default {
               uObj.days_set.add(r.stat_date);
               uObj.total_visits += v;
               uObj.total_clicks += c;
+              uObj.total_exports += ex;
               uObj.total_active_seconds += s;
               if (!uObj.last_active_date || r.stat_date > uObj.last_active_date) {
                 uObj.last_active_date = r.stat_date;
               }
               if (!uObj.modules[r.module]) {
-                uObj.modules[r.module] = { visits: 0, clicks: 0, active_seconds: 0 };
+                uObj.modules[r.module] = { visits: 0, clicks: 0, exports: 0, active_seconds: 0 };
               }
               uObj.modules[r.module].visits += v;
               uObj.modules[r.module].clicks += c;
+              uObj.modules[r.module].exports += ex;
               uObj.modules[r.module].active_seconds += s;
             }
           }
@@ -805,6 +813,7 @@ export default {
               active_days: u.days_set.size,
               total_visits: u.total_visits,
               total_clicks: u.total_clicks,
+              total_exports: u.total_exports,
               total_active_seconds: u.total_active_seconds,
               last_active_date: u.last_active_date,
               modules: u.modules
@@ -820,6 +829,7 @@ export default {
               dau: d.users.size,
               visits: d.visits,
               clicks: d.clicks,
+              exports: d.exports,
               active_seconds: d.active_seconds
             }))
             .sort((a, b) => a.date.localeCompare(b.date));
@@ -830,6 +840,7 @@ export default {
               users_count: m.users.size,
               visits: m.visits,
               clicks: m.clicks,
+              exports: m.exports,
               active_seconds: m.active_seconds
             }))
             .sort((a, b) => b.clicks - a.clicks || b.visits - a.visits);
@@ -844,6 +855,7 @@ export default {
                 sleeping_users: allUsers.length - activeUsersCount,
                 total_visits: totalVisits,
                 total_clicks: totalClicks,
+                total_exports: totalExports,
                 total_active_seconds: totalActiveSeconds,
                 avg_active_seconds: activeUsersCount ? Math.round(totalActiveSeconds / activeUsersCount) : 0,
                 avg_active_days: activeUsersCount ? Number((totalActiveDaysSum / activeUsersCount).toFixed(1)) : 0
@@ -879,21 +891,23 @@ export default {
           const mod = String(item?.module || '').trim();
           const visits = Math.max(0, Math.min(Number(item?.visits) || 0, 5000));
           const clicks = Math.max(0, Math.min(Number(item?.clicks) || 0, 50000));
+          const exportsCnt = Math.max(0, Math.min(Number(item?.exports) || 0, 5000));
           const activeSeconds = Math.max(0, Math.min(Number(item?.active_seconds) || 0, 86400));
 
           if (!/^\d{4}-\d{2}-\d{2}$/.test(statDate) || !VALID_MODULES.has(mod)) continue;
-          if (visits === 0 && clicks === 0 && activeSeconds === 0) continue;
+          if (visits === 0 && clicks === 0 && exportsCnt === 0 && activeSeconds === 0) continue;
 
           await env.DB.prepare(
-            `INSERT INTO user_daily_stats (stat_date, user_id, module, visits, clicks, active_seconds)
-             VALUES (?, ?, ?, ?, ?, ?)
+            `INSERT INTO user_daily_stats (stat_date, user_id, module, visits, clicks, exports, active_seconds)
+             VALUES (?, ?, ?, ?, ?, ?, ?)
              ON CONFLICT(stat_date, user_id, module) DO UPDATE SET
                visits = visits + excluded.visits,
                clicks = clicks + excluded.clicks,
+               exports = exports + excluded.exports,
                active_seconds = active_seconds + excluded.active_seconds,
                updated_at = datetime('now')`
           )
-            .bind(statDate, authCtx.user.id, mod, visits, clicks, activeSeconds)
+            .bind(statDate, authCtx.user.id, mod, visits, clicks, exportsCnt, activeSeconds)
             .run();
           synced++;
         }

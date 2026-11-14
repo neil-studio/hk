@@ -635,18 +635,23 @@
     } catch (_) {}
   }
 
-  function recordActivityDelta(moduleName, { visits = 0, clicks = 0, active_seconds = 0 }) {
+  function recordActivityDelta(moduleName, { visits = 0, clicks = 0, exports = 0, active_seconds = 0 }) {
     if (!currentUser) return;
     const date = getTodayStr();
     const key = `${currentUser.id}|${date}|${moduleName}`;
     const buf = readActivityBuffer();
     if (!buf[key]) {
-      buf[key] = { user_id: currentUser.id, date, module: moduleName, visits: 0, clicks: 0, active_seconds: 0 };
+      buf[key] = { user_id: currentUser.id, date, module: moduleName, visits: 0, clicks: 0, exports: 0, active_seconds: 0 };
     }
     buf[key].visits += visits;
     buf[key].clicks += clicks;
+    buf[key].exports = (buf[key].exports || 0) + exports;
     buf[key].active_seconds += active_seconds;
     writeActivityBuffer(buf);
+  }
+
+  function trackExport(moduleName = null) {
+    recordActivityDelta(moduleName || detectModule(), { exports: 1 });
   }
 
   async function flushActivity(useBeacon = false) {
@@ -661,7 +666,14 @@
     const remaining = {};
     for (const [k, v] of allEntries) {
       if (!uid || v.user_id === uid) {
-        items.push({ date: v.date, module: v.module, visits: v.visits, clicks: v.clicks, active_seconds: v.active_seconds });
+        items.push({
+          date: v.date,
+          module: v.module,
+          visits: v.visits || 0,
+          clicks: v.clicks || 0,
+          exports: v.exports || 0,
+          active_seconds: v.active_seconds || 0
+        });
       } else {
         remaining[k] = v;
       }
@@ -674,8 +686,8 @@
     const url = `${AUTH_CONFIG.apiBase}/api/activity/sync`;
     if (useBeacon && navigator.sendBeacon) {
       try {
-        const blob = new Blob([JSON.stringify({ token, items })], { type: 'application/json' });
-        const sent = navigator.sendBeacon(url, blob);
+        // 使用纯文本字符串避免触发跨域 OPTIONS 预检，确保关闭页面时 100% 送达
+        const sent = navigator.sendBeacon(url, JSON.stringify({ token, items }));
         if (sent) return;
       } catch (_) {}
     }
@@ -694,6 +706,7 @@
         else {
           cur[key].visits += it.visits;
           cur[key].clicks += it.clicks;
+          cur[key].exports = (cur[key].exports || 0) + (it.exports || 0);
           cur[key].active_seconds += it.active_seconds;
         }
       }
@@ -884,6 +897,8 @@
     getRole,
     hasPermission,
     applyPermissions,
+    trackExport,
+    flushActivity,
     logout,
     ready
   };

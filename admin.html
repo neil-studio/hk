@@ -310,7 +310,7 @@
           <div class="table-wrap">
             <table>
               <thead>
-                <tr><th>板块</th><th>人数</th><th>访问</th><th>点击</th><th>有效时长</th></tr>
+                <tr><th>板块</th><th>人数</th><th>访问</th><th>点击</th><th>导出</th><th>有效时长</th></tr>
               </thead>
               <tbody id="moduleStatsTbody"></tbody>
             </table>
@@ -332,6 +332,7 @@
                 <th>登录天数</th>
                 <th>有效总时长</th>
                 <th>总访问 / 总点击</th>
+                <th>导出方案</th>
                 <th>各板块操作明细</th>
                 <th>最近活跃日期</th>
               </tr>
@@ -617,6 +618,9 @@
 
     async function loadAnalytics(days = analyticsDays) {
       analyticsDays = days;
+      if (window.HKAuth && window.HKAuth.flushActivity) {
+        await window.HKAuth.flushActivity(false).catch(() => {});
+      }
       const data = await HKAuth.apiRequest(`/api/admin/analytics?days=${days}`);
       const ov = data.overview || {};
       document.getElementById('analyticsKpis').innerHTML = `
@@ -625,8 +629,8 @@
           <div class="kpi-val">${ov.active_users ?? 0} <span style="font-size:14px;color:#94a3b8;font-weight:500;">/ ${ov.sleeping_users ?? 0} 沉睡</span></div>
         </div>
         <div class="kpi-card">
-          <div class="kpi-label">累计访问 / 总点击</div>
-          <div class="kpi-val">${ov.total_visits ?? 0} <span style="font-size:14px;color:#2563eb;font-weight:600;">/ ${ov.total_clicks ?? 0} 次</span></div>
+          <div class="kpi-label">访问 / 点击 / 导出方案</div>
+          <div class="kpi-val" style="font-size:20px;">${ov.total_visits ?? 0} <span style="font-size:14px;color:#2563eb;font-weight:600;">/ ${ov.total_clicks ?? 0}点 / ${ov.total_exports ?? 0}导</span></div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label">全站有效总时长</div>
@@ -662,13 +666,14 @@
       // 板块统计
       const mods = data.module_stats || [];
       document.getElementById('moduleStatsTbody').innerHTML = mods.length === 0
-        ? '<tr><td colspan="5" style="text-align:center;color:#94a3b8;">暂无数据</td></tr>'
+        ? '<tr><td colspan="6" style="text-align:center;color:#94a3b8;">暂无数据</td></tr>'
         : mods.map(m => `
           <tr>
             <td><strong>${MODULE_LABELS[m.module] || m.module}</strong></td>
             <td>${m.users_count}</td>
             <td>${m.visits}</td>
             <td><strong>${m.clicks}</strong></td>
+            <td>${m.exports || 0}</td>
             <td>${fmtDuration(m.active_seconds)}</td>
           </tr>
         `).join('');
@@ -688,6 +693,7 @@
             <td>${u.active_days > 0 ? `<strong>${u.active_days} 天</strong>` : '<span style="color:#94a3b8;">0 天(沉睡)</span>'}</td>
             <td>${fmtDuration(u.total_active_seconds)}</td>
             <td>${u.total_visits} / <strong>${u.total_clicks}</strong></td>
+            <td><strong>${u.total_exports || 0} 次</strong></td>
             <td style="white-space:normal;min-width:240px;">${modBadges || '<span style="color:#94a3b8;">暂无操作记录</span>'}</td>
             <td>${u.last_active_date || '从未活跃'}</td>
           </tr>

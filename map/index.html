@@ -6494,6 +6494,9 @@ function triggerPdfPrint() {
     alert('请至少勾选一个楼盘');
     return;
   }
+  if (window.HKAuth && window.HKAuth.trackExport) {
+    window.HKAuth.trackExport('map');
+  }
 
   const advisorName = document.getElementById('advisor-name') ? document.getElementById('advisor-name').value.trim() : '';
   const advisorPhone = document.getElementById('advisor-phone') ? document.getElementById('advisor-phone').value.trim() : '';
