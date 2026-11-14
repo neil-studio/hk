@@ -630,11 +630,63 @@ def main():
                 "walk_time_min": round(w_d / 75.0, 1)
             }
 
+        def norm_coord_key(s):
+            if not s:
+                return ""
+            return str(s).replace(" ", "").replace("　", "").replace("．", ".").replace("·", ".").lower()
+
+        db_coords_map = {}
+        if os.path.exists(DB_FILE):
+            try:
+                conn_c = sqlite3.connect(DB_FILE)
+                cur_c = conn_c.cursor()
+                cur_c.execute(
+                    "SELECT project_name, clean_project_name, latitude, longitude "
+                    "FROM project_details "
+                    "WHERE latitude IS NOT NULL AND longitude IS NOT NULL AND latitude != 0 AND longitude != 0;"
+                )
+                for p_n, c_n, lat_v, lng_v in cur_c.fetchall():
+                    try:
+                        coords_pair = (round(float(lat_v), 6), round(float(lng_v), 6))
+                    except (TypeError, ValueError):
+                        continue
+                    for k in (p_n, c_n):
+                        if k:
+                            db_coords_map[k] = coords_pair
+                            db_coords_map[norm_coord_key(k)] = coords_pair
+                conn_c.close()
+            except Exception as e:
+                print("⚠️ 读取数据库坐标索引异常:", e)
+
+        def lookup_db_coords(name):
+            return db_coords_map.get(name) or db_coords_map.get(norm_coord_key(name))
+
+        fallback_coords_set = set()
+        for c_lat, c_lng in district_centers.values():
+            fallback_coords_set.add((round(c_lat, 6), round(c_lng, 6)))
+            fallback_coords_set.add((round(c_lat + 0.0002, 6), round(c_lng + 0.0002, 6)))
+        fallback_coords_set.update({(22.3193, 114.1694), (22.2814, 114.1583)})
+
+        for p in projects:
+            p_lat = p.get("lat")
+            p_lng = p.get("lng")
+            if p_lat is not None and p_lng is not None:
+                cur_pair = (round(float(p_lat), 6), round(float(p_lng), 6))
+                if cur_pair in fallback_coords_set:
+                    db_pair = lookup_db_coords(p.get("name", ""))
+                    if db_pair and db_pair != cur_pair:
+                        p["lat"], p["lng"] = db_pair
+                        p["nearest_mtr"] = get_nearest_mtr_info(db_pair[0], db_pair[1])
+                        print(f"📍 已将兜底坐标项目 [{p.get('name')}] 校准为数据库精确坐标: {db_pair[0]}, {db_pair[1]} (最近地铁: {p['nearest_mtr']['nearest_mtr_cn']}站 步行约{p['nearest_mtr']['walk_time_min']}分钟)")
+
         for dj_name, dj_proj in data_json_map.items():
             if dj_name not in existing_pnames:
                 p_dist = dj_proj.get("district", "")
                 p_region = dj_proj.get("region", "")
-                if p_dist in district_centers:
+                db_pair = lookup_db_coords(dj_name)
+                if db_pair:
+                    t_lat, t_lng = db_pair
+                elif p_dist in district_centers:
                     t_lat, t_lng = district_centers[p_dist]
                     t_lat = round(t_lat + 0.0002, 6)
                     t_lng = round(t_lng + 0.0002, 6)

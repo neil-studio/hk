@@ -2996,8 +2996,8 @@
     "name": "天玺",
     "region": "九龙",
     "district": "九龙站",
-    "lat": 22.3045,
-    "lng": 114.1612,
+    "lat": 22.305622,
+    "lng": 114.160806,
     "sell_status": "on_sale",
     "sell_status_cn": "出售中",
     "is_coming_soon": false,
@@ -3015,87 +3015,11 @@
     "reason": "",
     "mainland_selling_points": "1、九龙站上盖香港地标级顶奢天际豪宅：新鸿基地产在港铁九龙站倾力打造的全港最高纯住宅地标建筑之一，直面全无遮挡的维多利亚港一线璀璨海景及中环天际线，全球闻名。\n2、机场快线/高铁/西九文化区三合一枢纽：楼下即达港铁九龙站、机场快线及圆方Elements商场，地下通道直连西九龙高铁站及M+、故宫文化博物馆，极速穿梭全球与大湾区。\n3、新鸿基巅峰装标与极强全球硬通货属性：配备逾10万呎六星级超豪华会所「d'Oro」，高层单位更配设专属天际私家泳池，在香港二手豪宅市场享有极高的抗跌与全球变现流通能力。",
     "nearest_mtr": {
-      "nearest_mtr_id": "mtr_kowloon",
-      "nearest_mtr_name": "九龍站 (東涌綫/機場快綫)",
       "nearest_mtr_cn": "九龍",
       "nearest_mtr_lines": "東涌綫/機場快綫",
-      "nearest_mtr_lat": 22.305,
-      "nearest_mtr_lng": 114.1615,
-      "dist_walk_m": 145,
-      "walk_time_min": 1.7,
-      "route_geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            114.161191,
-            22.304488
-          ],
-          [
-            114.16129,
-            22.304428
-          ],
-          [
-            114.161456,
-            22.304603
-          ],
-          [
-            114.161378,
-            22.304648
-          ],
-          [
-            114.161355,
-            22.304629
-          ],
-          [
-            114.161279,
-            22.304561
-          ],
-          [
-            114.161269,
-            22.304551
-          ],
-          [
-            114.161319,
-            22.304504
-          ],
-          [
-            114.161386,
-            22.304561
-          ],
-          [
-            114.161441,
-            22.304604
-          ],
-          [
-            114.161504,
-            22.304654
-          ],
-          [
-            114.161546,
-            22.304771
-          ],
-          [
-            114.161542,
-            22.304843
-          ],
-          [
-            114.161579,
-            22.304925
-          ],
-          [
-            114.161497,
-            22.30495
-          ],
-          [
-            114.16147,
-            22.304962
-          ],
-          [
-            114.161489,
-            22.305004
-          ]
-        ]
-      }
+      "dist_straight_m": 99,
+      "dist_walk_m": 129,
+      "walk_time_min": 1.7
     },
     "developer": "新鸿基地产",
     "completion_date": "现楼发售 (已入伙)",
@@ -14458,8 +14382,8 @@
     "name": "本木",
     "region": "九龙",
     "district": "尖沙咀",
-    "lat": 22.3045,
-    "lng": 114.1722,
+    "lat": 22.30418,
+    "lng": 114.172562,
     "sell_status": "on_sale",
     "sell_status_cn": "出售中",
     "is_coming_soon": false,
@@ -14477,81 +14401,11 @@
     "reason": "",
     "mainland_selling_points": "1、九龙佐敦德成街2号闹中取静绝佳地段：恒基兆业打造，坐落佐敦传统成熟核心区，步行仅约2分钟直达港铁佐敦站，1站达尖沙咀、2站即达金钟。\n2、纯正日系现代美学与自然原木格调：以日本现代禅意美学为主题，运用大量天然木材与石材打造质感私邸，全屋配备国际顶奢精装厨电。\n3、尖沙咀核心商圈辐射与极高租金收益率：紧邻九龙公园与尖沙咀广东道海港城商圈，白领、外籍高管及海归精英高租金承接力极强，租金回报稳居板块前列。",
     "nearest_mtr": {
-      "nearest_mtr_id": "mtr_jordan",
-      "nearest_mtr_name": "佐敦站 (荃灣綫)",
       "nearest_mtr_cn": "佐敦",
-      "nearest_mtr_en": "Jordan",
       "nearest_mtr_lines": "荃灣綫",
-      "nearest_mtr_lat": 22.305,
-      "nearest_mtr_lng": 114.1716,
-      "dist_straight_m": 67,
-      "dist_walk_m": 163,
-      "walk_time_min": 2.0,
-      "route_geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            114.172093,
-            22.30461
-          ],
-          [
-            114.172063,
-            22.305014
-          ],
-          [
-            114.172038,
-            22.305369
-          ],
-          [
-            114.171917,
-            22.305318
-          ],
-          [
-            114.171847,
-            22.305293
-          ],
-          [
-            114.171754,
-            22.305255
-          ],
-          [
-            114.171762,
-            22.305154
-          ],
-          [
-            114.171729,
-            22.305155
-          ],
-          [
-            114.17169,
-            22.305156
-          ],
-          [
-            114.171672,
-            22.305155
-          ],
-          [
-            114.171647,
-            22.305154
-          ],
-          [
-            114.171651,
-            22.305058
-          ],
-          [
-            114.171635,
-            22.305057
-          ],
-          [
-            114.171591,
-            22.305055
-          ],
-          [
-            114.171595,
-            22.305
-          ]
-        ]
-      }
+      "dist_straight_m": 135,
+      "dist_walk_m": 176,
+      "walk_time_min": 2.3
     },
     "developer": "恒基兆业",
     "completion_date": "现楼发售 (已入伙)",
@@ -63218,14 +63072,14 @@
     "name": "皓畋",
     "region": "九龙",
     "district": "何文田",
-    "lat": 22.319104,
-    "lng": 114.179394,
+    "lat": 22.31924,
+    "lng": 114.181954,
     "nearest_mtr": {
-      "nearest_mtr_cn": "旺角",
-      "nearest_mtr_lines": "荃灣綫/觀塘綫",
-      "dist_straight_m": 1028,
-      "dist_walk_m": 1336,
-      "walk_time_min": 17.8
+      "nearest_mtr_cn": "宋皇臺",
+      "nearest_mtr_lines": "屯馬綫",
+      "dist_straight_m": 1081,
+      "dist_walk_m": 1405,
+      "walk_time_min": 18.7
     },
     "sell_status": "sales_suspended",
     "sell_status_cn": "暂停销售",
@@ -63328,14 +63182,14 @@
     "name": "Oasis Kai Tak",
     "region": "九龙",
     "district": "启德",
-    "lat": 22.318085,
-    "lng": 114.204019,
+    "lat": 22.328758,
+    "lng": 114.199926,
     "nearest_mtr": {
       "nearest_mtr_cn": "啟德",
       "nearest_mtr_lines": "屯馬綫",
-      "dist_straight_m": 1481,
-      "dist_walk_m": 1925,
-      "walk_time_min": 25.7
+      "dist_straight_m": 223,
+      "dist_walk_m": 290,
+      "walk_time_min": 3.9
     },
     "sell_status": "sales_suspended",
     "sell_status_cn": "暂停销售",
@@ -63437,14 +63291,14 @@
     "name": "君柏",
     "region": "九龙",
     "district": "马头角",
-    "lat": 22.322549,
-    "lng": 114.189127,
+    "lat": 22.32446,
+    "lng": 114.185566,
     "nearest_mtr": {
       "nearest_mtr_cn": "宋皇臺",
       "nearest_mtr_lines": "屯馬綫",
-      "dist_straight_m": 396,
-      "dist_walk_m": 515,
-      "walk_time_min": 6.9
+      "dist_straight_m": 434,
+      "dist_walk_m": 564,
+      "walk_time_min": 7.5
     },
     "sell_status": "sales_suspended",
     "sell_status_cn": "暂停销售",
@@ -63552,14 +63406,14 @@
     "name": "津汇",
     "region": "九龙",
     "district": "马头角",
-    "lat": 22.322549,
-    "lng": 114.189127,
+    "lat": 22.315815,
+    "lng": 114.188114,
     "nearest_mtr": {
-      "nearest_mtr_cn": "宋皇臺",
-      "nearest_mtr_lines": "屯馬綫",
-      "dist_straight_m": 396,
-      "dist_walk_m": 515,
-      "walk_time_min": 6.9
+      "nearest_mtr_cn": "何文田",
+      "nearest_mtr_lines": "觀塘綫/屯馬綫",
+      "dist_straight_m": 886,
+      "dist_walk_m": 1152,
+      "walk_time_min": 15.4
     },
     "sell_status": "sales_suspended",
     "sell_status_cn": "暂停销售",
@@ -63654,14 +63508,14 @@
     "name": "倚南",
     "region": "港岛",
     "district": "香港仔及鸭脷洲",
-    "lat": 22.244201,
-    "lng": 114.156373,
+    "lat": 22.244263,
+    "lng": 114.15565,
     "nearest_mtr": {
       "nearest_mtr_cn": "海怡半島",
       "nearest_mtr_lines": "南港島綫",
-      "dist_straight_m": 772,
-      "dist_walk_m": 1004,
-      "walk_time_min": 13.4
+      "dist_straight_m": 701,
+      "dist_walk_m": 911,
+      "walk_time_min": 12.1
     },
     "sell_status": "on_sale",
     "sell_status_cn": "出售中",
