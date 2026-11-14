@@ -63075,11 +63075,11 @@
     "lat": 22.31924,
     "lng": 114.181954,
     "nearest_mtr": {
-      "nearest_mtr_cn": "宋皇臺",
+      "nearest_mtr_cn": "土瓜灣",
       "nearest_mtr_lines": "屯馬綫",
-      "dist_straight_m": 1081,
-      "dist_walk_m": 1405,
-      "walk_time_min": 18.7
+      "dist_straight_m": 576,
+      "dist_walk_m": 749,
+      "walk_time_min": 10.0
     },
     "sell_status": "sales_suspended",
     "sell_status_cn": "暂停销售",
@@ -63409,11 +63409,11 @@
     "lat": 22.315815,
     "lng": 114.188114,
     "nearest_mtr": {
-      "nearest_mtr_cn": "何文田",
-      "nearest_mtr_lines": "觀塘綫/屯馬綫",
-      "dist_straight_m": 886,
-      "dist_walk_m": 1152,
-      "walk_time_min": 15.4
+      "nearest_mtr_cn": "土瓜灣",
+      "nearest_mtr_lines": "屯馬綫",
+      "dist_straight_m": 175,
+      "dist_walk_m": 228,
+      "walk_time_min": 3.0
     },
     "sell_status": "sales_suspended",
     "sell_status_cn": "暂停销售",
@@ -63511,11 +63511,11 @@
     "lat": 22.244263,
     "lng": 114.15565,
     "nearest_mtr": {
-      "nearest_mtr_cn": "海怡半島",
+      "nearest_mtr_cn": "利東",
       "nearest_mtr_lines": "南港島綫",
-      "dist_straight_m": 701,
-      "dist_walk_m": 911,
-      "walk_time_min": 12.1
+      "dist_straight_m": 239,
+      "dist_walk_m": 311,
+      "walk_time_min": 4.1
     },
     "sell_status": "on_sale",
     "sell_status_cn": "出售中",

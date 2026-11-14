@@ -580,36 +580,52 @@ def main():
             for d, pts in district_coords.items() if pts
         }
 
-        # 内置核心地铁站列表供快速就近匹配
-        SUBWAY_STATIONS = [
-            {"station_name_zh": "堅尼地城", "lat": 22.2814, "lng": 114.1286, "lines": "港島綫"},
-            {"station_name_zh": "香港大學", "lat": 22.2840, "lng": 114.1347, "lines": "港島綫"},
-            {"station_name_zh": "西營盤", "lat": 22.2856, "lng": 114.1427, "lines": "港島綫"},
-            {"station_name_zh": "上環", "lat": 22.2865, "lng": 114.1520, "lines": "港島綫/荃灣綫"},
-            {"station_name_zh": "中環", "lat": 22.2820, "lng": 114.1583, "lines": "港島綫/荃灣綫"},
-            {"station_name_zh": "金鐘", "lat": 22.2793, "lng": 114.1654, "lines": "港島綫/荃灣綫/南港島綫/東鐵綫"},
-            {"station_name_zh": "灣仔", "lat": 22.2776, "lng": 114.1731, "lines": "港島綫"},
-            {"station_name_zh": "銅鑼灣", "lat": 22.2802, "lng": 114.1840, "lines": "港島綫"},
-            {"station_name_zh": "北角", "lat": 22.2912, "lng": 114.2001, "lines": "港島綫/將軍澳綫"},
-            {"station_name_zh": "鰂魚涌", "lat": 22.2878, "lng": 114.2097, "lines": "港島綫/將軍澳綫"},
-            {"station_name_zh": "筲箕灣", "lat": 22.2790, "lng": 114.2283, "lines": "港島綫"},
-            {"station_name_zh": "柴灣", "lat": 22.2649, "lng": 114.2371, "lines": "港島綫"},
-            {"station_name_zh": "黃竹坑", "lat": 22.2480, "lng": 114.1680, "lines": "南港島綫"},
-            {"station_name_zh": "海怡半島", "lat": 22.2429, "lng": 114.1490, "lines": "南港島綫"},
-            {"station_name_zh": "尖沙咀", "lat": 22.2973, "lng": 114.1726, "lines": "荃灣綫"},
-            {"station_name_zh": "佐敦", "lat": 22.3050, "lng": 114.1716, "lines": "荃灣綫"},
-            {"station_name_zh": "油麻地", "lat": 22.3131, "lng": 114.1708, "lines": "荃灣綫/觀塘綫"},
-            {"station_name_zh": "旺角", "lat": 22.3193, "lng": 114.1694, "lines": "荃灣綫/觀塘綫"},
-            {"station_name_zh": "深水埗", "lat": 22.3309, "lng": 114.1622, "lines": "荃灣綫"},
-            {"station_name_zh": "九龍塘", "lat": 22.3368, "lng": 114.1760, "lines": "東鐵綫/觀塘綫"},
-            {"station_name_zh": "啟德", "lat": 22.3307, "lng": 114.1994, "lines": "屯馬綫"},
-            {"station_name_zh": "宋皇臺", "lat": 22.3261, "lng": 114.1894, "lines": "屯馬綫"},
-            {"station_name_zh": "何文田", "lat": 22.3094, "lng": 114.1830, "lines": "觀塘綫/屯馬綫"},
-            {"station_name_zh": "紅磡", "lat": 22.3029, "lng": 114.1818, "lines": "東鐵綫/屯馬綫"},
-            {"station_name_zh": "九龍", "lat": 22.3050, "lng": 114.1615, "lines": "東涌綫/機場快綫"},
-            {"station_name_zh": "奧運", "lat": 22.3178, "lng": 114.1601, "lines": "东涌綫"},
-            {"station_name_zh": "南昌", "lat": 22.3265, "lng": 114.1537, "lines": "東涌綫/屯馬綫"}
-        ]
+        # 优先从全量港铁站数据 hk_mtr_stations.json 加载（96站），缺失时回退内置核心站列表
+        MTR_STATIONS_FILE = os.path.join(SANDBOX_DIR, "hk_mtr_stations.json")
+        SUBWAY_STATIONS = []
+        if os.path.exists(MTR_STATIONS_FILE):
+            try:
+                with open(MTR_STATIONS_FILE, "r", encoding="utf-8") as mf:
+                    for st in json.load(mf):
+                        if st.get("lat") is not None and st.get("lng") is not None:
+                            SUBWAY_STATIONS.append({
+                                "station_name_zh": st.get("station_name_cn") or st.get("station_name_zh") or st.get("name", ""),
+                                "lat": float(st["lat"]),
+                                "lng": float(st["lng"]),
+                                "lines": st.get("lines") or st.get("main_line", "")
+                            })
+            except Exception as e:
+                print("⚠️ 读取 hk_mtr_stations.json 异常，回退内置站点:", e)
+        if not SUBWAY_STATIONS:
+            SUBWAY_STATIONS = [
+                {"station_name_zh": "堅尼地城", "lat": 22.2814, "lng": 114.1286, "lines": "港島綫"},
+                {"station_name_zh": "香港大學", "lat": 22.2840, "lng": 114.1347, "lines": "港島綫"},
+                {"station_name_zh": "西營盤", "lat": 22.2856, "lng": 114.1427, "lines": "港島綫"},
+                {"station_name_zh": "上環", "lat": 22.2865, "lng": 114.1520, "lines": "港島綫/荃灣綫"},
+                {"station_name_zh": "中環", "lat": 22.2820, "lng": 114.1583, "lines": "港島綫/荃灣綫"},
+                {"station_name_zh": "金鐘", "lat": 22.2793, "lng": 114.1654, "lines": "港島綫/荃灣綫/南港島綫/東鐵綫"},
+                {"station_name_zh": "灣仔", "lat": 22.2776, "lng": 114.1731, "lines": "港島綫"},
+                {"station_name_zh": "銅鑼灣", "lat": 22.2802, "lng": 114.1840, "lines": "港島綫"},
+                {"station_name_zh": "北角", "lat": 22.2912, "lng": 114.2001, "lines": "港島綫/將軍澳綫"},
+                {"station_name_zh": "鰂魚涌", "lat": 22.2878, "lng": 114.2097, "lines": "港島綫/將軍澳綫"},
+                {"station_name_zh": "筲箕灣", "lat": 22.2790, "lng": 114.2283, "lines": "港島綫"},
+                {"station_name_zh": "柴灣", "lat": 22.2649, "lng": 114.2371, "lines": "港島綫"},
+                {"station_name_zh": "黃竹坑", "lat": 22.2480, "lng": 114.1680, "lines": "南港島綫"},
+                {"station_name_zh": "海怡半島", "lat": 22.2429, "lng": 114.1490, "lines": "南港島綫"},
+                {"station_name_zh": "尖沙咀", "lat": 22.2973, "lng": 114.1726, "lines": "荃灣綫"},
+                {"station_name_zh": "佐敦", "lat": 22.3050, "lng": 114.1716, "lines": "荃灣綫"},
+                {"station_name_zh": "油麻地", "lat": 22.3131, "lng": 114.1708, "lines": "荃灣綫/觀塘綫"},
+                {"station_name_zh": "旺角", "lat": 22.3193, "lng": 114.1694, "lines": "荃灣綫/觀塘綫"},
+                {"station_name_zh": "深水埗", "lat": 22.3309, "lng": 114.1622, "lines": "荃灣綫"},
+                {"station_name_zh": "九龍塘", "lat": 22.3368, "lng": 114.1760, "lines": "東鐵綫/觀塘綫"},
+                {"station_name_zh": "啟德", "lat": 22.3307, "lng": 114.1994, "lines": "屯馬綫"},
+                {"station_name_zh": "宋皇臺", "lat": 22.3261, "lng": 114.1894, "lines": "屯馬綫"},
+                {"station_name_zh": "何文田", "lat": 22.3094, "lng": 114.1830, "lines": "觀塘綫/屯馬綫"},
+                {"station_name_zh": "紅磡", "lat": 22.3029, "lng": 114.1818, "lines": "東鐵綫/屯馬綫"},
+                {"station_name_zh": "九龍", "lat": 22.3050, "lng": 114.1615, "lines": "東涌綫/機場快綫"},
+                {"station_name_zh": "奧運", "lat": 22.3178, "lng": 114.1601, "lines": "东涌綫"},
+                {"station_name_zh": "南昌", "lat": 22.3265, "lng": 114.1537, "lines": "東涌綫/屯馬綫"}
+            ]
 
         def get_nearest_mtr_info(t_lat, t_lng):
             import math
