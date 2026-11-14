@@ -75,7 +75,7 @@ def _parse_midland_pdf(pdf_path, sales_person, default_district, dry_run=False):
 
         detail_img = _render_full_page(doc, i, "detail.jpg", ref_no, dry_run=dry_run)
         plan = detail_img
-        photos = []
+        photos = [detail_img]
         rent = ""
         status = "待确认"
 
@@ -91,8 +91,6 @@ def _parse_midland_pdf(pdf_path, sales_person, default_district, dry_run=False):
             i += 2
         else:
             i += 1
-
-        photos.append(detail_img)
 
         listings.append({
             "id": ref_no,
