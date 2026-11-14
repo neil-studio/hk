@@ -22,32 +22,16 @@ IMAGE_DIRS = [
     os.path.join(PROJECT_DIR, "web", "secondhand_images"),
 ]
 
-# Common Midland boilerplate image dimensions (logo, footer cityscape, map banner)
-BOILERPLATE_SIZES = {(600, 255), (1100, 345), (1280, 397)}
-
-
-def _extract_images_for_page(doc, page_idx, out_name_prefix, ref_no, dry_run=False):
-    """Extract non-boilerplate embedded images from a single PDF page."""
-    saved_rel_paths = []
-    page = doc[page_idx]
-    for idx, img in enumerate(page.get_images(full=True), start=1):
-        xref, w, h = img[0], img[2], img[3]
-        if (w, h) in BOILERPLATE_SIZES or (w < 120 and h < 120):
-            continue
-        info = doc.extract_image(xref)
-        ext = info.get("ext", "jpeg")
-        fname = f"{out_name_prefix}.{ext}" if out_name_prefix == "plan" else f"{out_name_prefix}_{len(saved_rel_paths) + 1}.{ext}"
-        rel_path = f"secondhand_images/{ref_no}/{fname}"
-        if not dry_run:
-            for base_img_dir in IMAGE_DIRS:
-                target_dir = os.path.join(base_img_dir, ref_no)
-                os.makedirs(target_dir, exist_ok=True)
-                with open(os.path.join(target_dir, fname), "wb") as f:
-                    f.write(info["image"])
-        saved_rel_paths.append(rel_path)
-        if out_name_prefix == "plan":
-            break
-    return saved_rel_paths
+def _render_full_page(doc, page_idx, fname, ref_no, dry_run=False):
+    """Render an entire PDF page at 3x resolution (1785x2526 for A4) as JPEG."""
+    rel_path = f"secondhand_images/{ref_no}/{fname}"
+    if not dry_run:
+        pix = doc[page_idx].get_pixmap(matrix=fitz.Matrix(3, 3), alpha=False)
+        for base_img_dir in IMAGE_DIRS:
+            target_dir = os.path.join(base_img_dir, ref_no)
+            os.makedirs(target_dir, exist_ok=True)
+            pix.save(os.path.join(target_dir, fname), jpg_quality=90)
+    return rel_path
 
 
 def _parse_midland_pdf(pdf_path, sales_person, default_district, dry_run=False):
@@ -89,8 +73,8 @@ def _parse_midland_pdf(pdf_path, sales_person, default_district, dry_run=False):
         estate = " ".join(parts[:2]) if len(parts) >= 3 else title_line
         unit = " ".join(parts[2:]) if len(parts) >= 3 else ""
 
-        plan_paths = _extract_images_for_page(doc, i, "plan", ref_no, dry_run=dry_run)
-        plan = plan_paths[0] if plan_paths else ""
+        detail_img = _render_full_page(doc, i, "detail.jpg", ref_no, dry_run=dry_run)
+        plan = detail_img
         photos = []
         rent = ""
         status = "待确认"
@@ -103,13 +87,12 @@ def _parse_midland_pdf(pdf_path, sales_person, default_district, dry_run=False):
                 rent_num = int(m_rent.group(1).replace(",", ""))
                 rent = f"{rent_num / 10000:g}万/月"
                 status = "可售可租" if price_val else "出租"
-            photos = _extract_images_for_page(doc, i + 1, "photo", ref_no, dry_run=dry_run)
+            photos.append(_render_full_page(doc, i + 1, "photos.jpg", ref_no, dry_run=dry_run))
             i += 2
         else:
             i += 1
 
-        if plan:
-            photos.append(plan)
+        photos.append(detail_img)
 
         listings.append({
             "id": ref_no,
