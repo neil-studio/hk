@@ -8,11 +8,15 @@ import json
 import os
 import re
 import shutil
+import subprocess
 import fitz  # PyMuPDF
 
 SOURCE_DIR = "/Users/nb/google/Antigravity/工作/运营/聚焦盘精选盘/二手房源"
 ARCHIVE_DIR = os.path.join(SOURCE_DIR, "已导入")
 PROJECT_DIR = "/Users/nb/google/Antigravity/工作/运营/价单_正式版"
+WORKER_DIR = os.path.join(PROJECT_DIR, "auth-worker")
+R2_BUCKET = "hk-secondhand-assets"
+R2_PUBLIC_BASE = "https://pub-a42f933d18664016a787b359244407a5.r2.dev"
 JSON_PATHS = [
     os.path.join(PROJECT_DIR, "secondhand_data.json"),
     os.path.join(PROJECT_DIR, "web", "secondhand_data.json"),
@@ -22,16 +26,38 @@ IMAGE_DIRS = [
     os.path.join(PROJECT_DIR, "web", "secondhand_images"),
 ]
 
+
+def _upload_to_r2(local_file, object_key):
+    """Upload a generated image to Cloudflare R2 so git stays lightweight."""
+    cmd = [
+        "npx", "wrangler", "r2", "object", "put",
+        f"{R2_BUCKET}/{object_key}",
+        "--file", local_file,
+        "--content-type", "image/jpeg",
+        "--cache-control", "public, max-age=31536000",
+        "--remote",
+    ]
+    res = subprocess.run(cmd, cwd=WORKER_DIR, capture_output=True, text=True)
+    if res.returncode != 0:
+        raise RuntimeError(f"R2 upload failed for {object_key}: {res.stderr.strip() or res.stdout.strip()}")
+
+
 def _render_full_page(doc, page_idx, fname, ref_no, dry_run=False):
-    """Render an entire PDF page at 3x resolution (1785x2526 for A4) as JPEG."""
+    """Render an entire PDF page at 3x resolution (1785x2526 for A4) as JPEG and upload to R2."""
     rel_path = f"secondhand_images/{ref_no}/{fname}"
     if not dry_run:
         pix = doc[page_idx].get_pixmap(matrix=fitz.Matrix(3, 3), alpha=False)
+        saved_file = None
         for base_img_dir in IMAGE_DIRS:
             target_dir = os.path.join(base_img_dir, ref_no)
             os.makedirs(target_dir, exist_ok=True)
-            pix.save(os.path.join(target_dir, fname), jpg_quality=90)
-    return rel_path
+            out_path = os.path.join(target_dir, fname)
+            pix.save(out_path, jpg_quality=90)
+            if saved_file is None:
+                saved_file = out_path
+        if saved_file:
+            _upload_to_r2(saved_file, rel_path)
+    return f"{R2_PUBLIC_BASE}/{rel_path}"
 
 
 def _parse_midland_pdf(pdf_path, sales_person, default_district, dry_run=False):

@@ -13,4 +13,6 @@ venv/
 !.env.example
 
 scratch/
+secondhand_images/
+web/secondhand_images/
 
