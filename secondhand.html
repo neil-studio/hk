@@ -523,7 +523,12 @@
       });
 
       if (sort === 'date-desc') {
-        filtered.sort((a, b) => (b.confirmDate || '').localeCompare(a.confirmDate || ''));
+        filtered.sort((a, b) => {
+          const aOwn = a.sourceType === 'own' ? 0 : 1;
+          const bOwn = b.sourceType === 'own' ? 0 : 1;
+          if (aOwn !== bOwn) return aOwn - bOwn;
+          return (b.confirmDate || '').localeCompare(a.confirmDate || '');
+        });
       } else if (sort === 'price-asc') {
         filtered.sort((a, b) => {
           if (!a.price) return 1;
