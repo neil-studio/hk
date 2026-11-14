@@ -97,31 +97,48 @@ body {
   padding: 2.5rem 1.5rem;
 }
 
-/* 页头样式 */
+/* 页头样式（双层舒展布局：上层品牌与状态，下层整行导航） */
 .app-header {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2.5rem;
+  row-gap: 0.9rem;
+  column-gap: 1rem;
+  margin-bottom: 1.75rem;
   border-bottom: 1px solid var(--border-color);
-  padding-bottom: 1.5rem;
+  padding-bottom: 1.15rem;
+}
+
+.logo-area {
+  order: 1;
 }
 
 .logo-area h1 {
-  font-size: 2.2rem;
+  font-size: 1.9rem;
   font-weight: 800;
   color: #0b2530;
   background: linear-gradient(135deg, #045d68 0%, #06AABD 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   letter-spacing: -0.025em;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0;
+  white-space: nowrap;
 }
 
 .logo-area .subtitle {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: var(--text-secondary);
   font-weight: 400;
+  margin-top: 0.25rem;
+}
+
+.header-actions {
+  order: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .update-badge {
@@ -2259,6 +2276,9 @@ body {
 }
 
 .main-nav {
+  order: 3;
+  flex: 0 0 100%;
+  width: 100%;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -2267,16 +2287,24 @@ body {
   border-radius: 14px;
   border: 1px solid var(--border-color);
   box-shadow: 0 4px 15px rgba(6, 170, 189, 0.06);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.main-nav::-webkit-scrollbar {
+  display: none;
 }
 
 .nav-item {
-  padding: 0.6rem 1.1rem;
+  padding: 0.55rem 1.05rem;
   border-radius: 10px;
   text-decoration: none;
   font-size: 0.92rem;
   font-weight: 600;
   color: var(--text-secondary);
   transition: all 0.25s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .nav-item:hover {
