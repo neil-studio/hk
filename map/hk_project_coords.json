@@ -63107,8 +63107,8 @@
     "sqft_price_desc": "",
     "main_layout": "",
     "reason": "",
-    "mainland_selling_points": "",
-    "developer": "香港品牌发展商",
+    "mainland_selling_points": "1、嘉里品牌何文田传统豪宅大盘：由嘉里建设匠心打造，坐落何文田传统半山名校住宅区常盛街28号，9座共1,429伙大型纯住宅社区，园林与会所配套成熟。\n2、九龙顶尖34小学与九龙城中学名校网：坐拥全港最受追捧的34小学名校网及九龙城第一梯队中学校网，名校教育资源密集，兼具家庭自住与长线保值属性。\n3、现楼社区配套完善兼享屯马线便利：已届现楼多年（2017年底落成），社区管理由嘉里物业负责，邻近港铁土瓜湾站及何文田传统生活圈。",
+    "developer": "嘉里建设",
     "completion_date": "现楼发售 (已入伙)",
     "sales_control_summary": [
       {
@@ -63155,11 +63155,11 @@
     "max_price_wan": 12256.48,
     "has_price_data": true,
     "tower_count": 9,
-    "selling_points": "",
+    "selling_points": "1、嘉里品牌何文田传统豪宅大盘：由嘉里建设匠心打造，坐落何文田传统半山名校住宅区常盛街28号，9座共1,429伙大型纯住宅社区，园林与会所配套成熟。\n2、九龙顶尖34小学与九龙城中学名校网：坐拥全港最受追捧的34小学名校网及九龙城第一梯队中学校网，名校教育资源密集，兼具家庭自住与长线保值属性。\n3、现楼社区配套完善兼享屯马线便利：已届现楼多年（2017年底落成），社区管理由嘉里物业负责，邻近港铁土瓜湾站及何文田传统生活圈。",
     "property_positioning": "🏡 自住型产品",
-    "core_pros": "",
-    "quantified_cons": "",
-    "commute_guidance": "",
+    "core_pros": "★ 何文田常盛街传统豪宅区大型纯住宅屋苑\n🏡【社区】9座大型地标纯住宅社区（1,429伙），尊享大型中央园林与完善会所设施\n🚇【轨交】步行约 10 分钟即达港铁土瓜灣站（12分钟轨交圈内，通勤从容便捷）\n🎓【名校】全港顶尖 34 名校网，享传统公立名校优质升学梯队\n🛍️【商业】邻近/周边1.5km聚合何文田广场、旺角及九龙城等成熟商业圈\n🔑【交付】现楼发售（即买即住 / 即时收租，实景所见即所得）",
+    "quantified_cons": "✨【五维全优】名校网 · 轨交直通 · 商业汇聚 · 大盘格局 · 即期交付，五维无显著量化短板",
+    "commute_guidance": "步行约 749米 (10分) 到土瓜灣站\n港铁 4站达金钟/中环 | 🚅 高铁 2站\n✈️ 机场约 30分 | 🚘 皇岗口岸 32分*",
     "is_coming_soon": false,
     "marketing_url": "https://drive.google.com/drive/search?q=type%3Afolder%20parent%3A15tRwSlG1VTOKuEyj-H131zpNK6v6MY04%20%22%E4%B9%9D%E9%BE%99-%E4%BD%95%E6%96%87%E7%94%B0-%E7%9A%93%E7%95%8B%22",
     "has_marketing_materials": false,
@@ -63176,7 +63176,12 @@
       "8座",
       "9座"
     ],
-    "is_tender_project": true
+    "is_tender_project": true,
+    "comparison_commute": {
+      "line1": "步行约 749米 (10分) 到土瓜灣站",
+      "line2": "港铁 4站达金钟/中环 | 🚅 高铁 2站",
+      "line3": "✈️ 机场约 30分 | 🚘 皇岗口岸 32分*"
+    }
   },
   {
     "name": "Oasis Kai Tak",
@@ -63217,8 +63222,8 @@
     "sqft_price_desc": "",
     "main_layout": "",
     "reason": "",
-    "mainland_selling_points": "",
-    "developer": "香港品牌发展商",
+    "mainland_selling_points": "1、会德丰启德城中心低密度河畔标杆：由会德丰地产打造，坐落启德城中心沐宁街10号，8座共648伙，包含高座及低座住宅，主打都会绿洲与启德河畔景观。\n2、步行约3.9分钟直达港铁启德站：紧邻屯马线启德站（直线约223米），快速串联九龙东、尖沙咀及红磡金钟核心商务区。\n3、坐享34名校网与启德千亿级商圈红利：纳入34小学及九龙城中学名校网，步行即达AIRSIDE、双子汇（The Twins）及启德体育园等旗舰商业文体地标。",
+    "developer": "会德丰地产",
     "completion_date": "现楼发售 (已入伙)",
     "sales_control_summary": [
       {
@@ -63265,11 +63270,11 @@
     "max_price_wan": 5538.6,
     "has_price_data": true,
     "tower_count": 8,
-    "selling_points": "",
-    "property_positioning": "🏡 自住型产品",
-    "core_pros": "",
-    "quantified_cons": "",
-    "commute_guidance": "",
+    "selling_points": "1、会德丰启德城中心低密度河畔标杆：由会德丰地产打造，坐落启德城中心沐宁街10号，8座共648伙，包含高座及低座住宅，主打都会绿洲与启德河畔景观。\n2、步行约3.9分钟直达港铁启德站：紧邻屯马线启德站（直线约223米），快速串联九龙东、尖沙咀及红磡金钟核心商务区。\n3、坐享34名校网与启德千亿级商圈红利：纳入34小学及九龙城中学名校网，步行即达AIRSIDE、双子汇（The Twins）及启德体育园等旗舰商业文体地标。",
+    "property_positioning": "⚖️ 投资自住兼顾",
+    "core_pros": "★ 启德城中心河畔低密度都会绿洲标杆\n🏡【社区】8座高/低座组合中型社区（648伙），享园林绿化与启德河畔休憩空间\n🚇【轨交】步行约 4 分钟即达港铁啟德站（轨交通勤从容便捷）\n🎓【名校】全港顶尖 34 名校网，享传统公立名校优质升学梯队\n🛍️【商业】邻近/周边1.5km聚合AIRSIDE、双子汇（SOGO）等大型地标商圈\n🔑【交付】现楼发售（即买即住 / 即时收租，实景所见即所得）",
+    "quantified_cons": "✨【五维全优】名校网 · 轨交直通 · 商业汇聚 · 大盘格局 · 即期交付，五维无显著量化短板",
+    "commute_guidance": "步行约 290米 (4分) 到啟德站\n港铁 4站达金钟/中环 | 🚅 高铁 4站\n✈️ 机场约 30分 | 🚘 皇岗口岸 32分*",
     "is_coming_soon": false,
     "marketing_url": "https://drive.google.com/drive/search?q=type%3Afolder%20parent%3A15tRwSlG1VTOKuEyj-H131zpNK6v6MY04%20%22%E4%B9%9D%E9%BE%99-%E5%90%AF%E5%BE%B7-Oasis%20Kai%20Tak%22",
     "has_marketing_materials": false,
@@ -63285,7 +63290,12 @@
       "低座C座",
       "低座D座"
     ],
-    "is_tender_project": true
+    "is_tender_project": true,
+    "comparison_commute": {
+      "line1": "步行约 290米 (4分) 到啟德站",
+      "line2": "港铁 4站达金钟/中环 | 🚅 高铁 4站",
+      "line3": "✈️ 机场约 30分 | 🚘 皇岗口岸 32分*"
+    }
   },
   {
     "name": "君柏",
@@ -63326,8 +63336,8 @@
     "sqft_price_desc": "",
     "main_layout": "",
     "reason": "",
-    "mainland_selling_points": "",
-    "developer": "香港品牌发展商",
+    "mainland_selling_points": "1、长实亚皆老街传统豪宅地段大宅：由长江实业开发，位于九龙城区核心干道亚皆老街204号，6座仅规划228伙，整体社区圈层纯粹低密。\n2、34名校网核心腹地护城河：位处34小学名校网及九龙城中学校网核心区域，周边名校林立，长期受高净值家庭客户青睐。\n3、现楼发售兼邻近宋皇台站：已属成熟现楼（2016年落成），步行约7.5分钟可达屯马线宋皇台站，兼享九龙城与旺角东双商圈生活便利。",
+    "developer": "长实集团",
     "completion_date": "现楼发售 (已入伙)",
     "sales_control_summary": [
       {
@@ -63382,11 +63392,11 @@
     "max_price_wan": 14077.5,
     "has_price_data": true,
     "tower_count": 6,
-    "selling_points": "",
+    "selling_points": "1、长实亚皆老街传统豪宅地段大宅：由长江实业开发，位于九龙城区核心干道亚皆老街204号，6座仅规划228伙，整体社区圈层纯粹低密。\n2、34名校网核心腹地护城河：位处34小学名校网及九龙城中学校网核心区域，周边名校林立，长期受高净值家庭客户青睐。\n3、现楼发售兼邻近宋皇台站：已属成熟现楼（2016年落成），步行约7.5分钟可达屯马线宋皇台站，兼享九龙城与旺角东双商圈生活便利。",
     "property_positioning": "🏡 自住型产品",
-    "core_pros": "",
-    "quantified_cons": "",
-    "commute_guidance": "",
+    "core_pros": "★ 亚皆老街传统豪宅地段低密度纯大宅社区\n🏡【社区】6座低密度纯大宅社区（228伙），高私密度园林及会所配置\n🚇【轨交】步行约 8 分钟即达港铁宋皇臺站（轨交通勤从容便捷）\n🎓【名校】全港顶尖 34 名校网，享传统公立名校优质升学梯队\n🛍️【商业】邻近/周边1.5km聚合九龙城商圈、Mikiki及旺角等成熟商业区\n🔑【交付】现楼发售（即买即住 / 即时收租，实景所见即所得）",
+    "quantified_cons": "✨【五维全优】名校网 · 轨交直通 · 商业汇聚 · 大盘格局 · 即期交付，五维无显著量化短板",
+    "commute_guidance": "步行约 564米 (8分) 到宋皇臺站\n港铁 3站达金钟/中环 | 🚅 高铁 3站\n✈️ 机场约 30分 | 🚘 皇岗口岸 32分*",
     "is_coming_soon": false,
     "marketing_url": "https://drive.google.com/drive/search?q=type%3Afolder%20parent%3A15tRwSlG1VTOKuEyj-H131zpNK6v6MY04%20%22%E4%B9%9D%E9%BE%99-%E9%A9%AC%E5%A4%B4%E8%A7%92-%E5%90%9B%E6%9F%8F%22",
     "has_marketing_materials": false,
@@ -63400,7 +63410,12 @@
       "6座",
       "7座"
     ],
-    "is_tender_project": true
+    "is_tender_project": true,
+    "comparison_commute": {
+      "line1": "步行约 564米 (8分) 到宋皇臺站",
+      "line2": "港铁 3站达金钟/中环 | 🚅 高铁 3站",
+      "line3": "✈️ 机场约 30分 | 🚘 皇岗口岸 32分*"
+    }
   },
   {
     "name": "津汇",
@@ -63441,7 +63456,7 @@
     "sqft_price_desc": "",
     "main_layout": "",
     "reason": "",
-    "mainland_selling_points": "",
+    "mainland_selling_points": "1、市建局联合打造土瓜湾市区重建精品：由宝声集团、其士集团及市建局合作发展，单幢式175伙精巧设计，坐落九龙城道与浙江街交界成熟生活区。\n2、步行约3分钟超近距离接驳土瓜湾站：直线距港铁土瓜湾站仅约175米（步行约3.0分钟），屯马线通勤极度便捷，4站即可换乘直抵港岛核心区。\n3、34名校网低门槛入场之选：同享九龙城34小学及九龙城中学优质校网资源，兼具市区成熟民生配套与高租务需求支撑。",
     "developer": "香港品牌发展商",
     "completion_date": "现楼发售 (即买即住)",
     "sales_control_summary": [
@@ -63489,11 +63504,11 @@
     "max_price_wan": 1860.0,
     "has_price_data": true,
     "tower_count": 1,
-    "selling_points": "",
-    "property_positioning": "🏡 自住型产品",
-    "core_pros": "",
-    "quantified_cons": "",
-    "commute_guidance": "",
+    "selling_points": "1、市建局联合打造土瓜湾市区重建精品：由宝声集团、其士集团及市建局合作发展，单幢式175伙精巧设计，坐落九龙城道与浙江街交界成熟生活区。\n2、步行约3分钟超近距离接驳土瓜湾站：直线距港铁土瓜湾站仅约175米（步行约3.0分钟），屯马线通勤极度便捷，4站即可换乘直抵港岛核心区。\n3、34名校网低门槛入场之选：同享九龙城34小学及九龙城中学优质校网资源，兼具市区成熟民生配套与高租务需求支撑。",
+    "property_positioning": "⚖️ 投资自住兼顾",
+    "core_pros": "★ 港铁土瓜湾站步行约3分钟市区重建精品\n🚇【轨交】步行约 3 分钟即达港铁土瓜灣站（轨交通勤从容便捷）\n🎓【名校】全港顶尖 34 名校网，享传统公立名校优质升学梯队\n🛍️【商业】邻近/周边1.5km聚合土瓜湾成熟民生街区及东维港海滨商业带\n🔑【交付】现楼发售（即买即住 / 即时收租，实景所见即所得）",
+    "quantified_cons": "🏢【社区】属单幢精致物业（1座共175伙），公用绿化及大型会所相对小巧",
+    "commute_guidance": "步行约 228米 (3分) 到土瓜灣站\n港铁 4站达金钟/中环 | 🚅 高铁 2站\n✈️ 机场约 30分 | 🚘 皇岗口岸 35分*",
     "is_coming_soon": false,
     "marketing_url": "https://drive.google.com/drive/search?q=type%3Afolder%20parent%3A15tRwSlG1VTOKuEyj-H131zpNK6v6MY04%20%22%E4%B9%9D%E9%BE%99-%E9%A9%AC%E5%A4%B4%E8%A7%92-%E6%B4%A5%E6%B1%87%22",
     "has_marketing_materials": false,
@@ -63502,7 +63517,12 @@
     "tower_names": [
       "津汇"
     ],
-    "is_tender_project": true
+    "is_tender_project": true,
+    "comparison_commute": {
+      "line1": "步行约 228米 (3分) 到土瓜灣站",
+      "line2": "港铁 4站达金钟/中环 | 🚅 高铁 2站",
+      "line3": "✈️ 机场约 30分 | 🚘 皇岗口岸 35分*"
+    }
   },
   {
     "name": "倚南",
@@ -63543,8 +63563,8 @@
     "sqft_price_desc": "",
     "main_layout": "",
     "reason": "",
-    "mainland_selling_points": "",
-    "developer": "香港品牌发展商",
+    "mainland_selling_points": "1、恒基兆业南港岛精品临海住宅：由恒基兆业开发，坐落鸭脷洲大街68号，单幢仅106伙高私密度设计，中高层可享香港仔避风塘及鸭脷洲海景。\n2、步行约4.1分钟直达港铁利东站：直线距南港岛线利东站仅约239米（步行约4.1分钟），约3-4站即达金钟核心换乘枢纽，通勤港岛中环极其高效。\n3、现楼发售兼享鸭脷洲成熟海滨生活圈：2017年落成现楼，尊家管业管理，楼下即拥鸭脷洲大街餐饮美食、风之塔海滨公园及邻近The Southside商圈。",
+    "developer": "恒基兆业地产",
     "completion_date": "现楼发售 (已入伙)",
     "sales_control_summary": [
       {
@@ -63583,11 +63603,11 @@
     "max_price_wan": 3597.14,
     "has_price_data": true,
     "tower_count": 1,
-    "selling_points": "",
-    "property_positioning": "🏡 自住型产品",
-    "core_pros": "",
-    "quantified_cons": "",
-    "commute_guidance": "",
+    "selling_points": "1、恒基兆业南港岛精品临海住宅：由恒基兆业开发，坐落鸭脷洲大街68号，单幢仅106伙高私密度设计，中高层可享香港仔避风塘及鸭脷洲海景。\n2、步行约4.1分钟直达港铁利东站：直线距南港岛线利东站仅约239米（步行约4.1分钟），约3-4站即达金钟核心换乘枢纽，通勤港岛中环极其高效。\n3、现楼发售兼享鸭脷洲成熟海滨生活圈：2017年落成现楼，尊家管业管理，楼下即拥鸭脷洲大街餐饮美食、风之塔海滨公园及邻近The Southside商圈。",
+    "property_positioning": "💷 投资型产品",
+    "core_pros": "★ 港岛南区利东站步行约4分钟临海精品住宅\n🚇【轨交】步行约 4 分钟即达港铁利東站（轨交通勤从容便捷）\n🛍️【商业】邻近/周边1.5km聚合The Southside及鸭脷洲大街成熟商圈\n🔑【交付】现楼发售（即买即住 / 即时收租，实景所见即所得）",
+    "quantified_cons": "🏢【社区】属单幢精致物业（1座共106伙），公用绿化及大型会所相对小巧\n🎓【校网】非传统四大名校网（所属18校网，升学建议搭配优质私立或国际学校）",
+    "commute_guidance": "步行约 311米 (4分) 到利東站\n港铁 3站达金钟 | 🚅 高铁 5站\n✈️ 机场约 34分 | 🚘 深圳湾口岸 38分*",
     "is_coming_soon": false,
     "marketing_url": "https://drive.google.com/drive/search?q=type%3Afolder%20parent%3A15tRwSlG1VTOKuEyj-H131zpNK6v6MY04%20%22%E6%B8%AF%E5%B2%9B-%E9%A6%99%E6%B8%AF%E4%BB%94%E5%8F%8A%E9%B8%AD%E8%84%B7%E6%B4%B2-%E5%80%9A%E5%8D%97%22",
     "has_marketing_materials": false,
@@ -63596,6 +63616,11 @@
     "tower_names": [
       "倚南"
     ],
-    "is_tender_project": true
+    "is_tender_project": true,
+    "comparison_commute": {
+      "line1": "步行约 311米 (4分) 到利東站",
+      "line2": "港铁 3站达金钟 | 🚅 高铁 5站",
+      "line3": "✈️ 机场约 34分 | 🚘 深圳湾口岸 38分*"
+    }
   }
 ]
